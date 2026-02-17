@@ -16,7 +16,7 @@ public class IHSM_ClassSchedulingInformationTest extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 	private SoftAssert soft = new SoftAssert();
 
-	@Test(priority = 0, testName = "Verify Class Scheduling")
+	@Test(enabled = false,priority = 0, testName = "Verify Class Scheduling")
 	public void verifyClassSchedule() {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
@@ -26,8 +26,8 @@ public class IHSM_ClassSchedulingInformationTest extends BaseClass {
 
 		try {
 			IHSM_ClassSchedule classInfo = new IHSM_ClassSchedule(getDriver());
-			classInfo.fillClassSchedulingInformation("2025 -2026", "1", 1, 1, 1, 0, "2026-02-18", "2026-02-22",
-					"MON,FRI", "1 Class Every Week", "07:30 - 09:00");
+			classInfo.fillClassSchedulingInformation("2025 -2026", "1", 1, 1, 1, 0, "2026-02-02", "2026-02-08",
+					"MON", "1 Class Every Week", "07:30 - 09:00");
 			ExtentListener.getNode().pass("Class Scheduling added successfully");
 			stepStatus.put("Class Scheduling", "PASS");
 		} catch (Exception e) {
@@ -43,6 +43,35 @@ public class IHSM_ClassSchedulingInformationTest extends BaseClass {
 			ExtentListener.getNode().fail("Total Failed Sections in Class Scheduling Flow: " + failCount);
 		}
 
+		soft.assertAll();
+	}
+	@Test(priority = 1, testName = "Verify Class Scheduling")
+	public void verifyClassSchedule3() {
+		
+		String[] dates = TestDataGenerator.getRandomScheduleDates();
+		
+		ExtentListener.createNode("Class Scheduling Information");
+		int failCount = 0;
+		
+		try {
+			IHSM_ClassSchedule classInfo = new IHSM_ClassSchedule(getDriver());
+			classInfo.fillClassSchedulingInformation("2025 -2026", "1", 1, 1, 1, 0, "2026-02-02", "2026-02-08",
+					"THU", "1 Class Every Week", "07:30 - 09:00");
+			ExtentListener.getNode().pass("Class Scheduling added successfully");
+			stepStatus.put("Class Scheduling", "PASS");
+		} catch (Exception e) {
+			ExtentListener.getNode().fail("Class Scheduling failed: " + e.getMessage());
+			stepStatus.put("Class Scheduling", "FAIL");
+			soft.fail("Class Scheduling failed: " + e.getMessage());
+			failCount++;
+		}
+		
+		if (failCount == 0) {
+			ExtentListener.getNode().pass("All Class Scheduling sections executed successfully.");
+		} else {
+			ExtentListener.getNode().fail("Total Failed Sections in Class Scheduling Flow: " + failCount);
+		}
+		
 		soft.assertAll();
 	}
 

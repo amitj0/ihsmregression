@@ -27,7 +27,7 @@ public class IHSM_DesignationFullFlowTest extends BaseClass {
                     TestDataGenerator.randomNumber(5),
                     "01012026", 
                     "01012027", 
-                    "Department of Basic Disciplines", 
+                    "Academic", 
                     "Faculty", 
                     "CENTRAL / Bachelor / MBBS", 
                     "2", 

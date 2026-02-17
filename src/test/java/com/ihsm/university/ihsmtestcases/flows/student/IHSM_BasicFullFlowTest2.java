@@ -34,7 +34,7 @@ import com.ihsm.university.ihsmtestcases.pojo.StudentSocialStatusData;
 import com.ihsm.university.navigation.Student_Search;
 import com.ihsm.university.utilities.ExtentListener;
 import com.ihsm.university.utilities.TextUtility;
-import com.msit.university.navigation.StudentSearchPage;
+
 
 public class IHSM_BasicFullFlowTest2 extends BaseClass {
 
@@ -94,7 +94,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 					String.valueOf(data.getSemester()), data.getPin(), data.getFirstName(), data.getMiddleName(),
 					data.getLastName(), data.getGender(), data.getDob(), data.getCountry(), data.getState(),
 					data.getPhone(), data.getEmail(), data.getNationality());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
 			String studentEnrollmentId = enrollInfo.getStudentEnrollmentId();
 			if (studentEnrollmentId == null || studentEnrollmentId.isEmpty()) {
@@ -121,7 +122,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			BasicInfo_PersonalInformation personalInfo = new BasicInfo_PersonalInformation(getDriver());
 			personalInfo.fillPersonalInformationForm(data.getFirstName(), data.getLastName(), data.getCityName(),
 					data.getMaritalStatus(), data.getCountry());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
 			ExtentListener.getNode().pass("Personal Information completed");
 			stepStatus.put("Personal Information", "PASS");
@@ -137,7 +139,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		try {
 			BasicInfo_Biometrics biometrics = new BasicInfo_Biometrics(getDriver());
 			biometrics.fillBiometricsInfo(TestDataGenerator.randomEmployeePhotoFile());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
 			ExtentListener.getNode().pass("Biometrics Information completed");
 			stepStatus.put("Biometrics Information", "PASS");
@@ -155,7 +158,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			familyInfo.fillFamilyInformation(data.getRelation(), data.getName(), data.getDob(), data.getOccupation(),
 					data.getCountryCode(), data.getPhone(), data.getDependent(), data.getCountry(), data.getState(),
 					data.getCity(), data.getNationality());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
 
 			ExtentListener.getNode().pass("Family Information completed");
@@ -172,7 +176,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		try {
 			BasicInfo_LanguageInformation languageInfo = new BasicInfo_LanguageInformation(getDriver());
 			languageInfo.fillLanguageInformationForm(data.getLanguage(), data.getLevel());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
 			ExtentListener.getNode().pass("Language Information completed");
 			stepStatus.put("Language Information", "PASS");
@@ -192,7 +197,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 
 			prerightsInfo.fillPreferRightsInformation(data.getPreferRights(),
 					TestDataGenerator.randomEmployeePhotoFile());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
 			ExtentListener.getNode().pass("Pre Rights Information completed");
 			stepStatus.put("Pre Rights Information", "PASS");
@@ -210,7 +216,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 					getDriver());
 //			socialInfo.fillSocialStatusForm("Қандас", TestDataGenerator.randomEmployeePhotoFile());
 			socialInfo.fillSocialStatusForm(data.getSocialStatus(), TestDataGenerator.randomEmployeePhotoFile());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
 			ExtentListener.getNode().pass("Social Status Information completed");
 			stepStatus.put("Social Status Information", "PASS");
@@ -227,7 +234,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			BasicInfo_GeneralInformation_SocialWorkLocation socialWorkInfo = new BasicInfo_GeneralInformation_SocialWorkLocation(
 					getDriver());
 			socialWorkInfo.fillSocialWorkLocationDetails(TestDataGenerator.randomEmployeePhotoFile());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
 			ExtentListener.getNode().pass("Work Location Information completed");
 			stepStatus.put("Work Location Information", "PASS");
@@ -243,14 +251,11 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		try {
 			BasicInfo_MedicalInformation_Vaccination medicalInfo = new BasicInfo_MedicalInformation_Vaccination(
 					getDriver());
-			/*
-			 * medicalInfo.fillVaccinationInfo("Sputnik", "3", "01012026", "562",
-			 * TestDataGenerator.randomNotes(),
-			 * TestDataGenerator.randomEmployeePhotoFile());
-			 */
+
 			medicalInfo.fillVaccinationInfo(data.getVaccineName(), data.getDose(), data.getVaccinationDate(),
 					data.getBatchNo(), TestDataGenerator.randomNotes(), TestDataGenerator.randomEmployeePhotoFile());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
 			ExtentListener.getNode().pass("Medical Vaccination Information completed");
 			stepStatus.put("Medical Vaccination Information", "PASS");
@@ -267,14 +272,10 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		try {
 			BasicInfo_MedicalInforamtion_AtPoly medicalPolyInfo = new BasicInfo_MedicalInforamtion_AtPoly(getDriver());
 
-			/*
-			 * medicalPolyInfo.fillAtPolyMedicalInformation("01012026", "Pol Type",
-			 * TestDataGenerator.randomEmployeePhotoFile());
-			 */
-
 			medicalPolyInfo.fillAtPolyMedicalInformation(data.getVisitDate(), data.getPolyType(),
 					TestDataGenerator.randomEmployeePhotoFile());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
 			ExtentListener.getNode().pass("Medical At Poly Information completed");
 			stepStatus.put("Medical At Poly Information", "PASS");
@@ -298,7 +299,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 
 			medicalInsuranceInfo.fillInsuranceInformation(data.getInsuranceStartDate(), data.getInsuranceEndDate(),
 					TestDataGenerator.randomEmployeePhotoFile());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
 			ExtentListener.getNode().pass("Medical Insurance Information completed");
 			stepStatus.put("Medical Insurance Information", "PASS");
@@ -316,14 +318,10 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			BasicInfo_MedicalInformation_Disability medicalDisabilityInfo = new BasicInfo_MedicalInformation_Disability(
 					getDriver());
 
-			/*
-			 * medicalDisabilityInfo.fillDisabilityForm("дети - инвалиды", "5", "01012026",
-			 * TestDataGenerator.randomEmployeePhotoFile());
-			 */
-
 			medicalDisabilityInfo.fillDisabilityForm(data.getDisabilityType(), data.getDisabilityDocumentNo(),
 					data.getDisabilityDate(), TestDataGenerator.randomEmployeePhotoFile());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
 			ExtentListener.getNode().pass("Medical Disability Information completed");
 			stepStatus.put("Medical Disability Information", "PASS");

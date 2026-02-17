@@ -23,26 +23,26 @@
 				name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StatusFullFlowTest2" />
 
 			<!-- Employee Registration Module -->
-			<!--<class
+			<class
 				name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_BasicFullFlowTest" />
 			<class
 				name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_DesignationFullFlowTest" />
 			<class
 				name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_ProfessionalInformationFlowTest" />
 			<class
-				name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_DocumentFullFlowTest" />-->
+				name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_DocumentFullFlowTest" />
 
 			<!-- Class Scheduling -->
-			<!--<class
+			<class
 				name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_ClassSubjectCreditTest" />
 			<class
 				name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_VerifyGroupAssignmentTest" />
 			<class
-				name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_ClassSchedulingInformationTest" />-->
+				name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_ClassSchedulingInformationTest" />
 
 			<!-- Exam Management -->
-			<!--<class
-				name="com.ihsm.university.ihsmtestcases.flows.exammanage.IHSM_ExamManageTest" />-->
+			<class
+				name="com.ihsm.university.ihsmtestcases.flows.exammanage.IHSM_ExamManageTest" />
 
 		</classes>
 	</test>
