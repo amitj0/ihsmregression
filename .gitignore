@@ -1,0 +1,35 @@
+# ========================
+# Maven build
+# ========================
+target/
+
+# ========================
+# Test execution output
+# ========================
+test-output/
+reports/
+screenshots/
+logs/
+
+# ========================
+# IDE - Eclipse
+# ========================
+.project
+.classpath
+.settings/
+
+# ========================
+# OS files
+# ========================
+.DS_Store
+Thumbs.db
+src/test/java/com/ihsm/university/testcases/flows/IHSM_BasicFullFlowTest.java
+ src/test/java/com/ihsm/university/testcases/flows/student/IHSM_BasicFullFlowTest.ja
+src/test/java/com/ihsm/university/testcases/flows/student/IHSM_BasicFullFlowTest.java
+src/test/java/com/ihsm/university/testcases/flows/student/IHSM_DesignationFullFlowTest.java
+src/test/java/com/ihsm/university/testcases/flows/student/IHSM_DocumentsFullFlowTest.java
+src/test/java/com/ihsm/university/testcases/flows/student/StudentFullRegistrationDataProvider.java
+src/test/java/com/ihsm/university/testcases/flows/employee/IHSM_DesignationFullFlowTest.java
+src/test/java/com/ihsm/university/testcases/flows/employee/IHSM_DocumentFullFlowTest.java
+src/test/java/com/ihsm/university/testcases/flows/employee/IHSM_AcademicFullFlowTest.java
+src/test/java/com/ihsm/university/testcases/flows/student/IHSM_AcademicFullFlowTest.java

@@ -1,0 +1,140 @@
+default:
+  image: maven:3.9-eclipse-temurin-21
+
+variables:
+  PROJECT: "IHSM UNIVERSITY AUTOMATION"
+  REPORT_NAME: "IHSM University Extent Report"
+  ENV: "QA"
+  BROWSER: "chrome"
+  TEST_TYPE: "Regression"
+
+stages:
+  - initialize
+  - clean
+  - checkout
+  - build
+  - test
+  - test_prod
+  - publish
+  - notify
+
+initialize:
+  stage: initialize
+  script:
+    - echo "Starting pipeline for $PROJECT"
+    - echo "Environment - $ENV"
+    - echo "Browser - $BROWSER"
+    - echo "Test Type - $TEST_TYPE"
+
+clean:
+  stage: clean
+  script:
+    - rm -rf target/ reports/
+
+checkout:
+  stage: checkout
+  script:
+    - echo "Source code is already checked out by GitLab CI"
+
+build:
+  stage: build
+  script:
+    - mvn -q clean compile
+  cache:
+    paths:
+      - .m2/repository/
+
+test:
+  stage: test
+  image: markhobson/maven-chrome:jdk-21
+  when: manual
+  allow_failure: false
+  timeout: 1h
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - stuck_or_timeout_failure
+  rules:
+    - if: '$ENV == "QA" || $ENV == "UAT"'
+      when: manual
+    - when: never
+  before_script:
+    - echo "Using Chrome browser with headless mode"
+    - google-chrome --version
+  script:
+    - mvn test -Dbrowser=$BROWSER -Denv=$ENV -Dsuite=$TEST_TYPE -DthreadCount=1 -Dparallel=false
+  artifacts:
+    when: always
+    paths:
+      - target/surefire-reports/*.xml
+      - reports/*.html
+    reports:
+      junit: target/surefire-reports/*.xml
+    expire_in: 30 days
+  cache:
+    paths:
+      - .m2/repository/
+
+test_prod:
+  stage: test_prod
+  image: markhobson/maven-chrome:jdk-21
+  when: manual
+  allow_failure: false
+  timeout: 1h
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - stuck_or_timeout_failure
+  environment:
+    name: production
+  rules:
+    - if: '$ENV == "PROD"'
+      when: manual
+    - when: never
+  before_script:
+    - echo "Using Chrome browser with headless mode"
+    - google-chrome --version
+  script:
+    - mvn test -Dbrowser=$BROWSER -Denv=PROD -Dsuite=$TEST_TYPE -DthreadCount=1 -Dparallel=false
+  artifacts:
+    when: always
+    paths:
+      - target/surefire-reports/*.xml
+      - reports/*.html
+    reports:
+      junit: target/surefire-reports/*.xml
+    expire_in: 30 days
+  cache:
+    paths:
+      - .m2/repository/
+
+publish:
+  stage: publish
+  script:
+    - echo "Extent report is available in the test job artifacts"
+    - ls -la reports/ || echo "No reports directory yet"
+
+pages:
+  stage: publish
+  script:
+    - mkdir -p public
+    - cp reports/*.html public/ || echo "No reports to copy yet"
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
+
+notify_success:
+  stage: notify
+  when: on_success
+  script:
+    - echo "Pipeline completed successfully"
+
+notify_failure:
+  stage: notify
+  when: on_failure
+  script:
+    - echo "Pipeline failed"
