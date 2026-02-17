@@ -45,7 +45,7 @@ public class IHSM_ClassSchedulingInformationTest extends BaseClass {
 
 		soft.assertAll();
 	}
-	@Test(priority = 1, testName = "Verify Class Scheduling")
+	@Test(groups = "Regression", priority = 1, testName = "Verify Class Scheduling")
 	public void verifyClassSchedule3() {
 		
 		String[] dates = TestDataGenerator.getRandomScheduleDates();

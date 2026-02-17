@@ -15,7 +15,7 @@ import com.ihsm.university.utilities.FlowStateUtils;
 
 public class IHSM_FullBasicInformationFlowStep extends BaseClass {
 
-	@Test
+	@Test()
 	public void verifyFullBasicInformation() throws Exception {
 
 		logger.info("===== STARTING FULL BASIC INFORMATION FLOW =====");

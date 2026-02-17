@@ -20,7 +20,7 @@ public class IHSM_ExamManageTest extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 	private SoftAssert soft = new SoftAssert();
 
-	@Test(description = "Verify the Exam Manage Module", /* retryAnalyzer = RetryAnalyzer.class, */ dataProvider = "ExamManageData", dataProviderClass = ExamManageDataProvider.class)
+	@Test(groups = "Regression",description = "Verify the Exam Manage Module", /* retryAnalyzer = RetryAnalyzer.class, */ dataProvider = "ExamManageData", dataProviderClass = ExamManageDataProvider.class)
 	public void verifyExamManage(ExamManage data) {
 		ExtentListener.createNode("Exam Manage Information");
 		try {

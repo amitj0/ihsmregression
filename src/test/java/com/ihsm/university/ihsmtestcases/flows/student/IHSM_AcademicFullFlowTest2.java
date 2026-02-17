@@ -22,7 +22,7 @@ public class IHSM_AcademicFullFlowTest2 extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
 	// ---------------- LAST EDUCATION ----------------
-	@Test(dataProvider = "StudentAcademicsLastEducation", dataProviderClass = LastEducationData.class)
+	@Test(groups = "Regression",dataProvider = "StudentAcademicsLastEducation", dataProviderClass = LastEducationData.class)
 	public void lastEducationInformation(StudentAcademicsLastEducation data) {
 		ExtentListener.createNode("Academics - Last Education Information");
 		try {
@@ -46,7 +46,7 @@ public class IHSM_AcademicFullFlowTest2 extends BaseClass {
 	}
 
 	// ---------------- DIPLOMA ----------------
-	@Test(dependsOnMethods = "lastEducationInformation", dataProvider = "StudentAcademicsDiplomaData", dataProviderClass = DiplomaData.class)
+	@Test(groups = "Regression",dependsOnMethods = "lastEducationInformation", dataProvider = "StudentAcademicsDiplomaData", dataProviderClass = DiplomaData.class)
 	public void diplomaInformation(StudentAcademicsDiplomaData data) {
 		ExtentListener.createNode("Academics - Diploma Information");
 		try {
@@ -68,7 +68,7 @@ public class IHSM_AcademicFullFlowTest2 extends BaseClass {
 	}
 
 	// ---------------- QUALIFICATION ----------------
-	@Test(dependsOnMethods = "diplomaInformation", dataProvider = "StudentAcademicsQualification", dataProviderClass = QualificationData.class)
+	@Test(groups = "Regression",dependsOnMethods = "diplomaInformation", dataProvider = "StudentAcademicsQualification", dataProviderClass = QualificationData.class)
 	public void qualificationInformation(StudentAcademicsQualification data) {
 		ExtentListener.createNode("Academics - Qualification Information");
 		try {

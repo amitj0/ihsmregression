@@ -48,7 +48,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
-	@Test
+	@Test(groups = "Regression")
 	public void enrollmentInformation() {
 
 		ExtentListener.createNode("Enrollment Information");
@@ -100,7 +100,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(dependsOnMethods = "enrollmentInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "enrollmentInformation", alwaysRun = true)
 	public void personalInformation() {
 		ExtentListener.createNode("Personal Information");
 		try {
@@ -119,7 +119,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(dependsOnMethods = "personalInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "personalInformation", alwaysRun = true)
 	public void guardianInformation() {
 		ExtentListener.createNode("Guardian Information");
 		try {
@@ -134,7 +134,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(dependsOnMethods = "guardianInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "guardianInformation", alwaysRun = true)
 	public void languageInformation() {
 		ExtentListener.createNode("Language Information");
 		try {
@@ -148,7 +148,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(dependsOnMethods = "languageInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "languageInformation", alwaysRun = true)
 	public void vaccinationInformation() {
 		ExtentListener.createNode("Vaccination Information");
 		try {
@@ -163,7 +163,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(dependsOnMethods = "vaccinationInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "vaccinationInformation", alwaysRun = true)
 	public void biometricsInformation() {
 		ExtentListener.createNode("Biometrics Information");
 		try {
