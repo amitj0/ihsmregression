@@ -222,7 +222,8 @@ public class BasicInfo_EnrollnmentInformation extends BasePage {
 		}
 	}
 
-	public void fillDob(String dob) {
+	public void fillDob(String dob) throws InterruptedException {
+		Thread.sleep(1000);
 		enterDate(dobField, dob);
 	}
 
