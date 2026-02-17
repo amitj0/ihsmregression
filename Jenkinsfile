@@ -92,15 +92,23 @@ TEST TYPE : ${params.TEST_TYPE}
         }
 
         stage('🚀 EXECUTE TESTS') {
-            steps {
+    steps {
+        script {
+            try {
                 bat """
                 mvn test ^
                 -Dbrowser=${params.BROWSER} ^
                 -Denv=${params.ENV} ^
                 -Dsuite=${params.TEST_TYPE}
                 """
+            } catch (Exception e) {
+                echo "Some tests failed. Marking build as UNSTABLE."
+                currentBuild.result = 'UNSTABLE'
             }
         }
+    }
+}
+
 
         stage('📊 PUBLISH EXTENT REPORT') {
             steps {
@@ -127,7 +135,7 @@ TEST TYPE : ${params.TEST_TYPE}
 
         success {
             emailext(
-                to: 'ajangra@ismedusoftsol.com',
+                to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com,ankur@ismedusoftsol.com,amit@ismedusoftsol.com,corporate@ismedusoftsol.com,vpahwa@ismedusoftsol.com',
                 subject: "✅ ${PROJECT} | SUCCESS | Build #${BUILD_NUMBER}",
                 mimeType: 'text/html',
                 attachLog: true,
@@ -155,10 +163,34 @@ TEST TYPE : ${params.TEST_TYPE}
                 """
             )
         }
+        
+        unstable {
+        emailext(
+            to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com,ankur@ismedusoftsol.com,amit@ismedusoftsol.com,corporate@ismedusoftsol.com,vpahwa@ismedusoftsol.com',
+            subject: "⚠️ ${PROJECT} | UNSTABLE | Build #${BUILD_NUMBER}",
+            mimeType: 'text/html',
+            attachLog: true,
+            attachmentsPattern: 'reports/*.html',
+            body: """
+            <h3 style="color:orange;">ℹ️ ${DASHBOARD_NOTE}</h3>
+            <h2 style="color:orange;">Execution Completed with Some Test Failures</h2>
+
+            <p><b>Project:</b> ${PROJECT}</p>
+            <p><b>Environment:</b> ${params.ENV}</p>
+            <p><b>Browser:</b> ${params.BROWSER}</p>
+            <p><b>Suite:</b> ${params.TEST_TYPE}</p>
+
+            <p>
+              <a href="${BUILD_URL}">🔗 Open Jenkins Build</a><br>
+              <a href="${BUILD_URL}HTML_20Report/">📊 Open Extent Report</a>
+            </p>
+            """
+        )
+    }
 
         failure {
             emailext(
-                to: 'ajangra@ismedusoftsol.com',
+                to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com,ankur@ismedusoftsol.com,amit@ismedusoftsol.com,corporate@ismedusoftsol.com,vpahwa@ismedusoftsol.com',
                 subject: "❌ ${PROJECT} | FAILED | Build #${BUILD_NUMBER}",
                 mimeType: 'text/html',
                 attachLog: true,

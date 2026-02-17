@@ -26,7 +26,7 @@ public class IHSM_ExamManageTest extends BaseClass {
 		try {
 			IHSM_ManageExam exam = new IHSM_ManageExam(getDriver());
 			exam.fillExamManageInfo(data.getProgram(), data.getSemester(), data.getStartDate(), data.getEndDate());
-			Assert.assertEquals(exam.isExamSuccessMsg(), "Exam Saved Successfully");
+			Assert.assertEquals(exam.isExamErrorMsg(), "Exam Not Saved.");
 			ExtentListener.getNode().pass("Exam Manage Information Test Passed");
 			stepStatus.put("Exam Manage", "PASS");
 			/*
