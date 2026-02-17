@@ -98,7 +98,7 @@ public class IHSM_FullBasicInformationFlowTest extends BaseClass {
 
 	/* ================= STEP METHODS ================= */
 
-	private void fillEnrollmentInfo() {
+	private void fillEnrollmentInfo() throws InterruptedException {
 
 		new BasicInfo_EnrollnmentInformation(getDriver()).fillEnrollmentInformation(
 				StudentFullRegistrationDataVariables.term, StudentFullRegistrationDataVariables.course,
