@@ -9,8 +9,6 @@ import org.openqa.selenium.support.FindBy;
 
 import com.ihsm.university.base.BasePage;
 
-import groovy.transform.Final;
-
 public class IHSM_ClassSchedule_SubjectHours extends BasePage {
 
 	public IHSM_ClassSchedule_SubjectHours(WebDriver driver) {

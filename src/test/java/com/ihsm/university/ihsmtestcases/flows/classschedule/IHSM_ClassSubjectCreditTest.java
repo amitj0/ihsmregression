@@ -3,7 +3,6 @@ package com.ihsm.university.ihsmtestcases.flows.classschedule;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
