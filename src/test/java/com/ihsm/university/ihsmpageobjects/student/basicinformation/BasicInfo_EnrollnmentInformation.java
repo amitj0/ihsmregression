@@ -198,7 +198,8 @@ public class BasicInfo_EnrollnmentInformation extends BasePage {
 		firstNameField.sendKeys(firstName);
 	}
 
-	public void fillMiddleName(String middleName) {;
+	public void fillMiddleName(String middleName) {
+		;
 		middleNameField.clear();
 		middleNameField.sendKeys(middleName);
 	}
@@ -223,7 +224,13 @@ public class BasicInfo_EnrollnmentInformation extends BasePage {
 	}
 
 	public void fillDob(String dob) throws InterruptedException {
-		Thread.sleep(1000);
+
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt(); // restore interrupted status
+			throw new RuntimeException(e); // optional, rethrow as unchecked
+		}
 		enterDate(dobField, dob);
 	}
 
@@ -295,7 +302,7 @@ public class BasicInfo_EnrollnmentInformation extends BasePage {
 	public BasicInfo_EnrollnmentInformation fillEnrollmentInformation(String addmissionBatch, String universityCurr,
 			String semester, String group, String pinNo, String firstName, String middleName, String lastName,
 			String gender, String dob, String nationality, String state, String mobileNo, String email,
-			String address) {
+			String address) throws InterruptedException {
 		studentMenuItems();
 		addNewStudent();
 		addEnrollBtn();
@@ -321,6 +328,5 @@ public class BasicInfo_EnrollnmentInformation extends BasePage {
 		return new BasicInfo_EnrollnmentInformation(driver);
 
 	}
-
 
 }
