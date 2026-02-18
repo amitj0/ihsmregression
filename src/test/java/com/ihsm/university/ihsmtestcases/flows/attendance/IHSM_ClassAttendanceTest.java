@@ -10,6 +10,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
+import com.aventstack.extentreports.ExtentTest;
 import com.ihsm.university.base.BaseClass;
 import com.ihsm.university.ihsmpageobjects.attandence.IHSM_ClassAttendance;
 import com.ihsm.university.ihsmpageobjects.classchedule.*;
@@ -26,25 +27,26 @@ public class IHSM_ClassAttendanceTest extends BaseClass {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
 
-		ExtentListener.createNode("Class Attendance Information");
+		ExtentTest node =  ExtentListener.createNode("Class Attendance Information");
 		int failCount = 0;
 
 		try {
+			node.info("Entering Class Attendance Details");
 			IHSM_ClassAttendance classAttendance = new IHSM_ClassAttendance(getDriver());
 			classAttendance.fillClassAttendance(1, 1, 1);
-			ExtentListener.getNode().pass("Class Attendance added successfully");
+			node.pass("Class Attendance added successfully");
 			stepStatus.put("Class Attendance", "PASS");
 		} catch (Exception e) {
-			ExtentListener.getNode().fail("Class Attendance failed: " + e.getMessage());
+			node.fail("Class Attendance failed: " + e.getMessage());
 			stepStatus.put("Class Attendance", "FAIL");
 			soft.fail("Class Attendance failed: " + e.getMessage());
 			failCount++;
 		}
 
 		if (failCount == 0) {
-			ExtentListener.getNode().pass("All Class Attendance sections executed successfully.");
+			node.pass("All Class Attendance sections executed successfully.");
 		} else {
-			ExtentListener.getNode().fail("Total Failed Sections in Class Attendance Flow: " + failCount);
+			node.fail("Total Failed Sections in Class Attendance Flow: " + failCount);
 		}
 
 		soft.assertAll();
@@ -55,26 +57,27 @@ public class IHSM_ClassAttendanceTest extends BaseClass {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
 
-		ExtentListener.createNode("Class Attendance 2 Information");
+		ExtentTest node =  ExtentListener.createNode("Class Attendance 2 Information");
 		int failCount = 0;
 
 		try {
+			node.info("Entering Class Attendance 2 Details");
 			List<Integer> attendanceValues = Arrays.asList(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40);
 			IHSM_ClassAttendance classAttendance = new IHSM_ClassAttendance(getDriver());
 			classAttendance.fillClassAttendance2(1, 1, 1, "p", attendanceValues);
-			ExtentListener.getNode().pass("Class Attendance 2 added successfully");
+			node.pass("Class Attendance 2 added successfully");
 			stepStatus.put("Class Attendance", "PASS");
 		} catch (Exception e) {
-			ExtentListener.getNode().fail("Class Attendance 2 failed: " + e.getMessage());
+			node.fail("Class Attendance 2 failed: " + e.getMessage());
 			stepStatus.put("Class Attendance 2", "FAIL");
 			soft.fail("Class Attendance 2 failed: " + e.getMessage());
 			failCount++;
 		}
 
 		if (failCount == 0) {
-			ExtentListener.getNode().pass("All Class Attendance 2 sections executed successfully.");
+			node.pass("All Class Attendance 2 sections executed successfully.");
 		} else {
-			ExtentListener.getNode().fail("Total Failed Sections in Class Attendance 2 Flow: " + failCount);
+			node.fail("Total Failed Sections in Class Attendance 2 Flow: " + failCount);
 		}
 
 		soft.assertAll();

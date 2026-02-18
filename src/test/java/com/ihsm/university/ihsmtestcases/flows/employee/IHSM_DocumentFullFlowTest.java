@@ -6,6 +6,7 @@ import java.util.Map;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
+import com.aventstack.extentreports.ExtentTest;
 import com.ihsm.university.base.BaseClass;
 import com.ihsm.university.ihsmpageobjects.employee.documents.Documents_Documents;
 import com.ihsm.university.ihsmpageobjects.employee.documents.Documents_Passport;
@@ -18,15 +19,16 @@ public class IHSM_DocumentFullFlowTest extends BaseClass {
 
 	@Test(description = "Verify Documents Information Test")
 	public void documentsInformation() {
-		ExtentListener.createNode("Document Information");
+		ExtentTest node = ExtentListener.createNode("Document Information");
 		try {
+			node.info("Entering Document Information");
 			Documents_Documents docInfo = new Documents_Documents(getDriver());
 			docInfo.fillDocumentInformation("Diploma", TestDataGenerator.randomNotes(),
 					TestDataGenerator.randomPhotoFile());
-			ExtentListener.getNode().pass("Documents Information completed");
+			node.pass("Documents Information completed");
 			stepStatus.put("Documents Information", "PASS");
 		} catch (Exception e) {
-			ExtentListener.getNode().fail("Documents Information failed: " + e.getMessage());
+			node.fail("Documents Information failed: " + e.getMessage());
 			stepStatus.put("Documents Information", "FAIL");
 			failCount++;
 		}
@@ -34,15 +36,16 @@ public class IHSM_DocumentFullFlowTest extends BaseClass {
 
 	@Test(enabled = true, dependsOnMethods = "documentsInformation", alwaysRun = true, description = "Verify Passport Information Test")
 	public void passportInformation() {
-		ExtentListener.createNode("Passport Information");
+		ExtentTest node = ExtentListener.createNode("Passport Information");
 		try {
+			node.info("Entering Passport Information");
 			Documents_Passport docPassInfo = new Documents_Passport(getDriver());
 			docPassInfo.fillPassportDetails("Development", "England", TestDataGenerator.randomIssueAgency(),
 					TestDataGenerator.randomNumber(5), "ABCD1234567", "Manchester", "01012026", "01012027");
-			ExtentListener.getNode().pass("Passport Information completed");
+			node.pass("Passport Information completed");
 			stepStatus.put("Passport Information", "PASS");
 		} catch (Exception e) {
-			ExtentListener.getNode().fail("Passport Information failed: " + e.getMessage());
+			node.fail("Passport Information failed: " + e.getMessage());
 			stepStatus.put("Passport Information", "FAIL");
 			failCount++;
 		}
@@ -51,11 +54,11 @@ public class IHSM_DocumentFullFlowTest extends BaseClass {
 	// ---------------- SUMMARY ----------------
 	@AfterClass(alwaysRun = true)
 	public void summarizeDocumentsFlow() {
-		ExtentListener.createNode("DOCUMENTS INFORMATION FLOW SUMMARY");
+		ExtentTest node = ExtentListener.createNode("DOCUMENTS INFORMATION FLOW SUMMARY");
 		if (failCount == 0) {
-			ExtentListener.getNode().pass("All Documents Information sections executed successfully.");
+			node.pass("All Documents Information sections executed successfully.");
 		} else {
-			ExtentListener.getNode().fail("Total Failed Sections in Documents Information Flow: " + failCount);
+			node.fail("Total Failed Sections in Documents Information Flow: " + failCount);
 		}
 
 		System.out.println("==== Documents Flow Status for Employee ====");

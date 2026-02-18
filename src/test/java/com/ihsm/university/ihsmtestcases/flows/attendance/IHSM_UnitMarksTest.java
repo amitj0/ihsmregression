@@ -9,6 +9,7 @@ import org.testng.SkipException;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
+import com.aventstack.extentreports.ExtentTest;
 import com.ihsm.university.base.BaseClass;
 import com.ihsm.university.ihsmpageobjects.attandence.IHSM_ClassAttendance;
 import com.ihsm.university.ihsmpageobjects.attandence.IHSM_UnitMarks;
@@ -60,17 +61,17 @@ public class IHSM_UnitMarksTest extends BaseClass {
 	@Test(priority = 1, description = "Verify Class Unit Show Marks")
 	public void verifyShowUnitMarks() {
 
-		ExtentListener.createNode("Class Unit Show Marks Information");
+		ExtentTest node =  ExtentListener.createNode("Class Unit Show Marks Information");
 		int failCount = 0;
 
 		try {
-
+			node.info("Entering Class Unit Show Marks Details");
 			IHSM_UnitMarks classUnitMarks = new IHSM_UnitMarks(getDriver());
 			classUnitMarks.fillUnitMarksShowInformation(1, 1, 1, 1);
-			ExtentListener.getNode().pass("Class Unit Show Marks added successfully");
+			node.pass("Class Unit Show Marks added successfully");
 			stepStatus.put("Class Unit Show Marks", "PASS");
 		} catch (Exception e) {
-			ExtentListener.getNode().fail("Class Unit Show Marks  failed: " + e.getMessage());
+			node.fail("Class Unit Show Marks  failed: " + e.getMessage());
 			stepStatus.put("Class Unit Show Marks", "FAIL");
 			soft.fail("Class Unit Show Marks  failed: " + e.getMessage());
 
@@ -78,9 +79,9 @@ public class IHSM_UnitMarksTest extends BaseClass {
 		}
 
 		if (failCount == 0) {
-			ExtentListener.getNode().pass("All Class Unit Show Marks sections executed successfully.");
+			node.pass("All Class Unit Show Marks sections executed successfully.");
 		} else {
-			ExtentListener.getNode().fail("Total Failed Sections in Class Unit Show Marks  Flow: " + failCount);
+			node.fail("Total Failed Sections in Class Unit Show Marks  Flow: " + failCount);
 		}
 
 		soft.assertAll();

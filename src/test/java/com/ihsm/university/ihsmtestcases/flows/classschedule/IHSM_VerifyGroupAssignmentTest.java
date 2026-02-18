@@ -9,6 +9,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
+import com.aventstack.extentreports.ExtentTest;
 import com.ihsm.university.base.BaseClass;
 import com.ihsm.university.ihsmpageobjects.classchedule.IHSM_FacultyGroupAssignment;
 import com.ihsm.university.ihsmpageobjects.classchedule.IHSM_FacultyShowData;
@@ -25,25 +26,27 @@ public class IHSM_VerifyGroupAssignmentTest extends BaseClass {
 
 	@Test(groups = "Regression",priority = 0, description = "Verify Group Assignment Test", dataProvider = "FacultyGroupAssignData", dataProviderClass = FacultyGroupAssignmentDataProvider.class)
 	public void verifyGroupAssignment(FacultyGroupAssignData data) {
-		ExtentListener.createNode("Group Assignment Information");
+		ExtentTest node = ExtentListener.createNode("Group Assignment Information");
 		try {
+			node.info("Entering Group Assignment Details");
 			IHSM_FacultyGroupAssignment facultyGroup = new IHSM_FacultyGroupAssignment(getDriver());
 //			facultyGroup.fillGroupAssignmentInfo("2025 -2026", "1", "CENTRAL / Bachelor / MBBS", "1", "Main");
 			facultyGroup.fillGroupAssignmentInfo(data.getSession(), data.getBatch(), data.getAcademicPlan(),
 					data.getSemester(), data.getGroupType(), data.getSelectFaculty());
-			ExtentListener.getNode().pass("Group Assignment Information Test Passed");
+			node.pass("Group Assignment Information Test Passed");
 			stepStatus.put("Group Assignment", "PASS");
 		} catch (Exception e) {
-			ExtentListener.getNode().fail("Group Assignment Information Failed: " + e.getMessage());
+			node.fail("Group Assignment Information Failed: " + e.getMessage());
 			stepStatus.put("Group Assignment", "FAIL");
-			soft.fail("Group Assignment Information Failed: " + e.getMessage());
+			node.fail("Group Assignment Information Failed: " + e.getMessage());
 		}
 	}
 
 	@Test(groups = "Regression",description = "Verify Faculty Group Data Test", priority = 1, dependsOnMethods = "verifyGroupAssignment", dataProvider = "FacultyShowDataProvider", dataProviderClass = FacultyShowDataProvider.class, alwaysRun = true)
 	public void verifyFacultyGroupData(FacultyShowData data) {
-		ExtentListener.createNode("Faculty Show Data Information");
+		ExtentTest node = ExtentListener.createNode("Faculty Show Data Information");
 		try {
+			node.info("Entering Faculty Show Data Details");
 			IHSM_FacultyShowData showData = new IHSM_FacultyShowData(getDriver());
 			/*
 			 * showData.fillFacultyShowData("2025 -2026", "1", "CENTRAL / Bachelor / MBBS",
@@ -53,12 +56,12 @@ public class IHSM_VerifyGroupAssignmentTest extends BaseClass {
 			showData.fillFacultyShowData(data.getSession(), data.getBatch(), data.getAcademicPlan(), data.getSemester(),
 					data.getFacultyName()/* , data.getGroupType() */);
 
-			ExtentListener.getNode().pass("Faculty Show Data Test Passed");
+			node.pass("Faculty Show Data Test Passed");
 			stepStatus.put("Faculty Show Data", "PASS");
 		} catch (Exception e) {
-			ExtentListener.getNode().fail("Faculty Show Data Test Failed: " + e.getMessage());
+			node.fail("Faculty Show Data Test Failed: " + e.getMessage());
 			stepStatus.put("Faculty Show Data", "FAIL");
-			soft.fail("Faculty Show Data Test Failed: " + e.getMessage());
+			node.fail("Faculty Show Data Test Failed: " + e.getMessage());
 		}
 	}
 

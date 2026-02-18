@@ -6,6 +6,7 @@ import java.util.Map;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
+import com.aventstack.extentreports.ExtentTest;
 import com.ihsm.university.base.BaseClass;
 import com.ihsm.university.ihsmpageobjects.student.documents.*;
 import com.ihsm.university.ihsmtestcases.dataprovider.IdentificationCardData;
@@ -31,150 +32,138 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
 	// ---------------- OTHER DOCUMENTS ----------------
-	@Test(groups = "Regression",dataProvider = "StudentOtherDocuments", dataProviderClass = OtherDocumentsData.class, description = "Verify Other Documents Information Test")
+	@Test(groups = "Regression", dataProvider = "StudentOtherDocuments", dataProviderClass = OtherDocumentsData.class, description = "Verify Other Documents Information Test")
 	public void otherDocumentsInformation(StudentOtherDocuments data) {
-		ExtentListener.createNode("Other Documents Information");
+		ExtentTest node = ExtentListener.createNode("Other Documents Information");
 		try {
+			node.info("Entering Other Documents Information");
 			Documents_OtherDocuments documentsPage = new Documents_OtherDocuments(getDriver());
 //            documentsPage.fillOtherDocumentsForm("Passport Front", TestDataGenerator.randomEmployeePhotoFile());
 			documentsPage.fillOtherDocumentsForm(data.getDocumentType(), TestDataGenerator.randomEmployeePhotoFile());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
-			ExtentListener.getNode().pass("Other Documents Information completed");
+			node.pass("Other Documents Information completed");
 			stepStatus.put("Other Documents", "PASS");
 		} catch (Exception e) {
-			ExtentListener.getNode().fail("Other Documents Information failed: " + e.getMessage());
+			node.fail("Other Documents Information failed: " + e.getMessage());
 			stepStatus.put("Other Documents", "FAIL");
 		}
 	}
 
 	// ---------------- IDENTIFICATION CARD ----------------
-	@Test(groups = "Regression",dependsOnMethods = "otherDocumentsInformation", dataProvider = "StudentIdentificationCardData", dataProviderClass = IdentificationCardData.class, description = "Verify Identification Card Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "otherDocumentsInformation", dataProvider = "StudentIdentificationCardData", dataProviderClass = IdentificationCardData.class, description = "Verify Identification Card Information Test")
 	public void identificationCardInformation(StudentIdentificationData data) {
-		ExtentListener.createNode("Identification Card Information");
+		ExtentTest node = ExtentListener.createNode("Identification Card Information");
 		try {
-			/*
-			 * new Documents_IdentificationCard(getDriver()).fillIdentificationCardDetails(
-			 * "ID12345", "India", "01012026", "01012030",
-			 * TestDataGenerator.randomEmployeePhotoFile());
-			 */
+			node.info("Entering Identification Card Information");
 			new Documents_IdentificationCard(getDriver()).fillIdentificationCardDetails(data.getIdNumber(),
 					data.getCountry(), data.getStartDate(), data.getEndDate(),
 					TestDataGenerator.randomEmployeePhotoFile());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
-			ExtentListener.getNode().pass("Identification Card Information completed");
+			node.pass("Identification Card Information completed");
 			stepStatus.put("Identification Card", "PASS");
 		} catch (Exception e) {
-			ExtentListener.getNode().fail("Identification Card Information failed: " + e.getMessage());
+			node.fail("Identification Card Information failed: " + e.getMessage());
 			stepStatus.put("Identification Card", "FAIL");
 		}
 	}
 
 	// ---------------- VISA OFFLINE ----------------
-	@Test(groups = "Regression",dependsOnMethods = "identificationCardInformation", dataProvider = "StudentVisaOfflineData", dataProviderClass = VisaOfflineData.class, description = "Verify Visa Offline Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "identificationCardInformation", dataProvider = "StudentVisaOfflineData", dataProviderClass = VisaOfflineData.class, description = "Verify Visa Offline Information Test")
 	public void visaOfflineInformation(StudentVisaOfflineData data) {
-		ExtentListener.createNode("Visa Offline Information");
+		ExtentTest node = ExtentListener.createNode("Visa Offline Information");
 		try {
-			/*
-			 * new Documents_VisaInfo_OffVisa(getDriver()).
-			 * fillVisaInfoOffVisaForm("14 Month Single", "Home Country", "01012030",
-			 * "01012031", "01012035", "01012035", "V12345", "India",
-			 * TestDataGenerator.randomNotes(),
-			 * TestDataGenerator.randomEmployeePhotoFile());
-			 */
+			node.info("Entering Visa Offline Information");
 			new Documents_VisaInfo_OffVisa(getDriver()).fillVisaInfoOffVisaForm(data.getVisaType(),
 					data.getHomeCountry(), data.getStartDate(), data.getEndDate(), data.getIssueDate(),
 					data.getExpiryDate(), data.getVisaNumber(), data.getCountry(), data.getNotes(),
 					TestDataGenerator.randomEmployeePhotoFile());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
-			ExtentListener.getNode().pass("Visa Offline Information completed");
+			node.pass("Visa Offline Information completed");
 			stepStatus.put("Visa Offline", "PASS");
 		} catch (Exception e) {
-			ExtentListener.getNode().fail("Visa Offline Information failed: " + e.getMessage());
+			node.fail("Visa Offline Information failed: " + e.getMessage());
 			stepStatus.put("Visa Offline", "FAIL");
 		}
 	}
 
 	// ---------------- VISA ONLINE ----------------
-	@Test(groups = "Regression",dependsOnMethods = "visaOfflineInformation", dataProvider = "StudentVisaOnlineData", dataProviderClass = VisaOnlineData.class, description = "Verify Visa Online Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "visaOfflineInformation", dataProvider = "StudentVisaOnlineData", dataProviderClass = VisaOnlineData.class, description = "Verify Visa Online Information Test")
 	public void visaOnlineInformation(StudentVisaOnlineData data) {
-		ExtentListener.createNode("Visa Online Information");
+		ExtentTest node = ExtentListener.createNode("Visa Online Information");
 		try {
-			/*
-			 * new
-			 * Documents_VisaInfo_OnVisa(getDriver()).fillOnlineVisaInfo("14 Month Single",
-			 * "01012035", "01012038", "01012040", "OVNP1234");
-			 */
+			node.info("Entering Visa Online Information");
 			new Documents_VisaInfo_OnVisa(getDriver()).fillOnlineVisaInfo(data.getVisaType(), data.getStartDate(),
 					data.getEndDate(), data.getExpiryDate(), data.getOnlineVisaNumber());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
-			ExtentListener.getNode().pass("Visa Online Information completed");
+			node.pass("Visa Online Information completed");
 			stepStatus.put("Visa Online", "PASS");
 		} catch (Exception e) {
-			ExtentListener.getNode().fail("Visa Online Information failed: " + e.getMessage());
+			node.fail("Visa Online Information failed: " + e.getMessage());
 			stepStatus.put("Visa Online", "FAIL");
 		}
 	}
 
 	// ---------------- VISA REGISTER ----------------
-	@Test(groups = "Regression",dependsOnMethods = "visaOnlineInformation", dataProvider = "StudentVisaRegisterData", dataProviderClass = VisaRegisterData.class, description = "Verify Visa Register Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "visaOnlineInformation", dataProvider = "StudentVisaRegisterData", dataProviderClass = VisaRegisterData.class, description = "Verify Visa Register Information Test")
 	public void visaRegisterInformation(StudentVisaRegisterData data) {
-		ExtentListener.createNode("Visa Register Information");
+		ExtentTest node = ExtentListener.createNode("Visa Register Information");
 		try {
-			/*
-			 * new Documents_VisaInfo_Register(getDriver()).fillRegisterInfo("Home Country",
-			 * "India", "01012026", TestDataGenerator.randomNotes());
-			 */
+			node.info("Entering Visa Register Information");
 			new Documents_VisaInfo_Register(getDriver()).fillRegisterInfo(data.getHomeCountry(), data.getCountry(),
 					data.getRegisterDate(), data.getNotes());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
-			ExtentListener.getNode().pass("Visa Register Information completed");
+			node.pass("Visa Register Information completed");
 			stepStatus.put("Visa Register", "PASS");
 		} catch (Exception e) {
-			ExtentListener.getNode().fail("Visa Register Information failed: " + e.getMessage());
+			node.fail("Visa Register Information failed: " + e.getMessage());
 			stepStatus.put("Visa Register", "FAIL");
 		}
 	}
 
 	// ---------------- PASSPORT LOCATION ----------------
-	@Test(groups = "Regression",dependsOnMethods = "visaRegisterInformation", dataProvider = "StudentPassportLocationData", dataProviderClass = PassportLocationData.class, description = "Verify Passport Location Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "visaRegisterInformation", dataProvider = "StudentPassportLocationData", dataProviderClass = PassportLocationData.class, description = "Verify Passport Location Information Test")
 	public void passportLocationInformation(StudentPassportLocationData data) {
-		ExtentListener.createNode("Passport Location Information");
+		ExtentTest node = ExtentListener.createNode("Passport Location Information");
 		try {
-//			new Documents_VisaInfo_PassportLocation(getDriver()).fillPassportLocationInfo("Delhi", "01012026");
+			node.info("Entering Passport Location Information");
 			new Documents_VisaInfo_PassportLocation(getDriver()).fillPassportLocationInfo(data.getLocation(),
 					data.getDate());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
-			ExtentListener.getNode().pass("Passport Location Information completed");
+			node.pass("Passport Location Information completed");
 			stepStatus.put("Passport Location", "PASS");
 		} catch (Exception e) {
-			ExtentListener.getNode().fail("Passport Location Information failed: " + e.getMessage());
+			node.fail("Passport Location Information failed: " + e.getMessage());
 			stepStatus.put("Passport Location", "FAIL");
 		}
 	}
 
 	// ---------------- PASSPORT ----------------
-	@Test(groups = "Regression",dependsOnMethods = "passportLocationInformation", dataProvider = "StudentPassportData", dataProviderClass = PassportData.class, description = "Verify Passport Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "passportLocationInformation", dataProvider = "StudentPassportData", dataProviderClass = PassportData.class, description = "Verify Passport Information Test")
 	public void passportInformation(StudentPassportData data) {
-		ExtentListener.createNode("Passport Information");
+		ExtentTest node = ExtentListener.createNode("Passport Information");
 		try {
-			/*
-			 * new Documents_PassportInformation(getDriver()).fillPassportInformation(
-			 * "AB123456", "Delhi", "01012026", "01012030");
-			 */
+			node.info("Entering Passport Information");
 			new Documents_PassportInformation(getDriver()).fillPassportInformation(data.getPassportNumber(),
 					data.getPlaceOfIssue(), data.getIssueDate(), data.getExpiryDate());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing screenshot
+			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
+																		// screenshot
 			System.out.println(pageText); // Debug: Print page text to verify content
-			ExtentListener.getNode().pass("Passport Information completed");
+			node.pass("Passport Information completed");
 			stepStatus.put("Passport Information", "PASS");
 		} catch (Exception e) {
-			ExtentListener.getNode().fail("Passport Information failed: " + e.getMessage());
+			node.fail("Passport Information failed: " + e.getMessage());
 			stepStatus.put("Passport Information", "FAIL");
 		}
 	}

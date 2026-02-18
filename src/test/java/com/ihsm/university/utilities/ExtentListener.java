@@ -33,7 +33,53 @@ public class ExtentListener implements ITestListener {
 		ExtentSparkReporter spark = new ExtentSparkReporter(reportPath);
 		spark.config().setDocumentTitle("IHSM University Automation Report");
 		spark.config().setReportName("Automation Execution Report");
+		spark.config().setTimeStampFormat("dd MMM yyyy HH:mm:ss");
 		spark.config().setTheme(Theme.DARK);
+
+		spark.config().setTheme(Theme.DARK);
+		spark.config().setTimeStampFormat("dd MMM yyyy HH:mm:ss");
+
+		spark.config().setCss(
+
+		        /* ===== GLOBAL FONT ===== */
+		        "body { font-family: 'Segoe UI', Roboto, sans-serif !important; }" +
+
+		        /* ===== NAVBAR ===== */
+		        ".navbar { background: linear-gradient(90deg,#0f2027,#203a43,#2c5364) !important; }" +
+		        ".navbar-brand { font-size: 22px !important; font-weight: 700 !important; }" +
+
+		        /* ===== CARD DESIGN ===== */
+		        ".card { border-radius: 16px !important; box-shadow: 0 6px 18px rgba(0,0,0,0.4) !important; transition: 0.3s ease-in-out; }" +
+		        ".card:hover { transform: translateY(-3px); }" +
+
+		        /* ===== TEST TITLE ===== */
+		        ".test-name { font-size: 19px !important; font-weight: 600 !important; }" +
+		        ".node-name { font-weight: 500 !important; }" +
+
+		        /* ===== STATUS BADGES ===== */
+		        ".badge-success { background-color: #00e676 !important; }" +
+		        ".badge-danger { background-color: #ff1744 !important; }" +
+		        ".badge-warning { background-color: #ff9100 !important; }" +
+
+		        /* ===== STATUS TEXT ===== */
+		        ".status.pass { color: #00e676 !important; }" +
+		        ".status.fail { color: #ff5252 !important; }" +
+		        ".status.skip { color: #ffab00 !important; }" +
+
+		        /* ===== SIDEBAR ===== */
+		        ".side-nav { background-color: #1c1f26 !important; }" +
+		        ".side-nav li a { font-weight: 500 !important; }" +
+
+		        /* ===== TABLE SPACING ===== */
+		        "table tr { line-height: 1.8 !important; }" +
+
+		        /* ===== TIMESTAMP STYLE ===== */
+		        ".timestamp { font-size: 13px !important; opacity: 0.8 !important; }"
+
+		);
+
+
+
 
 		extent = new ExtentReports();
 		extent.attachReporter(spark);
@@ -41,7 +87,10 @@ public class ExtentListener implements ITestListener {
 		extent.setSystemInfo("Project", "IHSM University");
 		extent.setSystemInfo("Environment", "QA");
 		extent.setSystemInfo("Browser", "Chrome");
-		extent.setSystemInfo("User", System.getProperty("user.name"));
+		extent.setSystemInfo("Executed By", System.getProperty("user.name"));
+		extent.setSystemInfo("Operating System", System.getProperty("os.name"));
+		extent.setSystemInfo("Java Version", System.getProperty("java.version"));
+		extent.setSystemInfo("Build Version", "2.0.0.48");
 	}
 
 	// ================= TEST START =================
@@ -55,8 +104,9 @@ public class ExtentListener implements ITestListener {
 			testName = result.getMethod().getMethodName();
 		}
 		ExtentTest parent = extent.createTest(testName);
-		parent.assignAuthor("Amit Jangra");
+		parent.assignAuthor("Amit");
 		parent.assignCategory(result.getMethod().getGroups());
+		parent.assignDevice("Chrome");
 
 		parentTest.set(parent);
 		childTest.remove();
@@ -114,6 +164,12 @@ public class ExtentListener implements ITestListener {
 	public void onFinish(ITestContext context) {
 
 		if (extent != null) {
+			extent.createTest("Execution Summary")
+	        .info("Total Tests: " + context.getAllTestMethods().length)
+	        .info("Passed: " + context.getPassedTests().size())
+	        .info("Failed: " + context.getFailedTests().size())
+	        .info("Skipped: " + context.getSkippedTests().size());
+
 			extent.flush();
 		}
 	}

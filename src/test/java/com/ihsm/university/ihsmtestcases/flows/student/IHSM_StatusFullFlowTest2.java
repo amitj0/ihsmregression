@@ -6,6 +6,7 @@ import java.util.Map;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
+import com.aventstack.extentreports.ExtentTest;
 import com.ihsm.university.base.BaseClass;
 import com.ihsm.university.ihsmpageobjects.student.status.Status_Status;
 import com.ihsm.university.ihsmtestcases.dataprovider.StudentStatusDataProvider;
@@ -20,15 +21,16 @@ public class IHSM_StatusFullFlowTest2 extends BaseClass {
 	// ---------------- STATUS INFORMATION ----------------
 	@Test(groups = "Regression",dataProvider = "StudentStatusData", dataProviderClass = StudentStatusDataProvider.class, description = "Verify Status Information Test")
 	public void statusInformation(StudentStatusData data) {
-		ExtentListener.createNode("Status Information");
+		ExtentTest node =ExtentListener.createNode("Status Information");
 		try {
+			node.info("Entering Status Information");
 			Status_Status statusInfo = new Status_Status(getDriver());
 			statusInfo.fillStatusStatusForm(data.getStatus(), data.getStatusDate(), data.getStatusCode(),
 					data.getNotes(), TestDataGenerator.randomEmployeePhotoFile());
-			ExtentListener.getNode().pass("Status Information completed");
+			node.pass("Status Information completed");
 			stepStatus.put("Status Information", "PASS");
 		} catch (Exception e) {
-			ExtentListener.getNode().fail("Status Information failed: " + e.getMessage());
+			node.fail("Status Information failed: " + e.getMessage());
 			stepStatus.put("Status Information", "FAIL");
 		}
 	}
