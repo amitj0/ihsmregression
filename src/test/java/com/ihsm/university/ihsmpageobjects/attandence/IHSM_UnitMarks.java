@@ -20,7 +20,7 @@ public class IHSM_UnitMarks extends BasePage {
 	@FindBy(xpath = "//div[@class='departmentname']")
 	private WebElement chooseDegreeFaculty; // now hardcode for the degree fac
 
-	@FindBy(xpath = "//div[@class='departmentname' and normalize-space()='Manager']")
+	@FindBy(xpath = "//div[@class='departmentname' and normalize-space()='Faculty']")
 	private WebElement choosePosition; // now this one is also hard code
 
 	@FindBy(xpath = "//a[@id='a7']//span[normalize-space()='Teacher']")
@@ -149,6 +149,8 @@ public class IHSM_UnitMarks extends BasePage {
 	// fill the unit marks
 	public void fillUnitMarksInformation(String date, String input1, String input2, List<Integer> values) {
 
+		chooseDegreeFaculty();
+		choosePosition();
 		unitMarksTab();
 		checkbox();
 		unitDateField(date);
@@ -234,6 +236,8 @@ public class IHSM_UnitMarks extends BasePage {
 	// show unit marks
 	public void fillUnitMarksShowInformation(int session, int batch, int academics, int course) {
 
+		chooseDegreeFaculty();
+		choosePosition();
 		unitMarksTab();
 		showMarksTab();
 		selectSessionList(session);

@@ -31,7 +31,7 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
 	// ---------------- OTHER DOCUMENTS ----------------
-	@Test(groups = "Regression",dataProvider = "StudentOtherDocuments", dataProviderClass = OtherDocumentsData.class)
+	@Test(groups = "Regression",dataProvider = "StudentOtherDocuments", dataProviderClass = OtherDocumentsData.class, description = "Verify Other Documents Information Test")
 	public void otherDocumentsInformation(StudentOtherDocuments data) {
 		ExtentListener.createNode("Other Documents Information");
 		try {
@@ -49,7 +49,7 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 	}
 
 	// ---------------- IDENTIFICATION CARD ----------------
-	@Test(groups = "Regression",dependsOnMethods = "otherDocumentsInformation", dataProvider = "StudentIdentificationCardData", dataProviderClass = IdentificationCardData.class)
+	@Test(groups = "Regression",dependsOnMethods = "otherDocumentsInformation", dataProvider = "StudentIdentificationCardData", dataProviderClass = IdentificationCardData.class, description = "Verify Identification Card Information Test")
 	public void identificationCardInformation(StudentIdentificationData data) {
 		ExtentListener.createNode("Identification Card Information");
 		try {
@@ -72,7 +72,7 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 	}
 
 	// ---------------- VISA OFFLINE ----------------
-	@Test(groups = "Regression",dependsOnMethods = "identificationCardInformation", dataProvider = "StudentVisaOfflineData", dataProviderClass = VisaOfflineData.class)
+	@Test(groups = "Regression",dependsOnMethods = "identificationCardInformation", dataProvider = "StudentVisaOfflineData", dataProviderClass = VisaOfflineData.class, description = "Verify Visa Offline Information Test")
 	public void visaOfflineInformation(StudentVisaOfflineData data) {
 		ExtentListener.createNode("Visa Offline Information");
 		try {
@@ -98,7 +98,7 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 	}
 
 	// ---------------- VISA ONLINE ----------------
-	@Test(groups = "Regression",dependsOnMethods = "visaOfflineInformation", dataProvider = "StudentVisaOnlineData", dataProviderClass = VisaOnlineData.class)
+	@Test(groups = "Regression",dependsOnMethods = "visaOfflineInformation", dataProvider = "StudentVisaOnlineData", dataProviderClass = VisaOnlineData.class, description = "Verify Visa Online Information Test")
 	public void visaOnlineInformation(StudentVisaOnlineData data) {
 		ExtentListener.createNode("Visa Online Information");
 		try {
@@ -120,7 +120,7 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 	}
 
 	// ---------------- VISA REGISTER ----------------
-	@Test(groups = "Regression",dependsOnMethods = "visaOnlineInformation", dataProvider = "StudentVisaRegisterData", dataProviderClass = VisaRegisterData.class)
+	@Test(groups = "Regression",dependsOnMethods = "visaOnlineInformation", dataProvider = "StudentVisaRegisterData", dataProviderClass = VisaRegisterData.class, description = "Verify Visa Register Information Test")
 	public void visaRegisterInformation(StudentVisaRegisterData data) {
 		ExtentListener.createNode("Visa Register Information");
 		try {
@@ -141,7 +141,7 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 	}
 
 	// ---------------- PASSPORT LOCATION ----------------
-	@Test(groups = "Regression",dependsOnMethods = "visaRegisterInformation", dataProvider = "StudentPassportLocationData", dataProviderClass = PassportLocationData.class)
+	@Test(groups = "Regression",dependsOnMethods = "visaRegisterInformation", dataProvider = "StudentPassportLocationData", dataProviderClass = PassportLocationData.class, description = "Verify Passport Location Information Test")
 	public void passportLocationInformation(StudentPassportLocationData data) {
 		ExtentListener.createNode("Passport Location Information");
 		try {
@@ -159,7 +159,7 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 	}
 
 	// ---------------- PASSPORT ----------------
-	@Test(groups = "Regression",dependsOnMethods = "passportLocationInformation", dataProvider = "StudentPassportData", dataProviderClass = PassportData.class)
+	@Test(groups = "Regression",dependsOnMethods = "passportLocationInformation", dataProvider = "StudentPassportData", dataProviderClass = PassportData.class, description = "Verify Passport Information Test")
 	public void passportInformation(StudentPassportData data) {
 		ExtentListener.createNode("Passport Information");
 		try {

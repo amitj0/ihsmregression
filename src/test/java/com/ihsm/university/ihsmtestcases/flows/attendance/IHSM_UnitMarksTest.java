@@ -19,7 +19,7 @@ public class IHSM_UnitMarksTest extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 	private SoftAssert soft = new SoftAssert();
 
-	@Test(priority = 0, testName = "Verify Class Unit Marks")
+	@Test(priority = 0, description = "Verify Class Unit Marks")
 	public void verifyUnitMark() {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
@@ -57,7 +57,7 @@ public class IHSM_UnitMarksTest extends BaseClass {
 		soft.assertAll();
 	}
 
-	@Test(priority = 1, testName = "Verify Class Unit Show Marks")
+	@Test(priority = 1, description = "Verify Class Unit Show Marks")
 	public void verifyShowUnitMarks() {
 
 		ExtentListener.createNode("Class Unit Show Marks Information");

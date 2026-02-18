@@ -121,7 +121,7 @@ public class IHSM_ClassSchedule extends BasePage {
 	@FindBy(xpath = "//div[contains(label,'CONSTRAINTS')]//option")
 	private List<WebElement> constList;
 
-	@FindBy(xpath = "(//div[@id='btnSaveSchedule'])[2]")
+	@FindBy(xpath = "//div[@id='btnSaveSchedule']")
 	private WebElement saveBtn;
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")

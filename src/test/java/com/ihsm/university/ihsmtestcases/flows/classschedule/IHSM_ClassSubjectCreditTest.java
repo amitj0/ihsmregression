@@ -19,7 +19,7 @@ public class IHSM_ClassSubjectCreditTest extends BaseClass {
 
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
-	@Test(groups = "Regression",enabled = true,priority = 0, dataProvider = "SubjectCreditData", dataProviderClass = ClassScheduleDataProvider.class, testName = "Verify Subject Credit")
+	@Test(groups = "Regression",enabled = true,priority = 0, dataProvider = "SubjectCreditData", dataProviderClass = ClassScheduleDataProvider.class, description = "Verify Subject Credit Test")
 	public void verifySubjectCredit(SubjectCreditData data) {
 
 		ExtentListener.createNode("Subject Credit Information");
@@ -47,7 +47,7 @@ public class IHSM_ClassSubjectCreditTest extends BaseClass {
 		soft.assertAll();
 	}
 
-	@Test(groups = "Regression",enabled = true, testName = "Verify Subject Hours", priority = 1, dependsOnMethods = "verifySubjectCredit", dataProvider = "SubjectHoursData", dataProviderClass = ClassScheduleDataProvider.class, alwaysRun = true)
+	@Test(groups = "Regression",enabled = true, description = "Verify Subject Hours Test", priority = 1, dependsOnMethods = "verifySubjectCredit", dataProvider = "SubjectHoursData", dataProviderClass = ClassScheduleDataProvider.class, alwaysRun = true)
 	public void verifySubjectHours(SubjectHoursData data) {
 		ExtentListener.createNode("Subject Credit HOURS Information");
 		SoftAssert soft = new SoftAssert();

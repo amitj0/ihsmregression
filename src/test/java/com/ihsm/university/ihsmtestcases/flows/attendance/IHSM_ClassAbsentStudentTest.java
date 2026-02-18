@@ -17,7 +17,7 @@ public class IHSM_ClassAbsentStudentTest extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 	private SoftAssert soft = new SoftAssert();
 
-	@Test(priority = 1, testName = "Verify Class Attendance 4")
+	@Test(priority = 1, description = "Verify Class Attendance 4")
 	public void fillClassAttendance4() {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
@@ -26,10 +26,9 @@ public class IHSM_ClassAbsentStudentTest extends BaseClass {
 		int failCount = 0;
 
 		try {
-			List<Integer> attendanceValues = Arrays.asList(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-					40, 40);
+			List<Integer> attendanceValues = Arrays.asList(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40);
 			IHSM_ClassAttendance classAttendance = new IHSM_ClassAttendance(getDriver());
-			classAttendance.fillClassAttendance4(1, 1, 3, attendanceValues);
+			classAttendance.fillClassAttendance4(1, 1, 1, attendanceValues);
 			ExtentListener.getNode().pass("Class Attendance 4 added successfully");
 			stepStatus.put("Class Attendance", "PASS");
 		} catch (Exception e) {

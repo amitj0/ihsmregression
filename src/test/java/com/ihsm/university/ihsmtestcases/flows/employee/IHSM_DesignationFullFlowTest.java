@@ -15,7 +15,7 @@ public class IHSM_DesignationFullFlowTest extends BaseClass {
 
     private Map<String, String> stepStatus = new LinkedHashMap<>();
 
-    @Test(groups = "Regression")
+    @Test(groups = "Regression", description = "Verify Employee Rights Information Test")
     public void employeeRightsInformation() {
         ExtentListener.createNode("Employee Rights Information");
         try {
@@ -44,7 +44,7 @@ public class IHSM_DesignationFullFlowTest extends BaseClass {
         }
     }
 
-    @Test(groups = "Regression",dependsOnMethods = "employeeRightsInformation", alwaysRun = true)
+    @Test(groups = "Regression",dependsOnMethods = "employeeRightsInformation", alwaysRun = true, description = "Verify Employee Position Information Test")
     public void employeePositionInformation() {
         ExtentListener.createNode("Employee Position Information");
         try {

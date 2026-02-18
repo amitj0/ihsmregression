@@ -48,7 +48,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
-	@Test(groups = "Regression")
+	@Test(groups = "Regression",description = "Verify Employee Enrollnment Information Test")
 	public void enrollmentInformation() {
 
 		ExtentListener.createNode("Enrollment Information");
@@ -100,7 +100,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "enrollmentInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "enrollmentInformation", alwaysRun = true, description = "Verify Employee Personal Information Test")
 	public void personalInformation() {
 		ExtentListener.createNode("Personal Information");
 		try {
@@ -119,7 +119,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "personalInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "personalInformation", alwaysRun = true, description = "Verify Employee Guardian Information Test")
 	public void guardianInformation() {
 		ExtentListener.createNode("Guardian Information");
 		try {
@@ -134,7 +134,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "guardianInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "guardianInformation", alwaysRun = true, description = "Verify Employee Language Information Test")
 	public void languageInformation() {
 		ExtentListener.createNode("Language Information");
 		try {
@@ -148,7 +148,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "languageInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "languageInformation", alwaysRun = true, description = "Verify Employee Vaccination Information Test")
 	public void vaccinationInformation() {
 		ExtentListener.createNode("Vaccination Information");
 		try {
@@ -163,7 +163,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "vaccinationInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "vaccinationInformation", alwaysRun = true, description = "Verify Employee Biometrics Information Test")
 	public void biometricsInformation() {
 		ExtentListener.createNode("Biometrics Information");
 		try {

@@ -18,16 +18,11 @@ public class IHSM_StatusFullFlowTest2 extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
 	// ---------------- STATUS INFORMATION ----------------
-	@Test(groups = "Regression",dataProvider = "StudentStatusData", dataProviderClass = StudentStatusDataProvider.class)
+	@Test(groups = "Regression",dataProvider = "StudentStatusData", dataProviderClass = StudentStatusDataProvider.class, description = "Verify Status Information Test")
 	public void statusInformation(StudentStatusData data) {
 		ExtentListener.createNode("Status Information");
 		try {
 			Status_Status statusInfo = new Status_Status(getDriver());
-			/*
-			 * statusInfo.fillStatusStatusForm( "Enrolled and Active", "01012026", "45454",
-			 * TestDataGenerator.randomNotes(), TestDataGenerator.randomEmployeePhotoFile()
-			 * );
-			 */
 			statusInfo.fillStatusStatusForm(data.getStatus(), data.getStatusDate(), data.getStatusCode(),
 					data.getNotes(), TestDataGenerator.randomEmployeePhotoFile());
 			ExtentListener.getNode().pass("Status Information completed");

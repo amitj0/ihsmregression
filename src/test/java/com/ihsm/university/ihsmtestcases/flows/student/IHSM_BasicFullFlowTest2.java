@@ -56,7 +56,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
-	@Test(groups = "Regression",dataProvider = "StudentEnrollnmentData", dataProviderClass = EnrollnmentData.class)
+	@Test(groups = "Regression",dataProvider = "StudentEnrollnmentData", dataProviderClass = EnrollnmentData.class, description = "Verify Student Enrollment Information Test")
 	public void enrollmentInformation(StudentEnrollnmentData data) {
 
 		ExtentListener.createNode("Enrollment Information");
@@ -115,7 +115,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "enrollmentInformation", dataProvider = "StudentPersonalData", dataProviderClass = PersonalData.class, alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "enrollmentInformation", dataProvider = "StudentPersonalData", dataProviderClass = PersonalData.class, alwaysRun = true, description = "Verify Student Personal Information Test")
 	public void personalInformation(StudentPersonalData data) {
 		ExtentListener.createNode("Personal Information");
 		try {
@@ -133,7 +133,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "personalInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "personalInformation", alwaysRun = true, description = "Verify Student Biometrics Information Test")
 	public void biometricsInformation() {
 		ExtentListener.createNode("Biometrics Information");
 		try {
@@ -150,7 +150,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "biometricsInformation", dataProvider = "StudentFamilyData", dataProviderClass = FamilyData.class, alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "biometricsInformation", dataProvider = "StudentFamilyData", dataProviderClass = FamilyData.class, alwaysRun = true, description = "Verify Student Family Information Test")
 	public void familyInformation(StudentFamilyData data) {
 		ExtentListener.createNode("Family Information");
 		try {
@@ -170,7 +170,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "familyInformation", dataProvider = "StudentLanguageData", dataProviderClass = LanguageData.class, alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "familyInformation", dataProvider = "StudentLanguageData", dataProviderClass = LanguageData.class, alwaysRun = true, description = "Verify Student Language Information Test")
 	public void languageInformation(StudentLanguageData data) {
 		ExtentListener.createNode("Language Information");
 		try {
@@ -187,7 +187,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "languageInformation", dataProvider = "StudentPreRightData", dataProviderClass = PreRightData.class, alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "languageInformation", dataProvider = "StudentPreRightData", dataProviderClass = PreRightData.class, alwaysRun = true, description = "Verify Student Pre Rights Information Test")
 	public void preRightsInformation(StudentPreRightData data) {
 		ExtentListener.createNode("Pre Rights Information");
 		try {
@@ -208,7 +208,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "preRightsInformation", dataProvider = "StudentSocialStatusData", dataProviderClass = SocialStatusData.class, alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "preRightsInformation", dataProvider = "StudentSocialStatusData", dataProviderClass = SocialStatusData.class, alwaysRun = true, description = "Verify Student Social Status Information Test")	
 	public void socialStatusInformation(StudentSocialStatusData data) {
 		ExtentListener.createNode("Social Status Information");
 		try {
@@ -227,7 +227,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "socialStatusInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "socialStatusInformation", alwaysRun = true, description = "Verify Student Work Location Information Test")
 	public void workLocationInformation() {
 		ExtentListener.createNode("Work Location Information");
 		try {
@@ -245,7 +245,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "workLocationInformation", dataProvider = "StudentMedicalVaccinationData", dataProviderClass = MedicalVaccination.class, alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "workLocationInformation", dataProvider = "StudentMedicalVaccinationData", dataProviderClass = MedicalVaccination.class, alwaysRun = true, description = "Verify Student Medical Vaccination Information Test")
 	public void medicalVaccinationInformation(StudentMedicalVaccinationData data) {
 		ExtentListener.createNode("Medical Vaccination Information");
 		try {
@@ -266,7 +266,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "medicalVaccinationInformation", dataProvider = "StudentMedicalAtPolyData", dataProviderClass = MedicalAtPolyData.class, alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "medicalVaccinationInformation", dataProvider = "StudentMedicalAtPolyData", dataProviderClass = MedicalAtPolyData.class, alwaysRun = true, description = "Verify Student Medical At Poly Information Test")
 	public void medicalAtPolyInformation(StudentMedicalAtPolyData data) {
 		ExtentListener.createNode("Medical At Poly Information");
 		try {
@@ -285,7 +285,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "medicalAtPolyInformation", dataProvider = "StudentMedicalInsuranceData", dataProviderClass = MedicalInsuranceData.class, alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "medicalAtPolyInformation", dataProvider = "StudentMedicalInsuranceData", dataProviderClass = MedicalInsuranceData.class, alwaysRun = true, description = "Verify Student Medical Insurance Information Test")
 	public void medicalInsuranceInformation(StudentMedicalInsuranceData data) {
 		ExtentListener.createNode("Medical Insurance Information");
 		try {
@@ -311,7 +311,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "medicalInsuranceInformation", dataProvider = "StudentMedicalDisabilityData", dataProviderClass = MedicalDisabilityData.class, alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "medicalInsuranceInformation", dataProvider = "StudentMedicalDisabilityData", dataProviderClass = MedicalDisabilityData.class, alwaysRun = true, description = "Verify Student Medical Disability Information Test")
 	public void medicalDisabilityInformation(StudentMedicalDisabilityData data) {
 		ExtentListener.createNode("Medical Disability Information");
 		try {

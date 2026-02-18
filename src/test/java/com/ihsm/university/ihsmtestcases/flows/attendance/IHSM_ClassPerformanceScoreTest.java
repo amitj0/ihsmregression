@@ -19,7 +19,7 @@ public class IHSM_ClassPerformanceScoreTest extends BaseClass {
 	private SoftAssert soft = new SoftAssert();
 	String[] dates = TestDataGenerator.getRandomScheduleDates();
 
-	@Test(priority = 0, testName = "Verify Class Attendance 3")
+	@Test(priority = 0, description = "Verify Class Attendance 3")
 	public void fillClassAttendance3() {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();

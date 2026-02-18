@@ -16,7 +16,7 @@ public class IHSM_ClassSchedulingInformationTest extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 	private SoftAssert soft = new SoftAssert();
 
-	@Test(enabled = false,priority = 0, testName = "Verify Class Scheduling")
+	@Test(groups = "Regression",enabled = false,priority = 0, description  = "Verify Class Scheduling Test")
 	public void verifyClassSchedule() {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
@@ -45,7 +45,7 @@ public class IHSM_ClassSchedulingInformationTest extends BaseClass {
 
 		soft.assertAll();
 	}
-	@Test(groups = "Regression", priority = 1, testName = "Verify Class Scheduling")
+	@Test(groups = "Regression", priority = 1, description = "Verify Class Scheduling Test")
 	public void verifyClassSchedule3() {
 		
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
@@ -75,7 +75,7 @@ public class IHSM_ClassSchedulingInformationTest extends BaseClass {
 		soft.assertAll();
 	}
 
-	@Test(enabled = false, priority = 1, testName = "Verify Class Scheduling")
+	@Test(enabled = false, priority = 1, description = "Verify Class Scheduling Test")
 	public void verifyClassSchedule2() {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();

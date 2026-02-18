@@ -23,7 +23,7 @@ public class IHSM_VerifyGroupAssignmentTest extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 	private SoftAssert soft = new SoftAssert();
 
-	@Test(groups = "Regression",priority = 0, testName = "Verify Group Assignment", dataProvider = "FacultyGroupAssignData", dataProviderClass = FacultyGroupAssignmentDataProvider.class)
+	@Test(groups = "Regression",priority = 0, description = "Verify Group Assignment Test", dataProvider = "FacultyGroupAssignData", dataProviderClass = FacultyGroupAssignmentDataProvider.class)
 	public void verifyGroupAssignment(FacultyGroupAssignData data) {
 		ExtentListener.createNode("Group Assignment Information");
 		try {
@@ -40,7 +40,7 @@ public class IHSM_VerifyGroupAssignmentTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",testName = "Verify Faculty Group Data", priority = 1, dependsOnMethods = "verifyGroupAssignment", dataProvider = "FacultyShowDataProvider", dataProviderClass = FacultyShowDataProvider.class, alwaysRun = true)
+	@Test(groups = "Regression",description = "Verify Faculty Group Data Test", priority = 1, dependsOnMethods = "verifyGroupAssignment", dataProvider = "FacultyShowDataProvider", dataProviderClass = FacultyShowDataProvider.class, alwaysRun = true)
 	public void verifyFacultyGroupData(FacultyShowData data) {
 		ExtentListener.createNode("Faculty Show Data Information");
 		try {

@@ -20,10 +20,10 @@ public class IHSM_ClassAttendance extends BasePage {
 	@FindBy(xpath = "//div[@class='departmentname']")
 	private WebElement chooseDegreeFaculty; // now hardcode for the degree fac
 
-	@FindBy(xpath = "//div[@class='departmentname' and normalize-space()='Manager']")
+	@FindBy(xpath = "//div[@class='departmentname' and normalize-space()='Faculty']")
 	private WebElement choosePosition; // now this one is also hard code
 
-	@FindBy(xpath = "//a[@id='a7']//span[normalize-space()='Teacher']")
+	@FindBy(xpath = "//span[normalize-space()='Teacher']")
 	private WebElement teacherTab;
 
 	@FindBy(xpath = "//a[@href='#/Class/ClassAttendance']")
@@ -76,6 +76,9 @@ public class IHSM_ClassAttendance extends BasePage {
 	// other
 	@FindBy(xpath = "//div[@data-bs-target='#pills-contact111']")
 	private WebElement performanceAbScoreTab;
+	
+	@FindBy(xpath = "//table[@id='tblPndingPerformanceForAbsent']//button[@data-bs-target='#updateattendance']")
+	private WebElement performanceAbEditAction;
 
 	// method to perform the action
 	public void chooseDegreeFaculty() {
@@ -237,6 +240,11 @@ public class IHSM_ClassAttendance extends BasePage {
 	public void performanceAbScoreTab() {
 		safeClick(performanceAbScoreTab);
 	}
+	
+	public void performanceAbEditAction() {
+		blinkElement(performanceAbEditAction);
+		safeClick(performanceAbEditAction);
+	}
 
 	// fill the class Attendance data
 	public void fillClassAttendance(int acadIdx, int crsIdx, int subIdx) {
@@ -276,7 +284,8 @@ public class IHSM_ClassAttendance extends BasePage {
 	}
 
 	public void fillClassAttendance3(int acadIdx, int crsIdx, int subIdx, List<Integer> attendanceValues) {
-
+		chooseDegreeFaculty();
+		choosePosition();
 		teacherTab();
 		classAttendance();
 		selectAcademicPlanByIndex(acadIdx);
@@ -294,7 +303,8 @@ public class IHSM_ClassAttendance extends BasePage {
 
 	public void fillClassAttendance4(int acadIdx, int crsIdx, int subIdx, List<Integer> attendanceValues) {
 
-		
+		chooseDegreeFaculty();
+		choosePosition();
 		teacherTab();
 		classAttendance();
 		selectAcademicPlanByIndex(acadIdx);
@@ -302,18 +312,18 @@ public class IHSM_ClassAttendance extends BasePage {
 		selectSubjectFieldByIndex(subIdx);
 
 		// other
-		markAttActionEdit();
-		checkBox2();
-		saveBtn();
-		okBtn();
+//		markAttActionEdit();
+//		checkBox2();
+//		saveBtn();
+//		okBtn();
 
-		selectAcademicPlanByIndex(acadIdx);
-		selectCourseFieldByIndex(crsIdx);
-		selectSubjectFieldByIndex(subIdx);
+//		selectAcademicPlanByIndex(acadIdx);
+//		selectCourseFieldByIndex(crsIdx);
+//		selectSubjectFieldByIndex(subIdx);
 
 		// other
 		performanceAbScoreTab();
-		performanceEditAction();
+		performanceAbEditAction();
 		studentPerForField(attendanceValues);
 		saveStBtn();
 		okBtn();

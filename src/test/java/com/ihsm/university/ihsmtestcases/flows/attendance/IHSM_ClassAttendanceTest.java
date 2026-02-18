@@ -21,7 +21,7 @@ public class IHSM_ClassAttendanceTest extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 	private SoftAssert soft = new SoftAssert();
 
-	@Test(priority = 0, testName = "Verify Class Attendance")
+	@Test(priority = 0, description = "Verify Class Attendance")
 	public void verifyClassAttendace() {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
@@ -31,7 +31,7 @@ public class IHSM_ClassAttendanceTest extends BaseClass {
 
 		try {
 			IHSM_ClassAttendance classAttendance = new IHSM_ClassAttendance(getDriver());
-			classAttendance.fillClassAttendance(1, 1, 3);
+			classAttendance.fillClassAttendance(1, 1, 1);
 			ExtentListener.getNode().pass("Class Attendance added successfully");
 			stepStatus.put("Class Attendance", "PASS");
 		} catch (Exception e) {
@@ -50,7 +50,7 @@ public class IHSM_ClassAttendanceTest extends BaseClass {
 		soft.assertAll();
 	}
 
-	@Test(priority = 1, testName = "Verify Class Attendance 2", dependsOnMethods = "verifyClassAttendace")
+	@Test(priority = 1, description = "Verify Class Attendance 2", dependsOnMethods = "verifyClassAttendace")
 	public void verifyClassAttendace2() {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
@@ -59,10 +59,9 @@ public class IHSM_ClassAttendanceTest extends BaseClass {
 		int failCount = 0;
 
 		try {
-			List<Integer> attendanceValues = Arrays.asList(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-					40, 40,40,40,40,40);
+			List<Integer> attendanceValues = Arrays.asList(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40);
 			IHSM_ClassAttendance classAttendance = new IHSM_ClassAttendance(getDriver());
-			classAttendance.fillClassAttendance2(1, 1, 3, "p", attendanceValues);
+			classAttendance.fillClassAttendance2(1, 1, 1, "p", attendanceValues);
 			ExtentListener.getNode().pass("Class Attendance 2 added successfully");
 			stepStatus.put("Class Attendance", "PASS");
 		} catch (Exception e) {

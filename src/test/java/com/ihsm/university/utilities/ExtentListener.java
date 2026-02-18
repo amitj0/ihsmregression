@@ -48,14 +48,14 @@ public class ExtentListener implements ITestListener {
 	@Override
 	public void onTestStart(ITestResult result) {
 
-		String testName = result.getMethod().getMethodName();
+		String testName = result.getMethod().getDescription();
 		
 		// Fallback to method name if testName is not provided
 		if (testName == null || testName.trim().isEmpty()) {
 			testName = result.getMethod().getMethodName();
 		}
 		ExtentTest parent = extent.createTest(testName);
-		parent.assignAuthor("Amit");
+		parent.assignAuthor("Amit Jangra");
 		parent.assignCategory(result.getMethod().getGroups());
 
 		parentTest.set(parent);

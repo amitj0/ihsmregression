@@ -21,7 +21,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
-	@Test(groups = "Regression")
+	@Test(groups = "Regression", description = "Verify Professional Degree Information Test")
 	public void professionalDegreeInformation() {
 		ExtentListener.createNode("Professional Degree Information");
 		try {
@@ -37,7 +37,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "professionalDegreeInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "professionalDegreeInformation", alwaysRun = true, description = "Verify Professional Academics Information Test")
 	public void professionalAcademicsInformation() {
 		ExtentListener.createNode("Professional Academics Information");
 		try {
@@ -54,7 +54,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "professionalAcademicsInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "professionalAcademicsInformation", alwaysRun = true, description = "Verify Professional Title Information Test")
 	public void professionalTitleInformation() {
 		ExtentListener.createNode("Professional Title Information");
 		try {
@@ -70,7 +70,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "professionalTitleInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "professionalTitleInformation", alwaysRun = true, description = "Verify Professional Scientific Research Information Test")
 	public void professionalScientificResearchInformation() {
 		ExtentListener.createNode("Professional Scientific Research Information");
 		try {
@@ -87,7 +87,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "professionalScientificResearchInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "professionalScientificResearchInformation", alwaysRun = true, description = "Verify Professional Rewards Information Test")
 	public void professionalRewardsInformation() {
 		ExtentListener.createNode("Professional Rewards Information");
 		try {
@@ -103,7 +103,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "professionalRewardsInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "professionalRewardsInformation", alwaysRun = true, description = "Verify Professional Patent Information Test")
 	public void professionalPatentInformation() {
 		ExtentListener.createNode("Professional Patent Information");
 		try {
@@ -119,7 +119,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "professionalPatentInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "professionalPatentInformation", alwaysRun = true, description = "Verify Professional Attestations Information Test")
 	public void professionalAttestationsInformation() {
 		ExtentListener.createNode("Professional Attestations Information");
 		try {
@@ -134,7 +134,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",dependsOnMethods = "professionalAttestationsInformation", alwaysRun = true)
+	@Test(groups = "Regression",dependsOnMethods = "professionalAttestationsInformation", alwaysRun = true, description = "Verify Professional Military Information Test")
 	public void professionalMilitaryInformation() {
 		ExtentListener.createNode("Professional Military Information");
 		try {
