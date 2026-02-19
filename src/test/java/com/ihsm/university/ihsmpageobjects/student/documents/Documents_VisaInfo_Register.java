@@ -30,6 +30,9 @@ public class Documents_VisaInfo_Register extends BasePage {
 
 	@FindBy(xpath = "(//div[@id='STUDENTVISA']//input[@placeholder='Current Reg Address'])[2]")
 	private WebElement currentRegAddField;
+	
+	@FindBy(xpath = "(//div[@id='STUDENTVISA']//input[@placeholder='CURRENT_REG_ADDRESS'])[2]")
+	private WebElement currentRegAddField2;
 
 	@FindBy(xpath = "//div[@id='STUDENTVISA']//div[@id='tabID27']//input[@name='REGISTRATIONSUBMISSIONDATE']")
 	private WebElement registrationSubmissionDateField;
@@ -64,7 +67,7 @@ public class Documents_VisaInfo_Register extends BasePage {
 	}
 
 	public void enterCurrentRegAdd(String address) {
-		currentRegAddField.sendKeys(address);
+		currentRegAddField2.sendKeys(address);
 	}
 
 	public void enterRegistrationSubmissionDate(String date) {

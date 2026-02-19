@@ -27,7 +27,7 @@ public class IHSM_ClassAttendanceTest extends BaseClass {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
 
-		ExtentTest node =  ExtentListener.createNode("Class Attendance Information");
+		ExtentTest node = ExtentListener.createNode("Class Attendance Information");
 		int failCount = 0;
 
 		try {
@@ -57,12 +57,13 @@ public class IHSM_ClassAttendanceTest extends BaseClass {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
 
-		ExtentTest node =  ExtentListener.createNode("Class Attendance 2 Information");
+		ExtentTest node = ExtentListener.createNode("Class Attendance 2 Information");
 		int failCount = 0;
 
 		try {
 			node.info("Entering Class Attendance 2 Details");
-			List<Integer> attendanceValues = Arrays.asList(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40);
+
+			List<Integer> attendanceValues = Arrays.asList(40, 40, 40, 40, 40, 40, 40, 40);
 			IHSM_ClassAttendance classAttendance = new IHSM_ClassAttendance(getDriver());
 			classAttendance.fillClassAttendance2(1, 1, 1, "p", attendanceValues);
 			node.pass("Class Attendance 2 added successfully");

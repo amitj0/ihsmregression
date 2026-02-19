@@ -20,33 +20,32 @@ public class IHSM_ClassPerformanceScoreTest extends BaseClass {
 	private SoftAssert soft = new SoftAssert();
 	String[] dates = TestDataGenerator.getRandomScheduleDates();
 
-	@Test(priority = 0, description = "Verify Class Attendance 3")
-	public void fillClassAttendance3() {
+	@Test(priority = 0, description = "Verify Class Performance Score Test")
+	public void fillClassPerformanceScore() {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
 
-		ExtentTest node =  ExtentListener.createNode("Class Attendance 3 Information");
+		ExtentTest node = ExtentListener.createNode("Class Performance Score Information");
 		int failCount = 0;
 
 		try {
-			node.info("Entering Class Attendance Details");
-			List<Integer> attendanceValues = Arrays.asList(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-					40, 40,40,40,40,40);
+			node.info("Entering Class Performance Details");
+			List<Integer> attendanceValues = Arrays.asList(40, 40, 40, 40, 40, 40, 40, 40);
 			IHSM_ClassAttendance classAttendance = new IHSM_ClassAttendance(getDriver());
-			classAttendance.fillClassAttendance3(1, 1, 3, attendanceValues);
-			node.pass("Class Attendance 3 added successfully");
+			classAttendance.fillClassAttendance3(1, 1, 1, attendanceValues);
+			node.pass("Class Performance added successfully");
 			stepStatus.put("Class Attendance", "PASS");
 		} catch (Exception e) {
-			node.fail("Class Attendance 3 failed: " + e.getMessage());
-			stepStatus.put("Class Attendance 3", "FAIL");
-			soft.fail("Class Attendance 3 failed: " + e.getMessage());
+			node.fail("Class Performance failed: " + e.getMessage());
+			stepStatus.put("Class Performance ", "FAIL");
+			soft.fail("Class Performance: " + e.getMessage());
 			failCount++;
 		}
 
 		if (failCount == 0) {
-			node.pass("All Class Attendance 3 sections executed successfully.");
+			node.pass("All Class Performance sections executed successfully.");
 		} else {
-			node.fail("Total Failed Sections in Class Attendance 3 Flow: " + failCount);
+			node.fail("Total Failed Sections in Class Performance Score Flow: " + failCount);
 		}
 
 		soft.assertAll();

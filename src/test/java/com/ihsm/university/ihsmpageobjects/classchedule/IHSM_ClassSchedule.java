@@ -78,6 +78,9 @@ public class IHSM_ClassSchedule extends BasePage {
 
 	@FindBy(xpath = "//p[contains(text(),'First Week')]/following::div[contains(@class,'selectgroup-pills')][1]//label//span")
 	private List<WebElement> weekFieldList;
+	
+	@FindBy(xpath = "//p[contains(text(),'FIRST_WEEK')]/following::div[contains(@class,'selectgroup-pills')][1]//label//span")
+	private List<WebElement> weekFieldList2;
 
 	/*
 	 * @FindBy(xpath =
@@ -90,6 +93,9 @@ public class IHSM_ClassSchedule extends BasePage {
 
 	@FindBy(xpath = "//p[contains(text(),'First Week')]/following::div[contains(@class,'selectgroup-pills')][1]//label")
 	private List<WebElement> weekFieldLabels;
+	
+	@FindBy(xpath = "//p[contains(text(),'First Week')]/following::div[contains(@class,'selectgroup-pills')][1]//label")
+	private List<WebElement> weekFieldLabels2;
 
 	@FindBy(xpath = "//label[normalize-space()='ONLINE']")
 	private WebElement onlineClass;
@@ -308,7 +314,7 @@ public class IHSM_ClassSchedule extends BasePage {
 	 * safeClick(option); break; } } } }
 	 */
 	public void clearWeekSelection() {
-		for (WebElement label : weekFieldLabels) {
+		for (WebElement label : weekFieldList2) {
 			if (label.getAttribute("class").contains("active")) {
 				safeClick(label); // toggle OFF
 			}
@@ -322,7 +328,7 @@ public class IHSM_ClassSchedule extends BasePage {
 		String[] days = weekList.split(",");
 
 		for (String day : days) {
-			for (WebElement label : weekFieldLabels) {
+			for (WebElement label : weekFieldList2) {
 				if (label.getText().trim().equalsIgnoreCase(day.trim())) {
 					safeClick(label);
 					break;

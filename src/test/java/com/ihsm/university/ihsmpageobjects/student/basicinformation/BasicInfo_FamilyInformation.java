@@ -79,6 +79,9 @@ public class BasicInfo_FamilyInformation extends BasePage {
 
 	@FindBy(xpath = "//div[@id='familyinfoid']//label[normalize-space()='Country']/following-sibling::div[@class='input-group']")
 	private WebElement countryField;
+	
+	@FindBy(xpath = "//div[@id='familyinfoid']//label[normalize-space()='COUNTRY']/following-sibling::div[@class='input-group']")
+	private WebElement countryField2;
 
 	@FindBy(xpath = "//div[contains(@class,'ng-dropdown-panel')]//div[@role='option']")
 	private List<WebElement> countryFieldList;
@@ -235,7 +238,7 @@ public class BasicInfo_FamilyInformation extends BasePage {
 	}
 
 	public void countryFieldList(String countryName) {
-		safeClick(countryField);
+		safeClick(countryField2);
 
 		for (WebElement option : countryFieldList) {
 			if (option.getText().trim().equalsIgnoreCase(countryName)) {

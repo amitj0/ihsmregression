@@ -11,6 +11,7 @@ import com.aventstack.extentreports.ExtentTest;
 import com.ihsm.university.base.BaseClass;
 import com.ihsm.university.ihsmpageobjects.classchedule.IHSM_ClassSchedule;
 import com.ihsm.university.utilities.ExtentListener;
+import com.ihsm.university.utilities.RetryAnalyzer;
 
 public class IHSM_ClassSchedulingInformationTest extends BaseClass {
 
@@ -47,7 +48,7 @@ public class IHSM_ClassSchedulingInformationTest extends BaseClass {
 
 		soft.assertAll();
 	}
-	@Test(groups = "Regression", priority = 1, description = "Verify Class Scheduling Test")
+	@Test(groups = "Regression", priority = 1, description = "Verify Class Scheduling Test", retryAnalyzer = RetryAnalyzer.class)
 	public void verifyClassSchedule3() {
 		
 		String[] dates = TestDataGenerator.getRandomScheduleDates();

@@ -39,6 +39,9 @@ public class BasicInfo_LanguageInformation extends BasePage {
 
 	@FindBy(xpath = "//label[text()=' Level']/following-sibling::div//div[contains(@class,'ng-select-container')]")
 	private WebElement langLvlField;
+	
+	@FindBy(xpath = "//label[text()=' LEVEL']/following-sibling::div//div[contains(@class,'ng-select-container')]")
+	private WebElement langLvlField2;
 
 	@FindBy(xpath = "//div[contains(@class,'ng-dropdown-panel')]//div[@role='option']")
 	private List<WebElement> langLvlFieldList;
@@ -107,11 +110,11 @@ public class BasicInfo_LanguageInformation extends BasePage {
 	}
 
 	public void langLvlField() {
-		safeClick(langLvlField);
+		safeClick(langLvlField2);
 	}
 
 	public void langLvlFieldList(String level) {
-		safeClick(langLvlField);
+		safeClick(langLvlField2);
 
 		boolean found = false;
 		for (WebElement option : langLvlFieldList) {

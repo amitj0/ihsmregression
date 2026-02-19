@@ -18,32 +18,32 @@ public class IHSM_ClassAbsentStudentTest extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 	private SoftAssert soft = new SoftAssert();
 
-	@Test(priority = 1, description = "Verify Class Attendance 4")
-	public void fillClassAttendance4() {
+	@Test(priority = 1, description = "Verify Class Performance Absent Score Test")
+	public void fillClassPerformanceAbsentScore() {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
 
-		ExtentTest node =  ExtentListener.createNode("Class Attendance 4 Information");
+		ExtentTest node =  ExtentListener.createNode("Class Performance Absent Score Information");
 		int failCount = 0;
 
 		try {
-			node.info("Entering Class Attendance Details");
-			List<Integer> attendanceValues = Arrays.asList(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40);
+			node.info("Entering Performance Absent Score Details");
+			List<Integer> attendanceValues = Arrays.asList(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40);
 			IHSM_ClassAttendance classAttendance = new IHSM_ClassAttendance(getDriver());
 			classAttendance.fillClassAttendance4(1, 1, 1, attendanceValues);
-			node.pass("Class Attendance 4 added successfully");
-			stepStatus.put("Class Attendance", "PASS");
+			node.pass("Class Performance Absent Score added successfully");
+			stepStatus.put("Class Performance Absent Score", "PASS");
 		} catch (Exception e) {
-			node.fail("Class Attendance 4 failed: " + e.getMessage());
-			stepStatus.put("Class Attendance 4", "FAIL");
-			soft.fail("Class Attendance 4 failed: " + e.getMessage());
+			node.fail("Class Performance Absent Score failed: " + e.getMessage());
+			stepStatus.put("Class Performance Absent Score", "FAIL");
+			soft.fail("Class Performance Absent Score failed: " + e.getMessage());
 			failCount++;
 		}
 
 		if (failCount == 0) {
-			node.pass("All Class Attendance 4 sections executed successfully.");
+			node.pass("All Class Performance Absent Score sections executed successfully.");
 		} else {
-			node.fail("Total Failed Sections in Class Attendance 4 Flow: " + failCount);
+			node.fail("Total Failed Sections in Class Performance Absent Score Flow: " + failCount);
 		}
 
 		soft.assertAll();

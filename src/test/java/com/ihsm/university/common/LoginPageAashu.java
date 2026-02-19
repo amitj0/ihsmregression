@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,20 +16,29 @@ import com.ihsm.university.base.BasePage;
 
 ;
 
-public class LoginPage extends BasePage {
+public class LoginPageAashu extends BasePage {
 
-	public LoginPage(WebDriver driver) {
+	public LoginPageAashu(WebDriver driver) {
 		super(driver);
 	}
 
 	// locate the web elements
 
-	@FindBy(xpath = "//input[@name='txtEmail']")
+	@FindBy(id = "login-username")
 	private WebElement username;
-	@FindBy(xpath = "//input[@name='txtPassword']")
+	@FindBy(id = "login-password")
 	private WebElement password;
-	@FindBy(xpath = "//button[@value='Log In']")
+	@FindBy(xpath = "//button[@type='submit' and normalize-space()='Login']")
 	private WebElement loginBtn;
+	
+	@FindBy(xpath = "//div[@class='conv-title']")
+	private WebElement afterLoginSideMenu;
+	
+	@FindBy(xpath = "//input[@id='message-input']")
+	private WebElement messageInputField;
+	
+	@FindBy(xpath = "//button[@type='submit' and normalize-space()=\"Send\"]")
+	private WebElement sendBtn;
 
 	// methods to perform the actions
 
@@ -49,13 +59,34 @@ public class LoginPage extends BasePage {
 		}
 		safeClick(loginBtn);
 	}
+	
+	public void afterLoginSideMenu() {
+		safeClick(afterLoginSideMenu);
+	}
+	
+	public void messageInputField(String message) {
+		messageInputField.clear();
+	    messageInputField.sendKeys(message);
+	    messageInputField.sendKeys(Keys.ENTER);
+	}
+	
+	public void clickSendButton() {
+		safeClick(sendBtn);
+	}
+	
+	
 
 	// login method
-	public void login(String name, String pass) {
+	public void login2(String name, String pass) {
 		enterUsrName(name);
 		enterPassword(pass);
 		clickButton();
 
+	}
+	public void login3(String msg) {
+		
+		afterLoginSideMenu();
+		messageInputField(msg);
 	}
 
 }

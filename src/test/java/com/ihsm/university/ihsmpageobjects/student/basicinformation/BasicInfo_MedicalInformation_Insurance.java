@@ -23,6 +23,8 @@ public class BasicInfo_MedicalInformation_Insurance extends BasePage {
 
 	@FindBy(xpath = "//div[@id='tab27']//input[@placeholder='Date From']")
 	private WebElement insuranceDateFromField;
+	@FindBy(xpath = "//div[@id='tab27']//input[@placeholder='DATE_FROM']")
+	private WebElement insuranceDateFromField2;
 
 	@FindBy(xpath = "//div[@id='tab27']//input[@placeholder='Date To']")
 	private WebElement insuranceDateToField;
@@ -47,7 +49,7 @@ public class BasicInfo_MedicalInformation_Insurance extends BasePage {
 	}
 
 	public void enterInsuranceFromDate(String fromDate) {
-		enterDate(insuranceDateFromField, fromDate);
+		enterDate(insuranceDateFromField2, fromDate);
 	}
 
 	public void enterInsuranceToDate(String toDate) {

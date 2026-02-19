@@ -65,6 +65,9 @@ public class ProfInfo_DevResearch_SciResearch extends BasePage {
 
 	@FindBy(xpath = "//div[@id='DevelopmentResearchID']//label[contains(normalize-space(),'Name Of Magazine')]//following-sibling::div//input[@name='FULLNAME']")
 	private WebElement nameOfMagazineField;
+	
+	@FindBy(xpath = "//div[@id='DevelopmentResearchID']//label[contains(normalize-space(),'Name Of Magzine')]//following-sibling::div//input[@name='FULLNAME']")
+	private WebElement nameOfMagazineField2;
 
 	@FindBy(xpath = "//div[@id='DevelopmentResearchID']//label[contains(normalize-space(),'Name Of Article')]//following-sibling::div//input[@name='FULLNAME']")
 	private WebElement nameOfArticleField;
@@ -174,7 +177,7 @@ public class ProfInfo_DevResearch_SciResearch extends BasePage {
 	}
 
 	public void nameOfMagazineField(String nameOfMagazine) {
-		nameOfMagazineField.sendKeys(nameOfMagazine);
+		nameOfMagazineField2.sendKeys(nameOfMagazine);
 	}
 
 	public void nameOfArticleField(String nameOfArticle) {

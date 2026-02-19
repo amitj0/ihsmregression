@@ -60,6 +60,9 @@ public class BasicInfo_EnrollnmentInformation extends BasePage {
 
 	@FindBy(xpath = "//div[@id='EnrollmentInformationId']//input[@placeholder='Middle Name']")
 	private WebElement middleNameField;
+	
+	@FindBy(xpath = "//div[@id='EnrollmentInformationId']//input[@placeholder='MIDDLE_NAME']")
+	private WebElement middleNameField2;
 
 	@FindBy(xpath = "//div[@id='EnrollmentInformationId']//input[@name='LASTNAME']")
 	private WebElement lastNameField;
@@ -200,8 +203,8 @@ public class BasicInfo_EnrollnmentInformation extends BasePage {
 
 	public void fillMiddleName(String middleName) {
 		;
-		middleNameField.clear();
-		middleNameField.sendKeys(middleName);
+		middleNameField2.clear();
+		middleNameField2.sendKeys(middleName);
 	}
 
 	public void fillLastName(String lastName) {

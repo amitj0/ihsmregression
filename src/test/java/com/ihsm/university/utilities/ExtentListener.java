@@ -35,52 +35,57 @@ public class ExtentListener implements ITestListener {
 		spark.config().setReportName("Automation Execution Report");
 		spark.config().setTimeStampFormat("dd MMM yyyy HH:mm:ss");
 		spark.config().setTheme(Theme.DARK);
-
-		spark.config().setTheme(Theme.DARK);
 		spark.config().setTimeStampFormat("dd MMM yyyy HH:mm:ss");
 
 		spark.config().setCss(
 
-		        /* ===== GLOBAL FONT ===== */
-		        "body { font-family: 'Segoe UI', Roboto, sans-serif !important; }" +
+				/* Remove default Extent image */
+				".nav-logo img { display: none !important; }" +
 
-		        /* ===== NAVBAR ===== */
-		        ".navbar { background: linear-gradient(90deg,#0f2027,#203a43,#2c5364) !important; }" +
-		        ".navbar-brand { font-size: 22px !important; font-weight: 700 !important; }" +
+				/* Adjust logo container */
+						".nav-logo { "
+						+ "background-image: url('https://www.ismedusoftsol.com/assets/images/co-logo.png') !important; "
+						+ "background-repeat: no-repeat !important; " + "background-position: left center !important; "
+						+ "background-size: auto 40px !important; " + // Controls height properly of the Logo
+						"width: 220px !important; " + // Adjust width as needed
+						"height: 50px !important; " + // Match navbar height here
+						"margin-top: 5px !important; " + "}" +
 
-		        /* ===== CARD DESIGN ===== */
-		        ".card { border-radius: 16px !important; box-shadow: 0 6px 18px rgba(0,0,0,0.4) !important; transition: 0.3s ease-in-out; }" +
-		        ".card:hover { transform: translateY(-3px); }" +
+						/* ===== GLOBAL FONT ===== */
+						"body { font-family: 'Segoe UI', Roboto, sans-serif !important; }" +
 
-		        /* ===== TEST TITLE ===== */
-		        ".test-name { font-size: 19px !important; font-weight: 600 !important; }" +
-		        ".node-name { font-weight: 500 !important; }" +
+						/* ===== NAVBAR ===== */
+						".navbar { background: linear-gradient(90deg,#0f2027,#203a43,#2c5364) !important; }"
+						+ ".navbar-brand { font-size: 22px !important; font-weight: 700 !important; }" +
 
-		        /* ===== STATUS BADGES ===== */
-		        ".badge-success { background-color: #00e676 !important; }" +
-		        ".badge-danger { background-color: #ff1744 !important; }" +
-		        ".badge-warning { background-color: #ff9100 !important; }" +
+						/* ===== CARD DESIGN ===== */
+						".card { border-radius: 16px !important; box-shadow: 0 6px 18px rgba(0,0,0,0.4) !important; transition: 0.3s ease-in-out; }"
+						+ ".card:hover { transform: translateY(-3px); }" +
 
-		        /* ===== STATUS TEXT ===== */
-		        ".status.pass { color: #00e676 !important; }" +
-		        ".status.fail { color: #ff5252 !important; }" +
-		        ".status.skip { color: #ffab00 !important; }" +
+						/* ===== TEST TITLE ===== */
+						".test-name { font-size: 19px !important; font-weight: 600 !important; }"
+						+ ".node-name { font-weight: 500 !important; }" +
 
-		        /* ===== SIDEBAR ===== */
-		        ".side-nav { background-color: #1c1f26 !important; }" +
-		        ".side-nav li a { font-weight: 500 !important; }" +
+						/* ===== STATUS BADGES ===== */
+						".badge-success { background-color: #00e676 !important; }"
+						+ ".badge-danger { background-color: #ff1744 !important; }"
+						+ ".badge-warning { background-color: #ff9100 !important; }" +
 
-		        /* ===== TABLE SPACING ===== */
-		        "table tr { line-height: 1.8 !important; }" +
+						/* ===== STATUS TEXT ===== */
+						".status.pass { color: #00e676 !important; }" + ".status.fail { color: #ff5252 !important; }"
+						+ ".status.skip { color: #ffab00 !important; }" +
 
-		        /* ===== TIMESTAMP STYLE ===== */
-		        ".timestamp { font-size: 13px !important; opacity: 0.8 !important; }"
+						/* ===== SIDEBAR ===== */
+						".side-nav { background-color: #1c1f26 !important; }"
+						+ ".side-nav li a { font-weight: 500 !important; }" +
+
+						/* ===== TABLE SPACING ===== */
+						"table tr { line-height: 1.8 !important; }" +
+
+						/* ===== TIMESTAMP STYLE ===== */
+						".timestamp { font-size: 13px !important; opacity: 0.8 !important; }"
 
 		);
-
-
-
-
 		extent = new ExtentReports();
 		extent.attachReporter(spark);
 
@@ -98,7 +103,7 @@ public class ExtentListener implements ITestListener {
 	public void onTestStart(ITestResult result) {
 
 		String testName = result.getMethod().getDescription();
-		
+
 		// Fallback to method name if testName is not provided
 		if (testName == null || testName.trim().isEmpty()) {
 			testName = result.getMethod().getMethodName();
@@ -145,18 +150,18 @@ public class ExtentListener implements ITestListener {
 	}
 
 	// ================= TEST SKIP =================
-	
+
 	@Override
 	public void onTestSkipped(ITestResult result) {
 
-	    ExtentTest test = parentTest.get();
+		ExtentTest test = parentTest.get();
 
-	    if (test != null) {
-	        test.skip(MarkupHelper.createLabel("TEST SKIPPED", ExtentColor.YELLOW));
-	        if (result.getThrowable() != null) {
-	            test.skip(result.getThrowable());
-	        }
-	    }
+		if (test != null) {
+			test.skip(MarkupHelper.createLabel("TEST SKIPPED", ExtentColor.YELLOW));
+			if (result.getThrowable() != null) {
+				test.skip(result.getThrowable());
+			}
+		}
 	}
 
 	// ================= SUITE FINISH =================
@@ -164,11 +169,10 @@ public class ExtentListener implements ITestListener {
 	public void onFinish(ITestContext context) {
 
 		if (extent != null) {
-			extent.createTest("Execution Summary")
-	        .info("Total Tests: " + context.getAllTestMethods().length)
-	        .info("Passed: " + context.getPassedTests().size())
-	        .info("Failed: " + context.getFailedTests().size())
-	        .info("Skipped: " + context.getSkippedTests().size());
+			extent.createTest("Execution Summary").info("Total Tests: " + context.getAllTestMethods().length)
+					.info("Passed: " + context.getPassedTests().size())
+					.info("Failed: " + context.getFailedTests().size())
+					.info("Skipped: " + context.getSkippedTests().size());
 
 			extent.flush();
 		}
@@ -177,21 +181,19 @@ public class ExtentListener implements ITestListener {
 	// ================= NODE CREATION =================
 	public static ExtentTest createNode(String stepName) {
 
-	    ExtentTest parent = parentTest.get();
-	    if (parent == null) {
-	        return null;
-	    }
+		ExtentTest parent = parentTest.get();
+		if (parent == null) {
+			return null;
+		}
 
-	    ExtentTest node = parent.createNode(stepName);
-	    childTest.set(node);
-	    return node;
+		ExtentTest node = parent.createNode(stepName);
+		childTest.set(node);
+		return node;
 	}
-
 
 	public static ExtentTest getNode() {
-	    return childTest.get() != null ? childTest.get() : parentTest.get();
+		return childTest.get() != null ? childTest.get() : parentTest.get();
 	}
-
 
 	public static ExtentTest getTest() {
 		return parentTest.get();
