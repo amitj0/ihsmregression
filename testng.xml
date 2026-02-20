@@ -45,15 +45,15 @@
 				name="com.ihsm.university.ihsmtestcases.flows.exammanage.IHSM_ExamManageTest" />
 
 			<!-- Class Attendance -->
-		<!--	<class
-				name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_ClassAttendanceTest" />
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_ClassPerformanceScoreTest" />
-			<class
+			<!--<class
+				name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_ClassAttendanceTest" />-->
+			<!--<class
+				name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_ClassPerformanceScoreTest" />-->
+			<!--<class
 				name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_ClassAbsentStudentTest" />
 			<class
-				name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_UnitMarksTest" />
--->
+				name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_UnitMarksTest" />-->
+
 		</classes>
 	</test>
 
