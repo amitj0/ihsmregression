@@ -36,20 +36,15 @@ public class ExtentListener implements ITestListener {
 		spark.config().setTimeStampFormat("dd MMM yyyy HH:mm:ss");
 		spark.config().setTheme(Theme.DARK);
 		spark.config().setTimeStampFormat("dd MMM yyyy HH:mm:ss");
-
+		spark.config().setJs("document.getElementsByClassName('logo')[0].style.display='none';"); // Hide default logo
 		spark.config().setCss(
 
-				/* Remove default Extent image */
-				".nav-logo img { display: none !important; }" +
-
-				/* Adjust logo container */
-						".nav-logo { "
-						+ "background-image: url('https://www.ismedusoftsol.com/assets/images/co-logo.png') !important; "
-						+ "background-repeat: no-repeat !important; " + "background-position: left center !important; "
-						+ "background-size: auto 40px !important; " + // Controls height properly of the Logo
-						"width: 220px !important; " + // Adjust width as needed
-						"height: 50px !important; " + // Match navbar height here
-						"margin-top: 5px !important; " + "}" +
+				/* Replace with custom logo */
+				".nav-logo { "
+						+ "background-image: url('https://www.ismedusoftsol.com/assets/images/co-logo.png') !important;"
+						+ "background-repeat: no-repeat !important;" + "background-position: left center !important;"
+						+ "background-size: auto 40px !important;" + "width: 220px !important;"
+						+ "height: 50px !important;" + "margin-top: 5px !important;" + "}" +
 
 						/* ===== GLOBAL FONT ===== */
 						"body { font-family: 'Segoe UI', Roboto, sans-serif !important; }" +

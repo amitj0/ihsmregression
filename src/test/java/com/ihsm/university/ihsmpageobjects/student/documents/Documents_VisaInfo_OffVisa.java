@@ -143,7 +143,7 @@ public class Documents_VisaInfo_OffVisa extends BasePage {
 	}
 
 	public void enterCurrentRegAdd(String address) {
-		currentRegAdd.sendKeys(address);
+		currentRegAddField.sendKeys(address);
 	}
 
 	public void enterComments(String comments) {

@@ -77,10 +77,10 @@ public class IHSM_ClassSchedule extends BasePage {
 	private WebElement toDateField;
 
 	@FindBy(xpath = "//p[contains(text(),'First Week')]/following::div[contains(@class,'selectgroup-pills')][1]//label//span")
-	private List<WebElement> weekFieldList;
+	private List<WebElement> weekFieldList2;
 	
 	@FindBy(xpath = "//p[contains(text(),'FIRST_WEEK')]/following::div[contains(@class,'selectgroup-pills')][1]//label//span")
-	private List<WebElement> weekFieldList2;
+	private List<WebElement> weekFieldList;
 
 	/*
 	 * @FindBy(xpath =
