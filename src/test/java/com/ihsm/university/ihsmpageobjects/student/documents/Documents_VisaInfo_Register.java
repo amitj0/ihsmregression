@@ -67,7 +67,7 @@ public class Documents_VisaInfo_Register extends BasePage {
 	}
 
 	public void enterCurrentRegAdd(String address) {
-		currentRegAddField2.sendKeys(address);
+		currentRegAddField.sendKeys(address);
 	}
 
 	public void enterRegistrationSubmissionDate(String date) {

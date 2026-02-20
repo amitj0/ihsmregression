@@ -49,7 +49,7 @@ public class BasicInfo_MedicalInformation_Insurance extends BasePage {
 	}
 
 	public void enterInsuranceFromDate(String fromDate) {
-		enterDate(insuranceDateFromField2, fromDate);
+		enterDate(insuranceDateFromField, fromDate);
 	}
 
 	public void enterInsuranceToDate(String toDate) {

@@ -238,7 +238,7 @@ public class BasicInfo_FamilyInformation extends BasePage {
 	}
 
 	public void countryFieldList(String countryName) {
-		safeClick(countryField2);
+		safeClick(countryField);
 
 		for (WebElement option : countryFieldList) {
 			if (option.getText().trim().equalsIgnoreCase(countryName)) {

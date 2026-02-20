@@ -177,7 +177,7 @@ public class ProfInfo_DevResearch_SciResearch extends BasePage {
 	}
 
 	public void nameOfMagazineField(String nameOfMagazine) {
-		nameOfMagazineField2.sendKeys(nameOfMagazine);
+		nameOfMagazineField.sendKeys(nameOfMagazine);
 	}
 
 	public void nameOfArticleField(String nameOfArticle) {

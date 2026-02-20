@@ -203,8 +203,8 @@ public class BasicInfo_EnrollnmentInformation extends BasePage {
 
 	public void fillMiddleName(String middleName) {
 		;
-		middleNameField2.clear();
-		middleNameField2.sendKeys(middleName);
+		middleNameField.clear();
+		middleNameField.sendKeys(middleName);
 	}
 
 	public void fillLastName(String lastName) {

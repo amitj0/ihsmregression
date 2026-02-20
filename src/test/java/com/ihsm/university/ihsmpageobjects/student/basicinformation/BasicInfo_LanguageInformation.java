@@ -110,11 +110,11 @@ public class BasicInfo_LanguageInformation extends BasePage {
 	}
 
 	public void langLvlField() {
-		safeClick(langLvlField2);
+		safeClick(langLvlField);
 	}
 
 	public void langLvlFieldList(String level) {
-		safeClick(langLvlField2);
+		safeClick(langLvlField);
 
 		boolean found = false;
 		for (WebElement option : langLvlFieldList) {
