@@ -176,6 +176,7 @@ public class BaseClass {
 				driver.set(sharedDriver);
 				wait.set(new WebDriverWait(sharedDriver, Duration.ofSeconds(10)));
 
+				sharedDriver.manage().window().setSize(new Dimension(1920, 1080));
 				sharedDriver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 				sharedDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
 				sharedDriver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
