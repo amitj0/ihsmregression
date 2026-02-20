@@ -227,14 +227,8 @@ public class BasicInfo_EnrollnmentInformation extends BasePage {
 	}
 
 	public void fillDob(String dob) throws InterruptedException {
-
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt(); // restore interrupted status
-			throw new RuntimeException(e); // optional, rethrow as unchecked
-		}
-		enterDate(dobField, dob);
+//		enterDate(dobField, dob);
+		dobField.sendKeys(dob);
 	}
 
 	public void nationalityField() {
