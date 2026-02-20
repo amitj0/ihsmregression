@@ -67,7 +67,7 @@ public class Documents_VisaInfo_OffVisa extends BasePage {
 	@FindBy(xpath = "(//input[@placeholder='CURRENT_REG_ADDRESS'])[1]")
 	private WebElement currentRegAdd;
 	
-	@FindBy(xpath = "(//input[contains(@placeholder,'SEARCH_CURRENT_REG_ADDRESS')])[1]")
+	@FindBy(xpath = "(//input[contains(@placeholder,'Current Reg Address')])[1]")
 	private WebElement currentRegAddField;
 
 	@FindBy(xpath = "(//textarea[@placeholder='Comments'])[1]")
