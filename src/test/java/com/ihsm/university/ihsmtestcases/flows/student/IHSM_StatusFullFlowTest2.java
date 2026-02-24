@@ -19,7 +19,7 @@ public class IHSM_StatusFullFlowTest2 extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
 	// ---------------- STATUS INFORMATION ----------------
-	@Test(groups = "Regression",dataProvider = "StudentStatusData", dataProviderClass = StudentStatusDataProvider.class, description = "Verify Status Information Test")
+	@Test(groups = "Regression",dataProvider = "StudentStatusData", dataProviderClass = StudentStatusDataProvider.class, description = "Verify Student Status Information Test")
 	public void statusInformation(StudentStatusData data) {
 		ExtentTest node =ExtentListener.createNode("Status Information");
 		try {

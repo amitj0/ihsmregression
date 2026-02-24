@@ -59,6 +59,9 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 	// other
 	@FindBy(xpath = "(//table[@id='tblTotalSubjects']//tbody//tr//td[4])[1]//a")
 	private WebElement lectureField;
+	
+	@FindBy(xpath = "(//table[@id='tblTotalSubjects']//tbody//tr//td[5])[1]//a")
+	private WebElement tutorialField;
 
 	@FindBy(xpath = "//div[@id='dvGroupStudentCount']//select")
 	private WebElement sltFacultyField;
@@ -169,6 +172,11 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 		blinkElement(lectureField);
 		safeClick(lectureField);
 	}
+	
+	public void tutorial() {
+		blinkElement(tutorialField);
+		safeClick(tutorialField);
+	}
 
 	public void sltFacultyField() {
 		safeClick(sltFacultyField);
@@ -235,6 +243,32 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 		saveBtn();
 		okBtn();
 
+	}
+	public void fillGroupAssignmentInfo2(String facList, String facBatch, String facAcad, String facSem,
+			String facSubType, String list) {
+		coursePlannerTab();
+		facGroupAssignmentTab();
+		facultySessionField();
+		facultySessionList(facList);
+		facultyBatchField();
+		facultyBatchFieldList(facBatch);
+		facultyAcadPlanField();
+		facultyAcadPlanFieldList(facAcad);
+		facultySemField();
+		facultySemFieldList(facSem);
+		facultySubTypeField();
+		facultySubTypeFieldList(facSubType);
+		searchButton();
+		
+//		other scenario
+		tutorial();
+		sltFacultyField();
+		facList(list);
+//		selectAllCheckboxes();
+		checkBox();
+		saveBtn();
+		okBtn();
+		
 	}
 
 }

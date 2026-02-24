@@ -17,7 +17,7 @@ public class IHSM_DocumentFullFlowTest extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 	private int failCount = 0;
 
-	@Test(description = "Verify Documents Information Test")
+	@Test(description = "Verify Employee Documents Information Test")
 	public void documentsInformation() {
 		ExtentTest node = ExtentListener.createNode("Document Information");
 		try {
@@ -34,7 +34,7 @@ public class IHSM_DocumentFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(enabled = true, dependsOnMethods = "documentsInformation", alwaysRun = true, description = "Verify Passport Information Test")
+	@Test(enabled = true, dependsOnMethods = "documentsInformation", alwaysRun = true, description = "Verify Employee Passport Information Test")
 	public void passportInformation() {
 		ExtentTest node = ExtentListener.createNode("Passport Information");
 		try {

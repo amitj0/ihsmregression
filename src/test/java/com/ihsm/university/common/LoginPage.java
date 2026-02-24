@@ -30,31 +30,42 @@ public class LoginPage extends BasePage {
 	@FindBy(xpath = "//button[@value='Log In']")
 	private WebElement loginBtn;
 
+	@FindBy(xpath = "//span[@class='d-block']")
+	private WebElement afterLoginUserName;
+
 	// methods to perform the actions
 
 	public void enterUsrName(String Uname) {
+		wait.until(ExpectedConditions.visibilityOf(username));
+		username.clear();
 		username.sendKeys(Uname);
 	}
 
 	public void enterPassword(String Upass) {
+		wait.until(ExpectedConditions.visibilityOf(password));
+		password.clear();
 		password.sendKeys(Upass);
 	}
 
-	public void clickButton() {
+	public void clickButton() throws IOException {
+		wait.until(ExpectedConditions.elementToBeClickable(loginBtn));
 		blinkElement(loginBtn);
-		try {
-			captureScreenshot("Login Details");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		captureScreenshot("LoginPage_ClickButton");
 		safeClick(loginBtn);
 	}
+	
+	public void verifyLogin(String expectedUserName) {
+		wait.until(ExpectedConditions.visibilityOf(afterLoginUserName));
+		String actualUserName = afterLoginUserName.getText();
+		Assert.assertEquals(actualUserName, expectedUserName, "Login failed: Username does not match.");
+	}
 
-	// login method
-	public void login(String name, String pass) {
+	// method to perform login action
+	public void login(String name, String pass) throws IOException {
 		enterUsrName(name);
 		enterPassword(pass);
 		clickButton();
+		
 
 	}
 

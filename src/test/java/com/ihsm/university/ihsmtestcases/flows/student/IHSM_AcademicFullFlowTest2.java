@@ -23,7 +23,7 @@ public class IHSM_AcademicFullFlowTest2 extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
 	// ---------------- LAST EDUCATION ----------------
-	@Test(groups = "Regression", dataProvider = "StudentAcademicsLastEducation", dataProviderClass = LastEducationData.class, description = "Verify Last Education Information Test")
+	@Test(groups = "Regression", dataProvider = "StudentAcademicsLastEducation", dataProviderClass = LastEducationData.class, description = "Verify Student Last Education Information Test")
 	public void lastEducationInformation(StudentAcademicsLastEducation data) {
 		ExtentTest node = ExtentListener.createNode("Academics - Last Education Information");
 		try {
@@ -48,7 +48,7 @@ public class IHSM_AcademicFullFlowTest2 extends BaseClass {
 	}
 
 	// ---------------- DIPLOMA ----------------
-	@Test(groups = "Regression", dependsOnMethods = "lastEducationInformation", dataProvider = "StudentAcademicsDiplomaData", dataProviderClass = DiplomaData.class, description = "Verify Diploma Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "lastEducationInformation", dataProvider = "StudentAcademicsDiplomaData", dataProviderClass = DiplomaData.class, description = "Verify Student Diploma Information Test")
 	public void diplomaInformation(StudentAcademicsDiplomaData data) {
 		ExtentTest node = ExtentListener.createNode("Academics - Diploma Information");
 		try {
@@ -71,7 +71,7 @@ public class IHSM_AcademicFullFlowTest2 extends BaseClass {
 	}
 
 	// ---------------- QUALIFICATION ----------------
-	@Test(groups = "Regression", dependsOnMethods = "diplomaInformation", dataProvider = "StudentAcademicsQualification", dataProviderClass = QualificationData.class, description = "Verify Qualification Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "diplomaInformation", dataProvider = "StudentAcademicsQualification", dataProviderClass = QualificationData.class, description = "Verify Student Qualification Information Test")
 	public void qualificationInformation(StudentAcademicsQualification data) {
 		ExtentTest node = ExtentListener.createNode("Academics - Qualification Information");
 		try {

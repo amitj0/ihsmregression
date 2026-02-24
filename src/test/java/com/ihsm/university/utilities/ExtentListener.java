@@ -7,7 +7,9 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 import com.ihsm.university.base.BaseClass;
 
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.logging.*;
+import org.openqa.selenium.support.FindBy;
 import org.testng.*;
 
 import java.io.File;
@@ -20,6 +22,16 @@ public class ExtentListener implements ITestListener {
 	private static ExtentReports extent;
 	private static ThreadLocal<ExtentTest> parentTest = new ThreadLocal<>();
 	private static ThreadLocal<ExtentTest> childTest = new ThreadLocal<>();
+	@FindBy(xpath = "//div[@class='version']")
+	private WebElement versionInfo;
+
+	public String getVersionInfo() {
+		try {
+			return versionInfo.getText();
+		} catch (Exception e) {
+			return "Version info not available";
+		}
+	}
 
 	// ================= SUITE START =================
 	@Override
@@ -90,7 +102,7 @@ public class ExtentListener implements ITestListener {
 		extent.setSystemInfo("Executed By", System.getProperty("user.name"));
 		extent.setSystemInfo("Operating System", System.getProperty("os.name"));
 		extent.setSystemInfo("Java Version", System.getProperty("java.version"));
-		extent.setSystemInfo("Build Version", "2.0.0.48");
+		extent.setSystemInfo("Build Version", "2.0.0.49");
 	}
 
 	// ================= TEST START =================

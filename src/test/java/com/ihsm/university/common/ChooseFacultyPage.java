@@ -3,6 +3,7 @@ package com.ihsm.university.common;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.ihsm.university.base.BasePage;
 import com.ihsm.university.common.ChooseDepartmentPage;
@@ -20,6 +21,7 @@ public class ChooseFacultyPage extends BasePage {
 	// methods to perform the action
 
 	public void degreeFacultyHere() {
+		wait.until(ExpectedConditions.elementToBeClickable(departmentFaculty));
 		blinkElement(departmentFaculty);
 		safeClick(departmentFaculty);
 

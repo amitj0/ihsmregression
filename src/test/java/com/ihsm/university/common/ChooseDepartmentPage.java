@@ -3,6 +3,7 @@ package com.ihsm.university.common;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.ihsm.university.base.BasePage;
 import com.ihsm.university.ihsmpageobjects.student.basicinformation.BasicInfo_EnrollnmentInformation;
@@ -21,6 +22,7 @@ public class ChooseDepartmentPage extends BasePage {
 
 	// methods to perform the action
 	public void departAdmin() {
+		wait.until(ExpectedConditions.elementToBeClickable(superAdminLabel));
 		blinkElement(superAdmin);
 		safeClick(superAdmin);
 	}

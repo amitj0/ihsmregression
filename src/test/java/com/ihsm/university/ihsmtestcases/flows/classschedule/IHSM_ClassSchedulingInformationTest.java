@@ -10,6 +10,8 @@ import org.testng.asserts.SoftAssert;
 import com.aventstack.extentreports.ExtentTest;
 import com.ihsm.university.base.BaseClass;
 import com.ihsm.university.ihsmpageobjects.classchedule.IHSM_ClassSchedule;
+import com.ihsm.university.ihsmtestcases.dataprovider.ClassSchedulingDataProvider;
+import com.ihsm.university.ihsmtestcases.pojo.ClassSchedulingData;
 import com.ihsm.university.utilities.ExtentListener;
 import com.ihsm.university.utilities.RetryAnalyzer;
 
@@ -18,49 +20,24 @@ public class IHSM_ClassSchedulingInformationTest extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 	private SoftAssert soft = new SoftAssert();
 
-	@Test(groups = "Regression",enabled = false,priority = 0, description  = "Verify Class Scheduling Test")
-	public void verifyClassSchedule() {
+	@Test(enabled = true, groups = "Regression", priority = 0, description = "Verify Class Scheduling (Online) Test", dataProvider = "ClassScheduling", dataProviderClass = ClassSchedulingDataProvider.class)
+	public void verifyClassSchedule3(ClassSchedulingData data) throws Exception {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
 
-		ExtentTest node =  ExtentListener.createNode("Class Scheduling Information");
-		int failCount = 0;
-
-		try {
-			node.info("Entering Class Scheduling Details");
-			IHSM_ClassSchedule classInfo = new IHSM_ClassSchedule(getDriver());
-			classInfo.fillClassSchedulingInformation("2025 -2026", "1", 1, 1, 1, 0, "2026-02-02", "2026-02-08",
-					"MON", "1 Class Every Week", "07:30 - 09:00");
-			node.pass("Class Scheduling added successfully");
-			stepStatus.put("Class Scheduling", "PASS");
-		} catch (Exception e) {
-			node.fail("Class Scheduling failed: " + e.getMessage());
-			stepStatus.put("Class Scheduling", "FAIL");
-			soft.fail("Class Scheduling failed: " + e.getMessage());
-			failCount++;
-		}
-
-		if (failCount == 0) {
-			node.pass("All Class Scheduling sections executed successfully.");
-		} else {
-			node.fail("Total Failed Sections in Class Scheduling Flow: " + failCount);
-		}
-
-		soft.assertAll();
-	}
-	@Test(groups = "Regression", priority = 1, description = "Verify Class Scheduling Test", retryAnalyzer = RetryAnalyzer.class)
-	public void verifyClassSchedule3() {
-		
-		String[] dates = TestDataGenerator.getRandomScheduleDates();
-		
 		ExtentTest node = ExtentListener.createNode("Class Scheduling Information");
 		int failCount = 0;
-		
+
 		try {
 			node.info("Entering Class Scheduling Details");
 			IHSM_ClassSchedule classInfo = new IHSM_ClassSchedule(getDriver());
-			classInfo.fillClassSchedulingInformation("2025 -2026", "1", 1, 1, 1, 0, "2026-02-02", "2026-02-08",
-					"THU", "1 Class Every Week", "07:30 - 09:00");
+			/*
+			 * classInfo.fillClassSchedulingInformation("2025 -2026", "1", 1, 1, 1, 0,
+			 * "2026-02-02", "2026-02-08", "THU", "1 Class Every Week", "07:30 - 09:00");
+			 */
+			classInfo.fillClassSchedulingInformation(data.getAcademicSession(), data.getBatch(), data.getAcademicPlan(),
+					data.getSemester(), data.getSubject(), data.getClassType(), data.getStartDate(), data.getEndDate(),
+					data.getDay(), data.getFrequency(), data.getTimeSlot());
 			node.pass("Class Scheduling added successfully");
 			stepStatus.put("Class Scheduling", "PASS");
 		} catch (Exception e) {
@@ -68,19 +45,20 @@ public class IHSM_ClassSchedulingInformationTest extends BaseClass {
 			stepStatus.put("Class Scheduling", "FAIL");
 			soft.fail("Class Scheduling failed: " + e.getMessage());
 			failCount++;
+			throw e; // Rethrow the exception to trigger retry if enabled
 		}
-		
+
 		if (failCount == 0) {
 			node.pass("All Class Scheduling sections executed successfully.");
 		} else {
 			node.fail("Total Failed Sections in Class Scheduling Flow: " + failCount);
 		}
-		
+
 		soft.assertAll();
 	}
 
-	@Test(enabled = false, priority = 1, description = "Verify Class Scheduling Test")
-	public void verifyClassSchedule2() {
+	@Test(enabled = false, priority = 1, description = "Verify Class Scheduling (Offline) Test")
+	public void verifyClassSchedule2() throws Exception {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
 
@@ -99,6 +77,7 @@ public class IHSM_ClassSchedulingInformationTest extends BaseClass {
 			stepStatus.put("Class Scheduling", "FAIL");
 			node.fail("Class Scheduling failed: " + e.getMessage());
 			failCount++;
+			throw e; // Rethrow the exception to trigger retry if enabled
 		}
 
 		if (failCount == 0) {

@@ -18,7 +18,7 @@ public class IHSM_ClassAbsentStudentTest extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 	private SoftAssert soft = new SoftAssert();
 
-	@Test(priority = 1, description = "Verify Class Performance Absent Score Test")
+	@Test(priority = 0, description = "Verify Class Performance Absent Score Test")
 	public void fillClassPerformanceAbsentScore() {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();

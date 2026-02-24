@@ -53,6 +53,10 @@ public class IHSM_ManageExam extends BasePage {
 
 	@FindBy(xpath = "//span[@id='spnSuccessTextContent' and normalize-space()='Exam Saved Successfully']")
 	private WebElement examSuccessMsg;
+	
+	
+	@FindBy(xpath = "(//div[contains(@class,'text-danger') and contains(@class,'error')])[3]")
+	private WebElement labelErrorMsg;
 
 	// method to perform the action on the web element
 	public void examManageTab() {
@@ -130,6 +134,12 @@ public class IHSM_ManageExam extends BasePage {
 	public String isExamSuccessMsg() {
 		String successMsg = examSuccessMsg.getText();
 		return successMsg;
+	}
+	
+	public String labelErrorMsg() {
+		String errorMsg = labelErrorMsg.getText();
+		System.out.println("Label Error Message: " + errorMsg);
+		return errorMsg;
 	}
 
 	// fill the manage exam information

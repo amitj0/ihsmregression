@@ -29,6 +29,7 @@ public class BasePage {
 	protected WebDriverWait wait;
 	private static final Duration WAIT_TIMEOUT = Duration
 			.ofSeconds(Integer.parseInt(System.getProperty("wait.timeout", "2")));
+	public static boolean HIGHLIGHT = true;
 
 	protected static Logger logger;
 
@@ -600,6 +601,33 @@ public class BasePage {
 			logger.debug("Unable to highlight element", e);
 			Thread.currentThread().interrupt();
 		}
+	}
+	
+	public void blinkElement2(WebElement element) {
+
+	    if (!HIGHLIGHT || element == null) {
+	        return;
+	    }
+
+	    try {
+	        wait.until(ExpectedConditions.visibilityOf(element));
+
+	        JavascriptExecutor js = (JavascriptExecutor) driver;
+	        String originalStyle = element.getAttribute("style");
+
+	        js.executeScript(
+	            "var element = arguments[0];" +
+	            "var originalStyle = arguments[1];" +
+	            "element.setAttribute('style', 'border: 3px solid black; background-color: yellow;');" +
+	            "setTimeout(function() {" +
+	            "   element.setAttribute('style', originalStyle);" +
+	            "}, 200);",
+	            element, originalStyle
+	        );
+
+	    } catch (Exception e) {
+	        logger.debug("Unable to highlight element", e);
+	    }
 	}
 
 	public void handleSubmissionConfirmation() {

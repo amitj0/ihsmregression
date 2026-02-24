@@ -78,7 +78,7 @@ public class IHSM_ClassSchedule extends BasePage {
 
 	@FindBy(xpath = "//p[contains(text(),'First Week')]/following::div[contains(@class,'selectgroup-pills')][1]//label//span")
 	private List<WebElement> weekFieldList2;
-	
+
 	@FindBy(xpath = "//p[contains(text(),'FIRST_WEEK')]/following::div[contains(@class,'selectgroup-pills')][1]//label//span")
 	private List<WebElement> weekFieldList;
 
@@ -93,7 +93,7 @@ public class IHSM_ClassSchedule extends BasePage {
 
 	@FindBy(xpath = "//p[contains(text(),'First Week')]/following::div[contains(@class,'selectgroup-pills')][1]//label")
 	private List<WebElement> weekFieldLabels;
-	
+
 	@FindBy(xpath = "//p[contains(text(),'First Week')]/following::div[contains(@class,'selectgroup-pills')][1]//label")
 	private List<WebElement> weekFieldLabels2;
 
@@ -227,8 +227,37 @@ public class IHSM_ClassSchedule extends BasePage {
 		safeClick(lecField);
 	}
 
+	/*
+	 * public void clickLecByIndex(int index) { By lecLinks =
+	 * By.xpath("//a[contains(normalize-space(.),'LEC - ')]");
+	 * 
+	 * List<WebElement> elements = driver.findElements(lecLinks);
+	 * 
+	 * if (index < 0 || index >= elements.size()) { throw new
+	 * IllegalArgumentException("Invalid LEC index: " + index + ", total found: " +
+	 * elements.size()); }
+	 * 
+	 * elements.get(index).click(); // index is 0-based here }
+	 */
 	public void clickLecByIndex(int index) {
-		By lecLinks = By.xpath("//a[contains(normalize-space(.),'LEC - ')]");
+
+	    By lecLinks = By.xpath("//a[starts-with(normalize-space(.),'LEC')]");
+
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+	    wait.until(ExpectedConditions.presenceOfElementLocated(lecLinks));
+
+	    List<WebElement> elements = driver.findElements(lecLinks);
+
+	    if (index < 0 || index >= elements.size()) {
+	        throw new IllegalArgumentException(
+	            "Invalid LEC index: " + index + ", total found: " + elements.size());
+	    }
+	    System.out.println("LEC count: " + elements.size());
+	    elements.get(index).click();
+	}
+
+	public void clickLecByIndexPrac(int index) {
+		By lecLinks = By.xpath("//a[contains(normalize-space(.),'PRA - ')]");
 
 		List<WebElement> elements = driver.findElements(lecLinks);
 
@@ -262,57 +291,17 @@ public class IHSM_ClassSchedule extends BasePage {
 	}
 
 	public void fromDateField(String date) { // setDate(fromDateField, date); //
-//		fromDateField.sendKeys(Keys.TAB); // enterDate(fromDateField, date);
-//		fromDateField.sendKeys(date);
-		setDate(fromDateField, date);
+
+		scrollToElement(fromDateField);
+		enterDate(fromDateField, date);
 	}
 
 	public void toDateField(String date) { // setDate(toDateField, date); //
-//		toDateField.sendKeys(Keys.TAB); // enterDate(toDateField, date);
-//		toDateField.sendKeys(date);
-		setDate(toDateField, date);
+
+		scrollToElement(toDateField);
+		enterDate(toDateField, date);
 	}
 
-	/*
-	 * public void fromDateField(String date) {
-	 * System.out.println("Passing FromDate: " + date); WebElement freshFromDate =
-	 * driver.findElement( By.
-	 * xpath("//p[contains(normalize-space(),'From Date')]/following::input[@type='date'][1]"
-	 * ) );
-	 * 
-	 * // freshFromDate.click(); freshFromDate.clear();
-	 * freshFromDate.sendKeys(date); freshFromDate.sendKeys(Keys.TAB);
-	 * 
-	 * System.out.println("From Date UI Value: " +
-	 * freshFromDate.getAttribute("value")); }
-	 * 
-	 * public void toDateField(String date) {
-	 * 
-	 * System.out.println("Passing ToDate: " + date);
-	 * 
-	 * WebElement freshToDate = driver.findElement( By.
-	 * xpath("//p[contains(normalize-space(),'To Date')]/following::input[@type='date'][1]"
-	 * ) );
-	 * 
-	 * // freshToDate.click(); freshToDate.clear(); freshToDate.sendKeys(date);
-	 * freshToDate.sendKeys(Keys.TAB);
-	 * 
-	 * System.out.println("To Date UI Value: " + freshToDate.getAttribute("value"));
-	 * }
-	 */
-
-	/*
-	 * public void weekSelect(String weekList) {
-	 * 
-	 * String[] days = weekList.split(",");
-	 * 
-	 * for (String day : days) {
-	 * 
-	 * for (WebElement option : weekFieldList) {
-	 * 
-	 * if (option.getText().trim().equalsIgnoreCase(day.trim())) {
-	 * safeClick(option); break; } } } }
-	 */
 	public void clearWeekSelection() {
 		for (WebElement label : weekFieldList2) {
 			if (label.getAttribute("class").contains("active")) {

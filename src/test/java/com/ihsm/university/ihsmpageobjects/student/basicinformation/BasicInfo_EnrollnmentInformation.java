@@ -227,8 +227,8 @@ public class BasicInfo_EnrollnmentInformation extends BasePage {
 	}
 
 	public void fillDob(String dob) throws InterruptedException {
-//		enterDate(dobField, dob);
-		dobField.sendKeys(dob);
+		enterDate(dobField, dob);
+//		dobField.sendKeys(dob);
 	}
 
 	public void nationalityField() {

@@ -24,7 +24,7 @@ public class IHSM_VerifyGroupAssignmentTest extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 	private SoftAssert soft = new SoftAssert();
 
-	@Test(groups = "Regression",priority = 0, description = "Verify Group Assignment Test", dataProvider = "FacultyGroupAssignData", dataProviderClass = FacultyGroupAssignmentDataProvider.class)
+	@Test(groups = "Regression", priority = 0, description = "Verify Group Lecture Assignment Test", dataProvider = "FacultyGroupAssignData", dataProviderClass = FacultyGroupAssignmentDataProvider.class)
 	public void verifyGroupAssignment(FacultyGroupAssignData data) {
 		ExtentTest node = ExtentListener.createNode("Group Assignment Information");
 		try {
@@ -42,7 +42,25 @@ public class IHSM_VerifyGroupAssignmentTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression",description = "Verify Faculty Group Data Test", priority = 1, dependsOnMethods = "verifyGroupAssignment", dataProvider = "FacultyShowDataProvider", dataProviderClass = FacultyShowDataProvider.class, alwaysRun = true)
+	@Test(groups = "Regression", priority = 1, description = "Verify Group Practical Assignment Test", dataProvider = "FacultyGroupAssignData", dataProviderClass = FacultyGroupAssignmentDataProvider.class)
+	public void verifyGroupAssignment2(FacultyGroupAssignData data) {
+		ExtentTest node = ExtentListener.createNode("Group Practical Assignment Information");
+		try {
+			node.info("Entering Group Practical Assignment Details");
+			IHSM_FacultyGroupAssignment facultyGroup = new IHSM_FacultyGroupAssignment(getDriver());
+//			facultyGroup.fillGroupAssignmentInfo("2025 -2026", "1", "CENTRAL / Bachelor / MBBS", "1", "Main");
+			facultyGroup.fillGroupAssignmentInfo2(data.getSession(), data.getBatch(), data.getAcademicPlan(),
+					data.getSemester(), data.getGroupType(), data.getSelectFaculty());
+			node.pass("Group Practical Assignment Information Test Passed");
+			stepStatus.put("Group Practical Assignment", "PASS");
+		} catch (Exception e) {
+			node.fail("Group Practical Assignment Information Failed: " + e.getMessage());
+			stepStatus.put("Group Practical Assignment", "FAIL");
+			node.fail("Group Practical Assignment Information Failed: " + e.getMessage());
+		}
+	}
+
+	@Test(groups = "Regression", description = "Verify Faculty Group Data Test", priority = 2, dependsOnMethods = "verifyGroupAssignment", dataProvider = "FacultyShowDataProvider", dataProviderClass = FacultyShowDataProvider.class, alwaysRun = true)
 	public void verifyFacultyGroupData(FacultyShowData data) {
 		ExtentTest node = ExtentListener.createNode("Faculty Show Data Information");
 		try {
