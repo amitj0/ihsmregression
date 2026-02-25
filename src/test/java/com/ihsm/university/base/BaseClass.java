@@ -217,6 +217,7 @@ public class BaseClass {
 					loginPage = new LoginPage(sharedDriver);
 					loginPage.login(prop.getProperty("username"), prop.getProperty("password"));
 					
+					
 
 					try {
 						saveCookiesToFile();

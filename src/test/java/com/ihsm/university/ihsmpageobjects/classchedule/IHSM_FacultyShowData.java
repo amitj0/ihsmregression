@@ -53,7 +53,7 @@ public class IHSM_FacultyShowData extends BasePage {
 	@FindBy(xpath = "//div[@id='tblFacGroupData_wrapper']//table[@id='tblFacGroupData']//tbody//tr[1]//td[2]")
 	private WebElement editBox;
 
-	@FindBy(xpath = "//div[@id='changeFaculty']//div[@class='modal-body']//input[@type='checkbox']")
+	@FindBy(xpath = "(//div[@id='changeFaculty']//div[@class='modal-body']//input[@type='checkbox'])[1]")
 	private WebElement checkBox;
 
 	@FindBy(xpath = "//ng-select[@name='intFacultyId']")

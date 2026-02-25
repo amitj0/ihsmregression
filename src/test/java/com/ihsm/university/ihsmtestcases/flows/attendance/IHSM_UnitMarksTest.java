@@ -20,7 +20,7 @@ public class IHSM_UnitMarksTest extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 	private SoftAssert soft = new SoftAssert();
 
-	@Test(enabled= false,priority = 0, description = "Verify Class Unit Marks Test")
+	@Test(enabled= true,priority = 0, description = "Verify Class Unit Marks Test")
 	public void verifyUnitMark() {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();

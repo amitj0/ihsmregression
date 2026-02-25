@@ -16,14 +16,13 @@ public class IHSM_UnitMarks extends BasePage {
 	}
 
 	// locate the web element here
-
 	@FindBy(xpath = "//div[@class='departmentname']")
 	private WebElement chooseDegreeFaculty; // now hardcode for the degree fac
 
 	@FindBy(xpath = "//div[@class='departmentname' and normalize-space()='Faculty']")
 	private WebElement choosePosition; // now this one is also hard code
 
-	@FindBy(xpath = "//a[@id='a7']//span[normalize-space()='Teacher']")
+	@FindBy(xpath = "//span[normalize-space()='Teacher']")
 	private WebElement teacherTab;
 
 	@FindBy(xpath = "//a[@href='#/Class/UnitMarks']")
@@ -46,10 +45,10 @@ public class IHSM_UnitMarks extends BasePage {
 
 	@FindBy(xpath = "//div[@id='divUnitMarksStudents']//button[contains(@class, 'btnprimary') and text()='Save']")
 	private WebElement saveBtn;
-	
+
 	@FindBy(xpath = "//div[@id='AlertErrorModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okErrorButton;
-	
+
 	@FindBy(xpath = "(//h5[@id='staticBackdropLabel']//following-sibling::button[@class='btn-close'])[3]")
 	private WebElement cutButton;
 
@@ -71,14 +70,12 @@ public class IHSM_UnitMarks extends BasePage {
 
 	@FindBy(xpath = "//div[@id='pills-contact']//button[contains(@class, 'btnprimary') and text()='Search']")
 	private WebElement searchButton;
-	
+
 	@FindBy(xpath = "//table[@id='tblUnitPlanReport']//tbody//tr[1]//td[2]")
 	private WebElement seeDataField;
-	
+
 	@FindBy(xpath = "//div[@id='divUnitMarksReport']//button[contains(@class, 'btnsecondary') and text()='Close']")
 	private WebElement closeBtn;
-	
-
 
 	// method to perform the actions
 
@@ -119,14 +116,23 @@ public class IHSM_UnitMarks extends BasePage {
 		input2.sendKeys(inputSecond);
 	}
 
+	/*
+	 * public void enterInputAllInputMarks(List<Integer> values) {
+	 * 
+	 * if (values.size() != inputListOfAllField.size()) { throw new
+	 * IllegalArgumentException("Values count (" + values.size() +
+	 * ") does not match row count (" + inputListOfAllField.size() + ")"); }
+	 * 
+	 * for (int i = 0; i < inputListOfAllField.size(); i++) { WebElement input =
+	 * inputListOfAllField.get(i); input.clear();
+	 * input.sendKeys(String.valueOf(values.get(i))); } }
+	 */
+
 	public void enterInputAllInputMarks(List<Integer> values) {
 
-		if (values.size() != inputListOfAllField.size()) {
-			throw new IllegalArgumentException("Values count (" + values.size() + ") does not match row count ("
-					+ inputListOfAllField.size() + ")");
-		}
+		int count = Math.min(values.size(), inputListOfAllField.size());
 
-		for (int i = 0; i < inputListOfAllField.size(); i++) {
+		for (int i = 0; i < count; i++) {
 			WebElement input = inputListOfAllField.get(i);
 			input.clear();
 			input.sendKeys(String.valueOf(values.get(i)));
@@ -136,12 +142,12 @@ public class IHSM_UnitMarks extends BasePage {
 	public void saveBtn() {
 		safeClick(saveBtn);
 	}
-	
+
 	public void okErrorButton() {
 		blinkElement(okErrorButton);
 		safeClick(okErrorButton);
 	}
-	
+
 	public void cutButton() {
 		safeClick(cutButton);
 	}
@@ -151,6 +157,7 @@ public class IHSM_UnitMarks extends BasePage {
 
 		chooseDegreeFaculty();
 		choosePosition();
+		teacherTab();
 		unitMarksTab();
 		checkbox();
 		unitDateField(date);
@@ -160,7 +167,7 @@ public class IHSM_UnitMarks extends BasePage {
 		saveBtn();
 		okErrorButton();
 		cutButton();
-		
+
 	}
 
 	// method to perform the actions
@@ -192,6 +199,10 @@ public class IHSM_UnitMarks extends BasePage {
 
 		safeClick(option);
 	}
+	
+	public void selectAcademicPlanField() {
+		safeClick(academicPlanField);
+	}
 
 	public void selectAcademicList(int index) {
 
@@ -221,12 +232,12 @@ public class IHSM_UnitMarks extends BasePage {
 		blinkElement(searchButton);
 		safeClick(searchButton);
 	}
-	
+
 	public void seeDataField() {
 		blinkElement(seeDataField);
 		safeClick(seeDataField);
 	}
-	
+
 	public void closeBtn() {
 		scrollToElement(closeBtn);
 		blinkElement(closeBtn);
@@ -236,18 +247,19 @@ public class IHSM_UnitMarks extends BasePage {
 	// show unit marks
 	public void fillUnitMarksShowInformation(int session, int batch, int academics, int course) {
 
-		chooseDegreeFaculty();
-		choosePosition();
+//		chooseDegreeFaculty();
+//		choosePosition();
+		teacherTab();
 		unitMarksTab();
 		showMarksTab();
 		selectSessionList(session);
 		selectBatchList(batch);
+		selectAcademicPlanField();
 		selectAcademicList(academics);
 		selectCourseSearchList(course);
 		searchButton();
 		seeDataField();
 		closeBtn();
-	
 
 	}
 }
