@@ -26,10 +26,22 @@ public class IHSM_ClassSchedulingInformationTest extends BaseClass {
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
 
 		ExtentTest node = ExtentListener.createNode("Class Scheduling Information");
-		int failCount = 0;
+		boolean isSuccess = false;
 
 		try {
 			node.info("Entering Class Scheduling Details");
+			node.info("Academic Session: " + data.getAcademicSession());
+			node.info("Batch: " + data.getBatch());
+			node.info("Academic Plan: " + data.getAcademicPlan());
+			node.info("Semester: " + data.getSemester());
+			node.info("Subject: " + data.getSubject());
+			node.info("Class Type: " + data.getClassType());
+			node.info("Start Date: " + data.getStartDate());
+			node.info("End Date: " + data.getEndDate());
+			node.info("Day: " + data.getDay());
+			node.info("Frequency: " + data.getFrequency());
+			node.info("Time Slot: " + data.getTimeSlot());
+			
 			IHSM_ClassSchedule classInfo = new IHSM_ClassSchedule(getDriver());
 			/*
 			 * classInfo.fillClassSchedulingInformation("2025 -2026", "1", 1, 1, 1, 0,
@@ -38,23 +50,17 @@ public class IHSM_ClassSchedulingInformationTest extends BaseClass {
 			classInfo.fillClassSchedulingInformation(data.getAcademicSession(), data.getBatch(), data.getAcademicPlan(),
 					data.getSemester(), data.getSubject(), data.getClassType(), data.getStartDate(), data.getEndDate(),
 					data.getDay(), data.getFrequency(), data.getTimeSlot());
+			isSuccess = true;
 			node.pass("Class Scheduling added successfully");
-			stepStatus.put("Class Scheduling", "PASS");
+
 		} catch (Exception e) {
 			node.fail("Class Scheduling failed: " + e.getMessage());
-			stepStatus.put("Class Scheduling", "FAIL");
-			soft.fail("Class Scheduling failed: " + e.getMessage());
-			failCount++;
-			throw e; // Rethrow the exception to trigger retry if enabled
-		}
 
-		if (failCount == 0) {
-			node.pass("All Class Scheduling sections executed successfully.");
-		} else {
-			node.fail("Total Failed Sections in Class Scheduling Flow: " + failCount);
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Class Scheduling [" + data.getAcademicSession() + "-" + data.getBatch() + "]",
+					isSuccess ? "PASS" : "FAIL");
 		}
-
-		soft.assertAll();
 	}
 
 	@Test(enabled = false, priority = 1, description = "Verify Class Scheduling (Offline) Test")
@@ -63,36 +69,41 @@ public class IHSM_ClassSchedulingInformationTest extends BaseClass {
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
 
 		ExtentTest node = ExtentListener.createNode("Class Scheduling Information");
-		int failCount = 0;
+		boolean isSuccess = false;
 
 		try {
 			node.info("Entering Class Scheduling Details");
+			node.info("Academic Session: 2025 -2026");
+			node.info("Batch: 1");
+			node.info("Academic Plan: 1");
+			node.info("Semester: 1");
+			node.info("Subject: 1");
+			node.info("Class Type: 0");
+			node.info("Start Date: " + dates[0]);
+			node.info("End Date: " + dates[1]);
+			node.info("Day: SAT");
+			node.info("Location: Administration corpus, 310");
+			node.info("Frequency: 1 Class Every Week");
+			node.info("Time Slot: 07:30 - 09:00");
+			
 			IHSM_ClassSchedule classInfo = new IHSM_ClassSchedule(getDriver());
 			classInfo.fillClassSchedulingOffline("2025 -2026", "1", 1, 1, 1, 0, "2026-06-08", "2026-06-16", "SAT",
 					"Administration corpus, 310", "1 Class Every Week", "07:30 - 09:00");
+			isSuccess = true;
 			node.pass("Class Scheduling added successfully");
-			stepStatus.put("Class Scheduling", "PASS");
+
 		} catch (Exception e) {
 			node.fail("Class Scheduling failed: " + e.getMessage());
-			stepStatus.put("Class Scheduling", "FAIL");
-			node.fail("Class Scheduling failed: " + e.getMessage());
-			failCount++;
-			throw e; // Rethrow the exception to trigger retry if enabled
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Class Scheduling (Offline)", isSuccess ? "PASS" : "FAIL");
 		}
-
-		if (failCount == 0) {
-			node.pass("All Class Scheduling sections executed successfully.");
-		} else {
-			node.fail("Total Failed Sections in Class Scheduling Flow: " + failCount);
-		}
-
-		soft.assertAll();
 	}
 
 	@AfterClass(alwaysRun = true)
 	public void summarizeClassSchedulingFlow() {
-		System.out.println("==== Class Scheduling Flow Status ====");
+		System.out.println("\n==== Class Scheduling Flow Status ====");
 		stepStatus.forEach((step, status) -> System.out.println(step + " : " + status));
-		System.out.println("====================================");
+		System.out.println("====================================\n");
 	}
 }

@@ -35,19 +35,23 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 	@Test(groups = "Regression", dataProvider = "StudentOtherDocuments", dataProviderClass = OtherDocumentsData.class, description = "Verify Student Other Documents Information Test")
 	public void otherDocumentsInformation(StudentOtherDocuments data) {
 		ExtentTest node = ExtentListener.createNode("Other Documents Information");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Other Documents Information");
+			node.info("Document Type: " + data.getDocumentType());
+//			node.info("Document File: " + TestDataGenerator.randomEmployeePhotoFile());
+
 			Documents_OtherDocuments documentsPage = new Documents_OtherDocuments(getDriver());
-//            documentsPage.fillOtherDocumentsForm("Passport Front", TestDataGenerator.randomEmployeePhotoFile());
-			documentsPage.fillOtherDocumentsForm(data.getDocumentType(), TestDataGenerator.randomEmployeePhotoFile());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
-																		// screenshot
-			System.out.println(pageText); // Debug: Print page text to verify content
+
+			documentsPage.fillOtherDocumentsForm(data.getDocumentType(), getTestDataPath("male.png"));
+			isSuccess = true;
 			node.pass("Other Documents Information completed");
-			stepStatus.put("Other Documents", "PASS");
+
 		} catch (Exception e) {
 			node.fail("Other Documents Information failed: " + e.getMessage());
-			stepStatus.put("Other Documents", "FAIL");
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Other Documents", isSuccess ? "PASS" : "FAIL");
 		}
 	}
 
@@ -55,19 +59,26 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 	@Test(groups = "Regression", dependsOnMethods = "otherDocumentsInformation", dataProvider = "StudentIdentificationCardData", dataProviderClass = IdentificationCardData.class, description = "Verify Student Identification Card Information Test")
 	public void identificationCardInformation(StudentIdentificationData data) {
 		ExtentTest node = ExtentListener.createNode("Identification Card Information");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Identification Card Information");
+			node.info("ID Number: " + data.getIdNumber());
+			node.info("Country: " + data.getCountry());
+			node.info("Start Date: " + data.getStartDate());
+			node.info("End Date: " + data.getEndDate());
+//			node.info("Photo: " + TestDataGenerator.randomEmployeePhotoFile());
+
 			new Documents_IdentificationCard(getDriver()).fillIdentificationCardDetails(data.getIdNumber(),
 					data.getCountry(), data.getStartDate(), data.getEndDate(),
-					TestDataGenerator.randomEmployeePhotoFile());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
-																		// screenshot
-			System.out.println(pageText); // Debug: Print page text to verify content
+					getTestDataPath("male.png"));
+			isSuccess = true;
 			node.pass("Identification Card Information completed");
-			stepStatus.put("Identification Card", "PASS");
+
 		} catch (Exception e) {
 			node.fail("Identification Card Information failed: " + e.getMessage());
-			stepStatus.put("Identification Card", "FAIL");
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Identification Card", isSuccess ? "PASS" : "FAIL");
 		}
 	}
 
@@ -75,20 +86,32 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 	@Test(groups = "Regression", dependsOnMethods = "identificationCardInformation", dataProvider = "StudentVisaOfflineData", dataProviderClass = VisaOfflineData.class, description = "Verify Student Visa Offline Information Test")
 	public void visaOfflineInformation(StudentVisaOfflineData data) {
 		ExtentTest node = ExtentListener.createNode("Visa Offline Information");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Visa Offline Information");
+			node.info("Visa Type: " + data.getVisaType());
+			node.info("Home Country: " + data.getHomeCountry());
+			node.info("Start Date: " + data.getStartDate());
+			node.info("End Date: " + data.getEndDate());
+			node.info("Issue Date: " + data.getIssueDate());
+			node.info("Expiry Date: " + data.getExpiryDate());
+			node.info("Visa Number: " + data.getVisaNumber());
+			node.info("Country: " + data.getCountry());
+			node.info("Notes: " + data.getNotes());
+//			node.info("Photo: " + TestDataGenerator.randomEmployeePhotoFile());
+
 			new Documents_VisaInfo_OffVisa(getDriver()).fillVisaInfoOffVisaForm(data.getVisaType(),
 					data.getHomeCountry(), data.getStartDate(), data.getEndDate(), data.getIssueDate(),
 					data.getExpiryDate(), data.getVisaNumber(), data.getCountry(), data.getNotes(),
-					TestDataGenerator.randomEmployeePhotoFile());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
-																		// screenshot
-			System.out.println(pageText); // Debug: Print page text to verify content
+					getTestDataPath("male.png"));
+			isSuccess = true;
 			node.pass("Visa Offline Information completed");
-			stepStatus.put("Visa Offline", "PASS");
+
 		} catch (Exception e) {
 			node.fail("Visa Offline Information failed: " + e.getMessage());
-			stepStatus.put("Visa Offline", "FAIL");
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Visa Offline", isSuccess ? "PASS" : "FAIL");
 		}
 	}
 
@@ -96,18 +119,25 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 	@Test(groups = "Regression", dependsOnMethods = "visaOfflineInformation", dataProvider = "StudentVisaOnlineData", dataProviderClass = VisaOnlineData.class, description = "Verify Student Visa Online Information Test")
 	public void visaOnlineInformation(StudentVisaOnlineData data) {
 		ExtentTest node = ExtentListener.createNode("Visa Online Information");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Visa Online Information");
+			node.info("Visa Type: " + data.getVisaType());
+			node.info("Start Date: " + data.getStartDate());
+			node.info("End Date: " + data.getEndDate());
+			node.info("Expiry Date: " + data.getExpiryDate());
+			node.info("Online Visa Number: " + data.getOnlineVisaNumber());
+
 			new Documents_VisaInfo_OnVisa(getDriver()).fillOnlineVisaInfo(data.getVisaType(), data.getStartDate(),
 					data.getEndDate(), data.getExpiryDate(), data.getOnlineVisaNumber());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
-																		// screenshot
-			System.out.println(pageText); // Debug: Print page text to verify content
+			isSuccess = true;
 			node.pass("Visa Online Information completed");
-			stepStatus.put("Visa Online", "PASS");
+
 		} catch (Exception e) {
 			node.fail("Visa Online Information failed: " + e.getMessage());
-			stepStatus.put("Visa Online", "FAIL");
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Visa Online", isSuccess ? "PASS" : "FAIL");
 		}
 	}
 
@@ -115,18 +145,24 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 	@Test(groups = "Regression", dependsOnMethods = "visaOnlineInformation", dataProvider = "StudentVisaRegisterData", dataProviderClass = VisaRegisterData.class, description = "Verify Student Visa Register Information Test")
 	public void visaRegisterInformation(StudentVisaRegisterData data) {
 		ExtentTest node = ExtentListener.createNode("Visa Register Information");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Visa Register Information");
+			node.info("Home Country: " + data.getHomeCountry());
+			node.info("Country: " + data.getCountry());
+			node.info("Register Date: " + data.getRegisterDate());
+			node.info("Notes: " + data.getNotes());
+
 			new Documents_VisaInfo_Register(getDriver()).fillRegisterInfo(data.getHomeCountry(), data.getCountry(),
 					data.getRegisterDate(), data.getNotes());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
-																		// screenshot
-			System.out.println(pageText); // Debug: Print page text to verify content
+			isSuccess = true;
 			node.pass("Visa Register Information completed");
 			stepStatus.put("Visa Register", "PASS");
 		} catch (Exception e) {
 			node.fail("Visa Register Information failed: " + e.getMessage());
-			stepStatus.put("Visa Register", "FAIL");
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Visa Register", isSuccess ? "PASS" : "FAIL");
 		}
 	}
 
@@ -134,18 +170,22 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 	@Test(groups = "Regression", dependsOnMethods = "visaRegisterInformation", dataProvider = "StudentPassportLocationData", dataProviderClass = PassportLocationData.class, description = "Verify Student Passport Location Information Test")
 	public void passportLocationInformation(StudentPassportLocationData data) {
 		ExtentTest node = ExtentListener.createNode("Passport Location Information");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Passport Location Information");
+			node.info("Location: " + data.getLocation());
+			node.info("Date: " + data.getDate());
+
 			new Documents_VisaInfo_PassportLocation(getDriver()).fillPassportLocationInfo(data.getLocation(),
 					data.getDate());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
-																		// screenshot
-			System.out.println(pageText); // Debug: Print page text to verify content
+			isSuccess = true;
 			node.pass("Passport Location Information completed");
-			stepStatus.put("Passport Location", "PASS");
+
 		} catch (Exception e) {
 			node.fail("Passport Location Information failed: " + e.getMessage());
-			stepStatus.put("Passport Location", "FAIL");
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Passport Location", isSuccess ? "PASS" : "FAIL");
 		}
 	}
 
@@ -153,18 +193,25 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 	@Test(groups = "Regression", dependsOnMethods = "passportLocationInformation", dataProvider = "StudentPassportData", dataProviderClass = PassportData.class, description = "Verify Student Passport Information Test")
 	public void passportInformation(StudentPassportData data) {
 		ExtentTest node = ExtentListener.createNode("Passport Information");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Passport Information");
+			node.info("Passport Number: " + data.getPassportNumber());
+			node.info("Place of Issue: " + data.getPlaceOfIssue());
+			node.info("Issue Date: " + data.getIssueDate());
+			node.info("Expiry Date: " + data.getExpiryDate());
+
 			new Documents_PassportInformation(getDriver()).fillPassportInformation(data.getPassportNumber(),
 					data.getPlaceOfIssue(), data.getIssueDate(), data.getExpiryDate());
-			String pageText = TextUtility.getFullPageText(getDriver()); // Ensure all text is loaded before capturing
-																		// screenshot
-			System.out.println(pageText); // Debug: Print page text to verify content
+
+			isSuccess = true;
 			node.pass("Passport Information completed");
-			stepStatus.put("Passport Information", "PASS");
+
 		} catch (Exception e) {
 			node.fail("Passport Information failed: " + e.getMessage());
-			stepStatus.put("Passport Information", "FAIL");
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Passport Information", isSuccess ? "PASS" : "FAIL");
 		}
 	}
 

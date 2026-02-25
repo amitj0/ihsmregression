@@ -19,27 +19,37 @@ public class IHSM_StatusFullFlowTest2 extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
 	// ---------------- STATUS INFORMATION ----------------
-	@Test(groups = "Regression",dataProvider = "StudentStatusData", dataProviderClass = StudentStatusDataProvider.class, description = "Verify Student Status Information Test")
+	@Test(groups = "Regression", dataProvider = "StudentStatusData", dataProviderClass = StudentStatusDataProvider.class, description = "Verify Student Status Information Test")
 	public void statusInformation(StudentStatusData data) {
-		ExtentTest node =ExtentListener.createNode("Status Information");
+		ExtentTest node = ExtentListener.createNode("Status Information");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Status Information");
+			node.info("Status: " + data.getStatus());
+			node.info("Status Date: " + data.getStatusDate());
+			node.info("Status Code: " + data.getStatusCode());
+			node.info("Notes: " + data.getNotes());
+//			node.info("Photo: " + TestDataGenerator.randomEmployeePhotoFile());
+
 			Status_Status statusInfo = new Status_Status(getDriver());
 			statusInfo.fillStatusStatusForm(data.getStatus(), data.getStatusDate(), data.getStatusCode(),
-					data.getNotes(), TestDataGenerator.randomEmployeePhotoFile());
+					data.getNotes(), getTestDataPath("male.png"));
+			isSuccess = true;
 			node.pass("Status Information completed");
-			stepStatus.put("Status Information", "PASS");
+
 		} catch (Exception e) {
 			node.fail("Status Information failed: " + e.getMessage());
-			stepStatus.put("Status Information", "FAIL");
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Status Information", isSuccess ? "PASS" : "FAIL");
 		}
 	}
 
 	// ---------------- SUMMARY ----------------
 	@AfterClass(alwaysRun = true)
 	public void summarizeStatusFlow() {
-		System.out.println("==== Status Flow Status for Student ====");
+		System.out.println("\n==== Status Flow Status for Student ====");
 		stepStatus.forEach((step, status) -> System.out.println(step + " : " + status));
-		System.out.println("=================================================");
+		System.out.println("=================================================\n");
 	}
 }

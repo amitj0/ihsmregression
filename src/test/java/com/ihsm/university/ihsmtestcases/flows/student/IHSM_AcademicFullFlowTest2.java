@@ -26,24 +26,32 @@ public class IHSM_AcademicFullFlowTest2 extends BaseClass {
 	@Test(groups = "Regression", dataProvider = "StudentAcademicsLastEducation", dataProviderClass = LastEducationData.class, description = "Verify Student Last Education Information Test")
 	public void lastEducationInformation(StudentAcademicsLastEducation data) {
 		ExtentTest node = ExtentListener.createNode("Academics - Last Education Information");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Last Education Information");
+			node.info("Education Type: " + data.getEducationType());
+			node.info("School Name: " + data.getSchoolName());
+			node.info("Start Date: " + data.getStartDate());
+			node.info("End Date: " + data.getEndDate());
+			node.info("Graduation Date: " + data.getGraduationDate());
+			node.info("Score: " + data.getScore());
+			node.info("Major: " + data.getMajor());
+			node.info("Percentage: " + data.getPercentage());
+//			node.info("Photo: " + TestDataGenerator.randomEmployeePhotoFile());
+
 			Academics_Qualification_LastEducation lastInfo = new Academics_Qualification_LastEducation(getDriver());
-			/*
-			 * lastInfo.fillLastEducationInfo( "Diploma", "Dps School", "01012025",
-			 * "01012026", "01012027", "85", "Science", "90",
-			 * TestDataGenerator.randomEmployeePhotoFile() );
-			 */
 
 			lastInfo.fillLastEducationInfo(data.getEducationType(), data.getSchoolName(), data.getStartDate(),
 					data.getEndDate(), data.getGraduationDate(), data.getScore(), data.getMajor(), data.getPercentage(),
-					TestDataGenerator.randomEmployeePhotoFile());
-
+					getTestDataPath("male.png"));
+			isSuccess = true;
 			node.pass("Last Education Information completed");
-			stepStatus.put("Last Education", "PASS");
+
 		} catch (Exception e) {
 			node.fail("Last Education Information failed: " + e.getMessage());
-			stepStatus.put("Last Education", "FAIL");
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Last Education", isSuccess ? "PASS" : "FAIL");
 		}
 	}
 
@@ -51,22 +59,34 @@ public class IHSM_AcademicFullFlowTest2 extends BaseClass {
 	@Test(groups = "Regression", dependsOnMethods = "lastEducationInformation", dataProvider = "StudentAcademicsDiplomaData", dataProviderClass = DiplomaData.class, description = "Verify Student Diploma Information Test")
 	public void diplomaInformation(StudentAcademicsDiplomaData data) {
 		ExtentTest node = ExtentListener.createNode("Academics - Diploma Information");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Diploma Information");
+			node.info("Diploma No: " + data.getDiplomaNo());
+			node.info("DN Code: " + data.getDnCode());
+			node.info("DR Code: " + data.getDrCode());
+			node.info("Start Date: " + data.getStartDate());
+			node.info("End Date: " + data.getEndDate());
+			node.info("College Name: " + data.getCollegeName());
+			node.info("Status: " + data.getStatus());
+			node.info("Type: " + data.getType());
+			node.info("Score: " + data.getScore());
+			node.info("Graduation Date: " + data.getGraduationDate());
+//			node.info("Photo: " + TestDataGenerator.randomEmployeePhotoFile());
+
 			Academics_Qualification_Diploma diplomaInfo = new Academics_Qualification_Diploma(getDriver());
-			/*
-			 * diplomaInfo.fillDiplomaDetails("DIP123", "DN123", "DR123", "01012024",
-			 * "01012025", "Diploma College", "Completed", "Type1", "88", "01012025",
-			 * TestDataGenerator.randomEmployeePhotoFile());
-			 */
+
 			diplomaInfo.fillDiplomaDetails(data.getDiplomaNo(), data.getDnCode(), data.getDrCode(), data.getStartDate(),
 					data.getEndDate(), data.getCollegeName(), data.getStatus(), data.getType(), data.getScore(),
-					data.getGraduationDate(), TestDataGenerator.randomEmployeePhotoFile());
+					data.getGraduationDate(), getTestDataPath("male.png"));
+			isSuccess = true;
 			node.pass("Diploma Information completed");
-			stepStatus.put("Diploma", "PASS");
+
 		} catch (Exception e) {
 			node.fail("Diploma Information failed: " + e.getMessage());
-			stepStatus.put("Diploma", "FAIL");
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Diploma", isSuccess ? "PASS" : "FAIL");
 		}
 	}
 
@@ -74,24 +94,36 @@ public class IHSM_AcademicFullFlowTest2 extends BaseClass {
 	@Test(groups = "Regression", dependsOnMethods = "diplomaInformation", dataProvider = "StudentAcademicsQualification", dataProviderClass = QualificationData.class, description = "Verify Student Qualification Information Test")
 	public void qualificationInformation(StudentAcademicsQualification data) {
 		ExtentTest node = ExtentListener.createNode("Academics - Qualification Information");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Qualification Information");
+			node.info("Last Education: " + data.getLastEducation());
+			node.info("School Name: " + data.getSchoolName());
+			node.info("Qualification Code: " + data.getQualificationCode());
+			node.info("Start Date: " + data.getStartDate());
+			node.info("End Date: " + data.getEndDate());
+			node.info("Graduation Date: " + data.getGraduationDate());
+			node.info("Status: " + data.getStatus());
+			node.info("Country: " + data.getCountry());
+			node.info("State: " + data.getState());
+			node.info("City: " + data.getCity());
+//			node.info("Photo: " + TestDataGenerator.randomEmployeePhotoFile());
+
 			Academics_Qualification_Qualification qualificationInfo = new Academics_Qualification_Qualification(
 					getDriver());
-			/*
-			 * qualificationInfo.fillQualificationInformation("Diploma", "Dps School",
-			 * "Q123", "01012023", "01012026", "01012026", "Completed", "India",
-			 * "Haryana (HR)", "Gurgaon", TestDataGenerator.randomEmployeePhotoFile());
-			 */
+
 			qualificationInfo.fillQualificationInformation(data.getLastEducation(), data.getSchoolName(),
 					data.getQualificationCode(), data.getStartDate(), data.getEndDate(), data.getGraduationDate(),
 					data.getStatus(), data.getCountry(), data.getState(), data.getCity(),
-					TestDataGenerator.randomEmployeePhotoFile());
+					getTestDataPath("male.png"));
+			isSuccess = true;
 			node.pass("Qualification Information completed");
-			stepStatus.put("Qualification", "PASS");
+
 		} catch (Exception e) {
 			node.fail("Qualification Information failed: " + e.getMessage());
-			stepStatus.put("Qualification", "FAIL");
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Qualification", isSuccess ? "PASS" : "FAIL");
 		}
 	}
 

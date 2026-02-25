@@ -35,7 +35,7 @@ public class IHSM_ClassAttendanceTest extends BaseClass {
 			IHSM_ClassAttendance classAttendance = new IHSM_ClassAttendance(getDriver());
 			classAttendance.fillClassAttendance(1, 1, 1);
 			node.pass("Class Attendance added successfully");
-			stepStatus.put("Class Attendance", "PASS");
+//			stepStatus.put("Class Attendance", "PASS");
 		} catch (Exception e) {
 			node.fail("Class Attendance failed: " + e.getMessage());
 			stepStatus.put("Class Attendance", "FAIL");
@@ -67,7 +67,7 @@ public class IHSM_ClassAttendanceTest extends BaseClass {
 			IHSM_ClassAttendance classAttendance = new IHSM_ClassAttendance(getDriver());
 			classAttendance.fillClassAttendance2(1, 1, 1, "p", attendanceValues);
 			node.pass("Class Attendance 2 added successfully");
-			stepStatus.put("Class Attendance", "PASS");
+//			stepStatus.put("Class Attendance", "PASS");
 		} catch (Exception e) {
 			node.fail("Class Attendance 2 failed: " + e.getMessage());
 			stepStatus.put("Class Attendance 2", "FAIL");

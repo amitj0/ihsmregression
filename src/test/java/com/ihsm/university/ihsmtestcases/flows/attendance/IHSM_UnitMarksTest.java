@@ -69,7 +69,7 @@ public class IHSM_UnitMarksTest extends BaseClass {
 			IHSM_UnitMarks classUnitMarks = new IHSM_UnitMarks(getDriver());
 			classUnitMarks.fillUnitMarksShowInformation(1, 1, 1, 1);
 			node.pass("Class Unit Show Marks added successfully");
-			stepStatus.put("Class Unit Show Marks", "PASS");
+//			stepStatus.put("Class Unit Show Marks", "PASS");
 		} catch (Exception e) {
 			node.fail("Class Unit Show Marks  failed: " + e.getMessage());
 			stepStatus.put("Class Unit Show Marks", "FAIL");

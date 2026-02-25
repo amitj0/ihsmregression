@@ -1,5 +1,7 @@
 package com.ihsm.university.ihsmtestcases.flows.employee;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
@@ -106,22 +108,63 @@ public class TestDataGenerator {
 		return filePath; // return LOCAL file path
 	}
 
-	public static String randomEmployeePhotoFile() throws Exception {
+	/*
+	 * public static String randomEmployeePhotoFile() throws Exception {
+	 * 
+	 * String gender = Math.random() < 0.5 ? "men" : "women"; int id = (int)
+	 * (Math.random() * 100);
+	 * 
+	 * String imageUrl = "https://randomuser.me/api/portraits/" + gender + "/" + id
+	 * + ".jpg";
+	 * 
+	 * String filePath = System.getProperty("user.dir") + "/employeePhoto.jpg";
+	 * 
+	 * try (InputStream in = new URL(imageUrl).openStream()) { Files.copy(in,
+	 * Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING); }
+	 * 
+	 * return filePath; }
+	 */
+	public static String randomEmployeePhotoFile() {
 
-		String gender = Math.random() < 0.5 ? "men" : "women";
-		int id = (int) (Math.random() * 100);
+	    try {
 
-		String imageUrl = "https://randomuser.me/api/portraits/" + gender + "/" + id + ".jpg";
+	        // Random gender
+	        String gender = Math.random() < 0.5 ? "men" : "women";
 
-		String filePath = System.getProperty("user.dir") + "/employeePhoto.jpg";
+	        // Random image id (0–99 available)
+	        int id = (int) (Math.random() * 100);
 
-		try (InputStream in = new URL(imageUrl).openStream()) {
-			Files.copy(in, Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
-		}
+	        // Image URL
+	        String imageUrl = "https://randomuser.me/api/portraits/" + gender + "/" + id + ".jpg";
 
-		return filePath;
+	        // Folder path
+	        String folderPath = System.getProperty("user.dir") 
+	                + File.separator + "employeePhotos" + File.separator;
+
+	        // Create folder if not exists
+	        Files.createDirectories(Paths.get(folderPath));
+
+	        // Unique file name
+	        String filePath = folderPath + "employee_" + gender + "_" + id + "_" 
+	                + System.currentTimeMillis() + ".jpg";
+
+	        // Download file
+	        try (InputStream in = new URL(imageUrl).openStream()) {
+	            Files.copy(in, Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+	        }
+
+	        // Verify file exists
+	        if (!Files.exists(Paths.get(filePath))) {
+	            throw new IOException("Photo download failed");
+	        }
+
+	        return filePath;
+
+	    } catch (Exception e) {
+	        System.err.println("Failed to download employee photo: " + e.getMessage());
+	        return null;
+	    }
 	}
-
 	public static int randomSalary() {
 		return 20000 + (int) (Math.random() * (200000 - 20000));
 	}

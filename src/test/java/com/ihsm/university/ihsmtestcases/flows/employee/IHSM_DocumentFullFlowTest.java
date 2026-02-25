@@ -20,34 +20,52 @@ public class IHSM_DocumentFullFlowTest extends BaseClass {
 	@Test(description = "Verify Employee Documents Information Test")
 	public void documentsInformation() {
 		ExtentTest node = ExtentListener.createNode("Document Information");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Document Information");
+			node.info("Document Type: " + "Diploma");
+			node.info("Notes: " + TestDataGenerator.randomNotes());
+//			node.info("Upload Document: " + TestDataGenerator.randomPhotoFile());
+			
 			Documents_Documents docInfo = new Documents_Documents(getDriver());
 			docInfo.fillDocumentInformation("Diploma", TestDataGenerator.randomNotes(),
-					TestDataGenerator.randomPhotoFile());
+					getTestDataPath("male.png"));
+			isSuccess = true;
 			node.pass("Documents Information completed");
-			stepStatus.put("Documents Information", "PASS");
 		} catch (Exception e) {
 			node.fail("Documents Information failed: " + e.getMessage());
-			stepStatus.put("Documents Information", "FAIL");
-			failCount++;
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Documents Information", isSuccess ? "PASS" : "FAIL");
 		}
 	}
 
 	@Test(enabled = true, dependsOnMethods = "documentsInformation", alwaysRun = true, description = "Verify Employee Passport Information Test")
 	public void passportInformation() {
 		ExtentTest node = ExtentListener.createNode("Passport Information");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Passport Information");
+			node.info("Passport Type: " + "Development");
+			node.info("Country: " + "England");
+			node.info("Issue Agency: " + TestDataGenerator.randomIssueAgency());
+			node.info("Issue Number: " + TestDataGenerator.randomNumber(5));
+			node.info("Passport Number: " + "ABCD1234567");
+			node.info("Place of Issue: " + "Manchester");
+			node.info("Issue Date: " + "01/01/2026");
+			node.info("Expiry Date: " + "01/01/2027");
+			
 			Documents_Passport docPassInfo = new Documents_Passport(getDriver());
 			docPassInfo.fillPassportDetails("Development", "England", TestDataGenerator.randomIssueAgency(),
 					TestDataGenerator.randomNumber(5), "ABCD1234567", "Manchester", "01012026", "01012027");
+			isSuccess = true;
 			node.pass("Passport Information completed");
-			stepStatus.put("Passport Information", "PASS");
+
 		} catch (Exception e) {
 			node.fail("Passport Information failed: " + e.getMessage());
-			stepStatus.put("Passport Information", "FAIL");
-			failCount++;
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Passport Information", isSuccess ? "PASS" : "FAIL");
 		}
 	}
 

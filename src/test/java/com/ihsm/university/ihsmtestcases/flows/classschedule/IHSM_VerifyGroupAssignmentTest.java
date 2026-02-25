@@ -22,49 +22,81 @@ import com.ihsm.university.utilities.ExtentListener;
 public class IHSM_VerifyGroupAssignmentTest extends BaseClass {
 
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
-	private SoftAssert soft = new SoftAssert();
 
 	@Test(groups = "Regression", priority = 0, description = "Verify Group Lecture Assignment Test", dataProvider = "FacultyGroupAssignData", dataProviderClass = FacultyGroupAssignmentDataProvider.class)
 	public void verifyGroupAssignment(FacultyGroupAssignData data) {
-		ExtentTest node = ExtentListener.createNode("Group Assignment Information");
+		ExtentTest node = ExtentListener
+				.createNode("Group Assignment Information [" + data.getSession() + "_" + data.getBatch() + "]");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Group Assignment Details");
+			node.info("Academic Session: " + data.getSession());
+			node.info("Batch: " + data.getBatch());
+			node.info("Academic Plan: " + data.getAcademicPlan());
+			node.info("Semester: " + data.getSemester());
+			node.info("Group Type: " + data.getGroupType());
+			node.info("Select Faculty: " + data.getSelectFaculty());
+			
 			IHSM_FacultyGroupAssignment facultyGroup = new IHSM_FacultyGroupAssignment(getDriver());
 //			facultyGroup.fillGroupAssignmentInfo("2025 -2026", "1", "CENTRAL / Bachelor / MBBS", "1", "Main");
 			facultyGroup.fillGroupAssignmentInfo(data.getSession(), data.getBatch(), data.getAcademicPlan(),
 					data.getSemester(), data.getGroupType(), data.getSelectFaculty());
-			node.pass("Group Assignment Information Test Passed");
-			stepStatus.put("Group Assignment", "PASS");
+
+			isSuccess = true;
+			node.pass("Group Lecture Assignment Information Test Passed");
 		} catch (Exception e) {
-			node.fail("Group Assignment Information Failed: " + e.getMessage());
-			stepStatus.put("Group Assignment", "FAIL");
-			node.fail("Group Assignment Information Failed: " + e.getMessage());
+			node.fail("Group Lecture Assignment Information Failed: " + e.getMessage());
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Group Lecture Assignment [" + data.getSession() + "-" + data.getBatch() + "]",
+					isSuccess ? "PASS" : "FAIL");
+
 		}
 	}
 
 	@Test(groups = "Regression", priority = 1, description = "Verify Group Practical Assignment Test", dataProvider = "FacultyGroupAssignData", dataProviderClass = FacultyGroupAssignmentDataProvider.class)
 	public void verifyGroupAssignment2(FacultyGroupAssignData data) {
 		ExtentTest node = ExtentListener.createNode("Group Practical Assignment Information");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Group Practical Assignment Details");
+			node.info("Academic Session: " + data.getSession());
+			node.info("Batch: " + data.getBatch());
+			node.info("Academic Plan: " + data.getAcademicPlan());
+			node.info("Semester: " + data.getSemester());
+			node.info("Group Type: " + data.getGroupType());
+			node.info("Select Faculty: " + data.getSelectFaculty());
+			
+			
 			IHSM_FacultyGroupAssignment facultyGroup = new IHSM_FacultyGroupAssignment(getDriver());
 //			facultyGroup.fillGroupAssignmentInfo("2025 -2026", "1", "CENTRAL / Bachelor / MBBS", "1", "Main");
 			facultyGroup.fillGroupAssignmentInfo2(data.getSession(), data.getBatch(), data.getAcademicPlan(),
 					data.getSemester(), data.getGroupType(), data.getSelectFaculty());
+			isSuccess = true;
 			node.pass("Group Practical Assignment Information Test Passed");
-			stepStatus.put("Group Practical Assignment", "PASS");
 		} catch (Exception e) {
 			node.fail("Group Practical Assignment Information Failed: " + e.getMessage());
-			stepStatus.put("Group Practical Assignment", "FAIL");
-			node.fail("Group Practical Assignment Information Failed: " + e.getMessage());
+			throw new RuntimeException(e);
+		} finally {
+
+			stepStatus.put("Group Practical Assignment [" + data.getSession() + "-" + data.getBatch() + "]",
+					isSuccess ? "PASS" : "FAIL");
+
 		}
 	}
 
 	@Test(groups = "Regression", description = "Verify Faculty Group Data Test", priority = 2, dependsOnMethods = "verifyGroupAssignment", dataProvider = "FacultyShowDataProvider", dataProviderClass = FacultyShowDataProvider.class, alwaysRun = true)
 	public void verifyFacultyGroupData(FacultyShowData data) {
 		ExtentTest node = ExtentListener.createNode("Faculty Show Data Information");
+		boolean isSuccess = false;
 		try {
 			node.info("Entering Faculty Show Data Details");
+			node.info("Academic Session: " + data.getSession());
+			node.info("Batch: " + data.getBatch());
+			node.info("Academic Plan: " + data.getAcademicPlan());
+			node.info("Semester: " + data.getSemester());
+			node.info("Faculty Name: " + data.getFacultyName());
+			
 			IHSM_FacultyShowData showData = new IHSM_FacultyShowData(getDriver());
 			/*
 			 * showData.fillFacultyShowData("2025 -2026", "1", "CENTRAL / Bachelor / MBBS",
@@ -73,21 +105,27 @@ public class IHSM_VerifyGroupAssignmentTest extends BaseClass {
 
 			showData.fillFacultyShowData(data.getSession(), data.getBatch(), data.getAcademicPlan(), data.getSemester(),
 					data.getFacultyName()/* , data.getGroupType() */);
-
+			isSuccess = true;
 			node.pass("Faculty Show Data Test Passed");
-			stepStatus.put("Faculty Show Data", "PASS");
 		} catch (Exception e) {
 			node.fail("Faculty Show Data Test Failed: " + e.getMessage());
-			stepStatus.put("Faculty Show Data", "FAIL");
-			node.fail("Faculty Show Data Test Failed: " + e.getMessage());
+			throw new RuntimeException(e);
+		} finally {
+
+			stepStatus.put("Faculty Show Data [" + data.getSession() + "-" + data.getBatch() + "]",
+					isSuccess ? "PASS" : "FAIL");
+
 		}
 	}
 
 	@AfterClass(alwaysRun = true)
 	public void summarizeGroupAssignmentFlow() {
-		System.out.println("==== Group Assignment Flow Status ====");
+
+		System.out.println("\n==== Group Assignment Flow Status ====");
+
 		stepStatus.forEach((step, status) -> System.out.println(step + " : " + status));
-		System.out.println("====================================");
-		soft.assertAll();
+
+		System.out.println("====================================\n");
+
 	}
 }

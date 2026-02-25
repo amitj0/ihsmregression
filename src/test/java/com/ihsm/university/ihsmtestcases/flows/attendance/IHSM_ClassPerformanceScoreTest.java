@@ -34,7 +34,7 @@ public class IHSM_ClassPerformanceScoreTest extends BaseClass {
 			IHSM_ClassAttendance classAttendance = new IHSM_ClassAttendance(getDriver());
 			classAttendance.fillClassAttendance3(1, 1, 1, attendanceValues);
 			node.pass("Class Performance added successfully");
-			stepStatus.put("Class Attendance", "PASS");
+//			stepStatus.put("Class Attendance", "PASS");
 		} catch (Exception e) {
 			node.fail("Class Performance failed: " + e.getMessage());
 			stepStatus.put("Class Performance ", "FAIL");

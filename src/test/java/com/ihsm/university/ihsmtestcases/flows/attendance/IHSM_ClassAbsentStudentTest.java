@@ -32,7 +32,7 @@ public class IHSM_ClassAbsentStudentTest extends BaseClass {
 			IHSM_ClassAttendance classAttendance = new IHSM_ClassAttendance(getDriver());
 			classAttendance.fillClassAttendance4(1, 1, 1, attendanceValues);
 			node.pass("Class Performance Absent Score added successfully");
-			stepStatus.put("Class Performance Absent Score", "PASS");
+//			stepStatus.put("Class Performance Absent Score", "PASS");
 		} catch (Exception e) {
 			node.fail("Class Performance Absent Score failed: " + e.getMessage());
 			stepStatus.put("Class Performance Absent Score", "FAIL");
