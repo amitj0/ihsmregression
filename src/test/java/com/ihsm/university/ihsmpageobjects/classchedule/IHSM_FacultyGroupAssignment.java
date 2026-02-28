@@ -60,7 +60,7 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 	@FindBy(xpath = "(//table[@id='tblTotalSubjects']//tbody//tr//td[4])[1]//a")
 	private WebElement lectureField;
 	
-	@FindBy(xpath = "(//table[@id='tblTotalSubjects']//tbody//tr//td[5])[1]//a")
+	@FindBy(xpath = "(//table[@id='tblTotalSubjects']//tbody//tr//td[6])[1]//a")
 	private WebElement tutorialField;
 
 	@FindBy(xpath = "//div[@id='dvGroupStudentCount']//select")
