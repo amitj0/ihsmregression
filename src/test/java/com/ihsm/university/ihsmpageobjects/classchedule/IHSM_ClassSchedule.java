@@ -6,6 +6,7 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -49,6 +50,9 @@ public class IHSM_ClassSchedule extends BasePage {
 	@FindBy(xpath = "//div[@id='Tab1']//ng-select[@name='strAcademicPlanId']")
 	private WebElement academicPlanField;
 
+	@FindBy(xpath = "//ng-select[@name='strAcademicPlanId']//div[@role='option']")
+	private List<WebElement> academicPlanFieldList;
+
 	@FindBy(name = "intSemesterId")
 	private WebElement semField;
 
@@ -82,15 +86,6 @@ public class IHSM_ClassSchedule extends BasePage {
 	@FindBy(xpath = "//p[contains(text(),'FIRST_WEEK')]/following::div[contains(@class,'selectgroup-pills')][1]//label//span")
 	private List<WebElement> weekFieldList;
 
-	/*
-	 * @FindBy(xpath =
-	 * "//p[contains(text(),'First Week')]/following::div[contains(@class,'selectgroup-pills')][1]//label//span"
-	 * ) private List<WebElement> allWeekdayButtons;
-	 * 
-	 * // Usage - Click all buttons for (WebElement day : allWeekdayButtons) {
-	 * day.click(); }
-	 */
-
 	@FindBy(xpath = "//p[contains(text(),'First Week')]/following::div[contains(@class,'selectgroup-pills')][1]//label")
 	private List<WebElement> weekFieldLabels;
 
@@ -108,9 +103,6 @@ public class IHSM_ClassSchedule extends BasePage {
 
 	@FindBy(xpath = "//div[contains(label,'Room')]//option")
 	private List<WebElement> roomList;
-
-//	@FindBy(xpath = "//div[@id='Tab1']//label[contains(normalize-space(),'Time')]/following::ng-select[1]//div[@class='ng-select-container']")
-//	private WebElement timeField;
 
 	private WebElement waitForTimeDropdown() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
@@ -156,9 +148,16 @@ public class IHSM_ClassSchedule extends BasePage {
 	}
 
 	// -------------------- Session --------------------
+	public void sessionField() {
+		blinkElement(sessionField);
+		safeClick(sessionField);
+	}
 
 	public void selectSession(String sessionName) {
 		safeClick(sessionField);
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOfAllElements(sessionFieldList));
 
 		for (WebElement option : sessionFieldList) {
 			if (option.getText().trim().equalsIgnoreCase(sessionName)) {
@@ -166,6 +165,7 @@ public class IHSM_ClassSchedule extends BasePage {
 				return;
 			}
 		}
+		System.out.println("Session not found: " + sessionName);
 	}
 
 	// -------------------- Batch --------------------
@@ -183,16 +183,23 @@ public class IHSM_ClassSchedule extends BasePage {
 
 	// -------------------- Academic Plan --------------------
 
-	public void selectAcademicPlanByIndex(int index) {
-
-		// Open dropdown
+	public void selectAcademicPlan(String acPlan) {
 		safeClick(academicPlanField);
 
-		// Build xpath using index
-		WebElement option = academicPlanField
-				.findElement(By.xpath(".//div[@role='option' and contains(@id,'-" + index + "')]"));
+		for (WebElement option : academicPlanFieldList) {
+			if (option.getText().trim().equalsIgnoreCase(acPlan)) {
+				safeClick(option);
+				return;
+			}
+		}
 
-		safeClick(option);
+		/*
+		 * // Build xpath using index WebElement option = academicPlanField
+		 * .findElement(By.xpath(".//div[@role='option' and contains(@id,'-" + index +
+		 * "')]"));
+		 * 
+		 * safeClick(option);
+		 */
 	}
 
 	// -------------------- Semester --------------------
@@ -227,33 +234,34 @@ public class IHSM_ClassSchedule extends BasePage {
 		safeClick(lecField);
 	}
 
-	/*
-	 * public void clickLecByIndex(int index) { By lecLinks =
-	 * By.xpath("//a[contains(normalize-space(.),'LEC - ')]");
-	 * 
-	 * List<WebElement> elements = driver.findElements(lecLinks);
-	 * 
-	 * if (index < 0 || index >= elements.size()) { throw new
-	 * IllegalArgumentException("Invalid LEC index: " + index + ", total found: " +
-	 * elements.size()); }
-	 * 
-	 * elements.get(index).click(); // index is 0-based here }
-	 */
-	public void clickLecByIndex(int index) {
+	public void clickSubjectWiseDistribution(String subjectName, String columnType) {
 
-	    By lecLinks = By.xpath("//a[starts-with(normalize-space(.),'LEC')]");
+		String xpath = "//div[contains(@class,'subject-wise-box')]" + "[.//div[@class='fw-bold'][contains(.,'"
+				+ subjectName + "')]]" + "//a[div[contains(.,'" + columnType + "')]]";
 
-	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-	    wait.until(ExpectedConditions.presenceOfElementLocated(lecLinks));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
-	    List<WebElement> elements = driver.findElements(lecLinks);
+		int attempts = 0;
+		while (attempts < 3) {
+			try {
+				WebElement badge = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
 
-	    if (index < 0 || index >= elements.size()) {
-	        throw new IllegalArgumentException(
-	            "Invalid LEC index: " + index + ", total found: " + elements.size());
-	    }
-	    System.out.println("LEC count: " + elements.size());
-	    elements.get(index).click();
+				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", badge);
+				Thread.sleep(500);
+				((JavascriptExecutor) driver).executeScript("arguments[0].click();", badge);
+
+				System.out.println("Clicked " + columnType + " for: " + subjectName);
+				break;
+
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+				System.out.println("Stale - Retrying: " + attempts);
+				if (attempts == 3)
+					throw new RuntimeException("Failed after 3 attempts", e);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
 	}
 
 	public void clickLecByIndexPrac(int index) {
@@ -268,19 +276,59 @@ public class IHSM_ClassSchedule extends BasePage {
 		elements.get(index).click(); // index is 0-based here
 	}
 
-	public void groupField1() {
-		safeClick(groupFieldCheckBox1);
+	public void selectCheckboxBySubjectAndGroup(String subjectName, String teacherName, String groupNumber) {
+
+		// Try multiple XPath strategies
+		String[] xpaths = {
+				// Option 1 - teacher + group only (most reliable)
+				"//tr[td[contains(.,'" + teacherName + "')] " + "and td//label[normalize-space()='" + groupNumber
+						+ "']]//input[@type='checkbox']",
+
+				// Option 2 - subject without (Main) + teacher + group
+				"//tr[td[contains(.,'Russian language') and contains(.,'" + teacherName + "')] "
+						+ "and td//label[normalize-space()='" + groupNumber + "']]//input[@type='checkbox']",
+
+				// Option 3 - full subject + teacher + group
+				"//tr[td[contains(.,'" + subjectName + "') and contains(.,'" + teacherName + "')] "
+						+ "and td//label[normalize-space()='" + groupNumber + "']]//input[@type='checkbox']" };
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebElement checkbox = null;
+
+		for (String xpath : xpaths) {
+			try {
+				System.out.println("Trying XPath: " + xpath);
+				checkbox = driver.findElement(By.xpath(xpath));
+				System.out.println(" Found with XPath: " + xpath);
+				break;
+			} catch (Exception e) {
+				System.out.println(" Not found, trying next...");
+			}
+		}
+
+		if (checkbox == null) {
+			throw new RuntimeException(
+					" Checkbox not found for: " + subjectName + " Teacher: " + teacherName + " Group: " + groupNumber);
+		}
+
+		try {
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", checkbox);
+			Thread.sleep(300);
+
+			if (!checkbox.isSelected()) {
+				((JavascriptExecutor) driver).executeScript("arguments[0].click();", checkbox);
+				System.out.println("Clicked checkbox - Teacher: " + teacherName + " Group: " + groupNumber);
+			} else {
+				System.out.println("Already selected - Group: " + groupNumber);
+			}
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
 	}
 
 	public void groupdField2() {
 		safeClick(groupFieldCheckBox2);
 	}
-
-	/*
-	 * public void setDate(WebElement dateField, String dateIso) {
-	 * JavascriptExecutor js = (JavascriptExecutor) driver;
-	 * js.executeScript("arguments[0].value='" + dateIso + "';", dateField); }
-	 */
 
 	public void setDate(WebElement dateField, String dateIso) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -302,25 +350,54 @@ public class IHSM_ClassSchedule extends BasePage {
 		enterDate(toDateField, date);
 	}
 
-	public void clearWeekSelection() {
+	void clearWeekSelection() {
+		// Wait for week buttons to be visible first
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOfAllElements(weekFieldList2));
+
 		for (WebElement label : weekFieldList2) {
-			if (label.getAttribute("class").contains("active")) {
-				safeClick(label); // toggle OFF
+			try {
+				if (label.getAttribute("class").contains("active")) {
+					safeClick(label); // toggle OFF
+					Thread.sleep(300); // wait between each deselect
+				}
+			} catch (StaleElementReferenceException e) {
+				System.out.println("Stale during clear: " + e.getMessage());
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
 			}
 		}
 	}
 
 	public void weekSelect(String weekList) {
+		// Clear existing selections
+		clearWeekSelection();
 
-		clearWeekSelection(); // KEY FIX
+		// Wait for UI to settle
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
 
 		String[] days = weekList.split(",");
 
 		for (String day : days) {
 			for (WebElement label : weekFieldList2) {
-				if (label.getText().trim().equalsIgnoreCase(day.trim())) {
-					safeClick(label);
-					break;
+				try {
+					if (label.getText().trim().equalsIgnoreCase(day.trim())) {
+
+						// Only click if NOT already active
+						if (!label.getAttribute("class").contains("active")) {
+							safeClick(label);
+							System.out.println("Selected: " + day.trim());
+						} else {
+							System.out.println("Already selected: " + day.trim());
+						}
+						break;
+					}
+				} catch (StaleElementReferenceException e) {
+					System.out.println("Stale during select - retrying: " + day);
 				}
 			}
 		}
@@ -348,17 +425,30 @@ public class IHSM_ClassSchedule extends BasePage {
 			}
 		}
 	}
-
+	
 	public void selectTimeSlot(String timeValue) {
 
 		WebElement timeDropdown = waitForTimeDropdown();
 		safeClick(timeDropdown);
 
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		WebElement option = wait.until(ExpectedConditions
-				.elementToBeClickable(By.xpath("//ng-dropdown-panel//span[normalize-space()='" + timeValue + "']")));
 
-		safeClick(option);
+		// Handle multiple time slots separated by comma
+		String[] timeSlots = timeValue.split(",");
+
+		for (String slot : timeSlots) {
+			String trimmedSlot = slot.trim();
+			try {
+				WebElement option = wait.until(ExpectedConditions.elementToBeClickable(
+						By.xpath("//ng-dropdown-panel//span[normalize-space()='" + trimmedSlot + "']")));
+				safeClick(option);
+				System.out.println("Selected time slot: " + trimmedSlot);
+
+			} catch (Exception e) {
+				System.out.println("Time slot not found: " + trimmedSlot);
+				throw new RuntimeException("Time slot not found: " + trimmedSlot, e);
+			}
+		}
 	}
 
 	public void contraintsField() {
@@ -397,50 +487,53 @@ public class IHSM_ClassSchedule extends BasePage {
 		}
 	}
 
-	// fill the class scheduling information
+	/*
+	 * fill the class scheduling information
+	 */
 
-	public void fillClassSchedulingInformation(String session, String batch, int optionIndex, int sem, int subject,
-			int idx, String enterFromDate, String enterToDate, String week, String conList, String timeSelect)
-			throws InterruptedException {
+	public void fillClassSchedulingInformation(String session, String batch, String academicPlan, int sem, int subject,
+			String subName, String column, String sub, String teacher, String grpName, String enterFromDate,
+			String enterToDate, String week, String conList, String timeSelect) throws InterruptedException {
 		openCoursePlannerTab();
 		openClassSchedule();
+		sessionField();
 		selectSession(session);
 		selectBatch(batch);
-		selectAcademicPlanByIndex(optionIndex);
+		selectAcademicPlan(academicPlan);
 		selectSemester(sem);
 		selectSubjectType(subject);
 		clickSearch();
-		clickLecByIndex(idx);
-		groupField1();
+		clickSubjectWiseDistribution(subName, column);
+		selectCheckboxBySubjectAndGroup(sub, teacher, grpName);
 
 		fromDateField(enterFromDate);
 		Thread.sleep(2000);
 		toDateField(enterToDate);
 		weekSelect(week);
 		onlineClass();
-//		timeField();
-//		timeSlt(timeSelect);
 		selectTimeSlot(timeSelect);
 
 		constList(conList);
 		saveBtn();
 		okButton();
 		errorButton();
+		refreshPageSafely();
 	}
 
-	public void fillClassSchedulingOffline(String session, String batch, int optionIndex, int sem, int subject, int idx,
-			String enterFromDate, String enterToDate, String week, String roomName, String conList, String timeSelect)
+	public void fillClassSchedulingOffline(String session, String batch, String academicPlan, int sem, int subject,
+			String subName, String column, String sub, String teacher, String grpName, String enterFromDate,
+			String enterToDate, String week, String roomName, String conList, String timeSelect)
 			throws InterruptedException {
 		openCoursePlannerTab();
 		openClassSchedule();
 		selectSession(session);
 		selectBatch(batch);
-		selectAcademicPlanByIndex(optionIndex);
+		selectAcademicPlan(academicPlan);
 		selectSemester(sem);
 		selectSubjectType(subject);
 		clickSearch();
-		clickLecByIndex(idx);
-		groupField1();
+		clickSubjectWiseDistribution(subName, column);
+		selectCheckboxBySubjectAndGroup(sub, teacher, grpName);
 
 		fromDateField(enterFromDate);
 		Thread.sleep(2000);
@@ -457,4 +550,5 @@ public class IHSM_ClassSchedule extends BasePage {
 		okButton();
 		errorButton();
 	}
+
 }

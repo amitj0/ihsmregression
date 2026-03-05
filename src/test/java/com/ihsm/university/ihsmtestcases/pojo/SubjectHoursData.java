@@ -6,6 +6,7 @@ public class SubjectHoursData {
 	private String batch;
 	private int academicPlan;
 	private String course;
+	private String subjectValue;
 	private String totalCreditHours;
 	private String creditLectureHours;
 	private String creditPracticalHours;
@@ -53,6 +54,14 @@ public class SubjectHoursData {
 
 	public void setCourse(String course) {
 		this.course = course;
+	}
+	
+	public String getSubjectValue() {
+		return subjectValue;
+	}
+
+	public void setSubjectValue(String subjectValue) {
+		this.subjectValue = subjectValue;
 	}
 
 	public String getTotalCreditHours() {

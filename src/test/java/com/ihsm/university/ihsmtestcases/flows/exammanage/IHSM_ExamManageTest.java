@@ -48,6 +48,8 @@ public class IHSM_ExamManageTest extends BaseClass {
 			stepStatus.put("Exam Manage (Not Saved) [" + data.getProgram() + "-" + data.getSemester() + "]",
 					isSuccess ? "PASS" : "FAIL");
 		}
+		
+		
 	}
 
 }

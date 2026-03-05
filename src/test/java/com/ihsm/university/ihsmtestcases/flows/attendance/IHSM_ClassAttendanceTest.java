@@ -1,5 +1,6 @@
 package com.ihsm.university.ihsmtestcases.flows.attendance;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,72 +23,67 @@ public class IHSM_ClassAttendanceTest extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 	private SoftAssert soft = new SoftAssert();
 
-	@Test(priority = 0, description = "Verify Class Attendance")
-	public void verifyClassAttendace() {
+	@Test(priority = 0, description = "Verify Mark Attendance Of Lecture Class Test")
+	public void verifyClassAttendace() throws IOException, InterruptedException {
+
+		/*
+		 * Open a new browser instance and login as employee for this flow
+		 */
+		WebDriver empDriver = getDriver();
+		loginAsEmployee(empDriver);
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
 
-		ExtentTest node = ExtentListener.createNode("Class Attendance Information");
-		int failCount = 0;
+		ExtentTest node = ExtentListener.createNode("Class Attendance Of Lecture Information");
+		boolean isSuccess = false;
 
 		try {
 			node.info("Entering Class Attendance Details");
+			node.info("Academic Plan: " + "CENTRAL / Bachelor / MBBS");
+			node.info("Semester: " + "1");
+			node.info("Subject: " + "Russian Language (Main)");
+			
 			IHSM_ClassAttendance classAttendance = new IHSM_ClassAttendance(getDriver());
-			classAttendance.fillClassAttendance(1, 1, 1);
-			node.pass("Class Attendance added successfully");
-//			stepStatus.put("Class Attendance", "PASS");
+			classAttendance.fillClassAttendanceForLec(1, 1, 1);
+			isSuccess = true;
+
+			node.pass("Class Attendance Of Lec Successfully");
 		} catch (Exception e) {
 			node.fail("Class Attendance failed: " + e.getMessage());
-			stepStatus.put("Class Attendance", "FAIL");
-			soft.fail("Class Attendance failed: " + e.getMessage());
-			failCount++;
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Class Attendance Of Lec", isSuccess ? "PASS" : "FAIL");
 		}
-
-		if (failCount == 0) {
-			node.pass("All Class Attendance sections executed successfully.");
-		} else {
-			node.fail("Total Failed Sections in Class Attendance Flow: " + failCount);
-		}
-
-		soft.assertAll();
 	}
 
-	@Test(priority = 1, description = "Verify Class Attendance 2", dependsOnMethods = "verifyClassAttendace")
-	public void verifyClassAttendace2() {
+	@Test(priority = 1, description = "Verify Class Marks Of Practical Test")
+	public void verifyClassAttendace2() throws IOException {
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
 
-		ExtentTest node = ExtentListener.createNode("Class Attendance 2 Information");
-		int failCount = 0;
+		ExtentTest node = ExtentListener.createNode("Class Marks Of Practical Information");
+		boolean isSuccess = false;
 
 		try {
-			node.info("Entering Class Attendance 2 Details");
+			node.info("Entering Class Marks Of Practical Details");
 
 			List<Integer> attendanceValues = Arrays.asList(40, 40, 40, 40, 40, 40, 40, 40);
 			IHSM_ClassAttendance classAttendance = new IHSM_ClassAttendance(getDriver());
-			classAttendance.fillClassAttendance2(1, 1, 1, "p", attendanceValues);
-			node.pass("Class Attendance 2 added successfully");
-//			stepStatus.put("Class Attendance", "PASS");
+			classAttendance.fillClassAttendanceForPrac(1, 1, 1, "p", attendanceValues);
+			node.pass("Class Marks Of Practical added successfully");
+			isSuccess = true;
 		} catch (Exception e) {
-			node.fail("Class Attendance 2 failed: " + e.getMessage());
-			stepStatus.put("Class Attendance 2", "FAIL");
-			soft.fail("Class Attendance 2 failed: " + e.getMessage());
-			failCount++;
+			node.fail("Class Marks of Practical failed: " + e.getMessage());
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Class Marks of Practical", isSuccess ? "PASS" : "FAIL");
 		}
-
-		if (failCount == 0) {
-			node.pass("All Class Attendance 2 sections executed successfully.");
-		} else {
-			node.fail("Total Failed Sections in Class Attendance 2 Flow: " + failCount);
-		}
-
-		soft.assertAll();
 	}
 
 	@AfterClass(alwaysRun = true)
 	public void summarizeClassSchedulingFlow() {
-		System.out.println("==== Class Attendance Flow Status ====");
+		System.out.println("\n==== Class Attendance & Marks Flow Status ====");
 		stepStatus.forEach((step, status) -> System.out.println(step + " : " + status));
-		System.out.println("====================================");
+		System.out.println("====================================\n");
 	}
 }

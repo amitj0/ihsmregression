@@ -4,9 +4,13 @@ public class ClassSchedulingData {
 
 	private String academicSession;
 	private String batch;
-	private int academicPlan;
+	private String academicPlan;
 	private int semester;
 	private int subject;
+	private String subjectName;
+	private String columnName;
+	private String teacherName;
+	private String groupNumber;
 	private int classType;
 	private String startDate;
 	private String endDate;
@@ -30,11 +34,11 @@ public class ClassSchedulingData {
 		this.batch = batch;
 	}
 
-	public int getAcademicPlan() {
+	public String getAcademicPlan() {
 		return academicPlan;
 	}
 
-	public void setAcademicPlan(int academicPlan) {
+	public void setAcademicPlan(String academicPlan) {
 		this.academicPlan = academicPlan;
 	}
 
@@ -52,6 +56,38 @@ public class ClassSchedulingData {
 
 	public void setSubject(int subject) {
 		this.subject = subject;
+	}
+
+	public String getSubjectName() {
+		return subjectName;
+	}
+
+	public void setSubjectName(String subjectName) {
+		this.subjectName = subjectName;
+	}
+
+	public String getColumnName() {
+		return columnName;
+	}
+
+	public void setColumnName(String columnName) {
+		this.columnName = columnName;
+	}
+
+	public String getTeacherName() {
+		return teacherName;
+	}
+
+	public void setTeacherName(String teacherName) {
+		this.teacherName = teacherName;
+	}
+
+	public String getGroupNumber() {
+		return groupNumber;
+	}
+
+	public void setGroupNumber(String groupNumber) {
+		this.groupNumber = groupNumber;
 	}
 
 	public int getClassType() {

@@ -2,11 +2,14 @@ package com.ihsm.university.ihsmpageobjects.classchedule;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -72,64 +75,170 @@ public class IHSM_ClassSchedule_SubjectCredits extends BasePage {
 		safeClick(sessionField);
 	}
 
+	/*
+	 * public void sessionFieldList(String value) { safeClick(sessionField); for
+	 * (WebElement option : sessionFieldList) { if
+	 * (option.getText().trim().equalsIgnoreCase(value)) { safeClick(option);
+	 * return; } }
+	 * 
+	 * }
+	 */
 	public void sessionFieldList(String value) {
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+		// Wait until dropdown is visible + clickable, then click it
+		wait.until(ExpectedConditions.visibilityOf(sessionField));
+		wait.until(ExpectedConditions.elementToBeClickable(sessionField));
 		safeClick(sessionField);
+
+		// Wait until options are visible (and not empty)
+		wait.until(ExpectedConditions.visibilityOfAllElements(sessionFieldList));
+
 		for (WebElement option : sessionFieldList) {
-			if (option.getText().trim().equalsIgnoreCase(value)) {
+			String text = option.getText().trim();
+			if (text.equalsIgnoreCase(value.trim())) {
+
+				// Wait for this specific option to be visible + clickable
+				wait.until(ExpectedConditions.visibilityOf(option));
+				wait.until(ExpectedConditions.elementToBeClickable(option));
 				safeClick(option);
 				return;
 			}
 		}
 
+		throw new NoSuchElementException("Session option not found: " + value);
 	}
 
 	public void batchField() {
 		safeClick(batchField);
 	}
 
+	/*
+	 * public void batchFieldList(String value) { safeClick(batchField); for
+	 * (WebElement option : batchFieldList) { if
+	 * (option.getText().trim().equalsIgnoreCase(value)) { safeClick(option);
+	 * return; } }
+	 * 
+	 * }
+	 */
 	public void batchFieldList(String value) {
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+		// Wait until dropdown is visible + clickable, then click it
+		wait.until(ExpectedConditions.visibilityOf(batchField));
+		wait.until(ExpectedConditions.elementToBeClickable(batchField));
+		scrollIntoView(batchField);
 		safeClick(batchField);
+
+		// Wait until options are visible
+		wait.until(ExpectedConditions.visibilityOfAllElements(batchFieldList));
+
 		for (WebElement option : batchFieldList) {
-			if (option.getText().trim().equalsIgnoreCase(value)) {
+			String text = option.getText().trim();
+			if (text.equalsIgnoreCase(value.trim())) {
+
+				// Wait for this specific option to be visible + clickable
+				wait.until(ExpectedConditions.visibilityOf(option));
+				wait.until(ExpectedConditions.elementToBeClickable(option));
+				scrollIntoView(option);
 				safeClick(option);
 				return;
 			}
 		}
 
+		throw new NoSuchElementException("Batch option not found: " + value);
 	}
 
 	public void acaPlanField() {
 		safeClick(acaPlanField);
 	}
 
+	/*
+	 * public void selectAcademicPlanOption(String value) { safeClick(acaPlanField);
+	 * 
+	 * for (WebElement option : acaPlanFieldList) { if
+	 * (option.getText().trim().equalsIgnoreCase(value)) { safeClick(option);
+	 * return; } } }
+	 */
 	public void selectAcademicPlanOption(String value) {
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+		// Dropdown visible + clickable
+		wait.until(ExpectedConditions.visibilityOf(acaPlanField));
+		wait.until(ExpectedConditions.elementToBeClickable(acaPlanField));
+		scrollIntoView(acaPlanField);
 		safeClick(acaPlanField);
 
+		// Options visible
+		wait.until(ExpectedConditions.visibilityOfAllElements(acaPlanFieldList));
+
 		for (WebElement option : acaPlanFieldList) {
-			if (option.getText().trim().equalsIgnoreCase(value)) {
+			String text = option.getText().trim();
+			if (text.equalsIgnoreCase(value.trim())) {
+
+				// Option visible + clickable
+				wait.until(ExpectedConditions.visibilityOf(option));
+				wait.until(ExpectedConditions.elementToBeClickable(option));
+				scrollIntoView(option);
 				safeClick(option);
 				return;
 			}
 		}
+
+		throw new NoSuchElementException("Academic plan option not found: " + value);
 	}
 
 	public void semField() {
 		safeClick(semField);
 	}
 
+	/*
+	 * public void semFieldList(String value) { safeClick(semField); for (WebElement
+	 * option : semFieldList) { if (option.getText().trim().equalsIgnoreCase(value))
+	 * { safeClick(option); return; } }
+	 * 
+	 * }
+	 */
+	
 	public void semFieldList(String value) {
-		safeClick(semField);
-		for (WebElement option : semFieldList) {
-			if (option.getText().trim().equalsIgnoreCase(value)) {
-				safeClick(option);
-				return;
-			}
-		}
 
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+	    // Dropdown visible + clickable
+	    wait.until(ExpectedConditions.visibilityOf(semField));
+	    wait.until(ExpectedConditions.elementToBeClickable(semField));
+	    scrollIntoView(semField);
+	    safeClick(semField);
+
+	    // Options visible
+	    wait.until(ExpectedConditions.visibilityOfAllElements(semFieldList));
+
+	    for (WebElement option : semFieldList) {
+	        String text = option.getText().trim();
+	        if (text.equalsIgnoreCase(value.trim())) {
+
+	            // Option visible + clickable
+	            wait.until(ExpectedConditions.visibilityOf(option));
+	            wait.until(ExpectedConditions.elementToBeClickable(option));
+	            scrollIntoView(option);
+	            safeClick(option);
+	            return;
+	        }
+	    }
+
+	    throw new NoSuchElementException("Semester option not found: " + value);
 	}
 
-	public void checkbox() {
-		safeClick(checkBox);
+
+	public void checkboxAccordingToSubject(String subjectName) {
+		WebElement checkbox = driver.findElement(By.xpath(
+				"//td[normalize-space(text())='" + subjectName + "']/preceding-sibling::td//input[@type='checkbox']"));
+		if (!checkbox.isSelected()) {
+			checkbox.click();
+		}
 	}
 
 	public WebElement inputByValue(String value) {
@@ -155,7 +264,7 @@ public class IHSM_ClassSchedule_SubjectCredits extends BasePage {
 	// fill the subject credit information
 
 	public IHSM_ClassSchedule fillSubjectCreditInformation(String sessionField, String batchField, String acaPlanField,
-			String semField /* String value */) {
+			String semField, String subjectName /* String value */) {
 		coursePlannerTab();
 		subjectCredit();
 		sessionField();
@@ -163,7 +272,7 @@ public class IHSM_ClassSchedule_SubjectCredits extends BasePage {
 		batchFieldList(batchField);
 		selectAcademicPlanOption(acaPlanField);
 		semFieldList(semField);
-		checkbox();
+		checkboxAccordingToSubject(subjectName);
 		saveButton();
 		okBtn();
 

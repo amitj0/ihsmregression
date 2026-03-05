@@ -6,7 +6,7 @@ public class SubjectCreditData {
 	private String batchField;
 	private String academicPlanField;
 	private String semField;
-//	private String value;
+	private String subjectValue;
 
 	// Getters and Setters
 	public String getSessionField() {
@@ -41,9 +41,12 @@ public class SubjectCreditData {
 		this.semField = semField;
 	}
 
-	/*
-	 * public String getValue() { return value; }
-	 * 
-	 * public void setValue(String value) { this.value = value; }
-	 */
+	public String getSubjectValue() {
+		return subjectValue;
+	}
+
+	public void setSubjectValue(String subjectValue) {
+		this.subjectValue = subjectValue;
+	}
+
 }

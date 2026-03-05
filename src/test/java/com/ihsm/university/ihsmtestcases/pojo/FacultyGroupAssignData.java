@@ -6,7 +6,10 @@ public class FacultyGroupAssignData {
 	private String batch;
 	private String academicPlan;
 	private String semester;
+	private String subjectName;
+	private String columnType;
 	private String groupType;
+
 	private String selectFaculty;
 
 	public String getSelectFaculty() {
@@ -48,6 +51,22 @@ public class FacultyGroupAssignData {
 
 	public void setSemester(String semester) {
 		this.semester = semester;
+	}
+
+	public String getSubjectName() {
+		return subjectName;
+	}
+
+	public void setSubjectName(String subjectName) {
+		this.subjectName = subjectName;
+	}
+
+	public String getColumnType() {
+		return columnType;
+	}
+
+	public void setColumnType(String columnType) {
+		this.columnType = columnType;
 	}
 
 	public String getGroupType() {

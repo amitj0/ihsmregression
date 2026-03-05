@@ -33,10 +33,11 @@ public class IHSM_ClassSubjectCreditTest extends BaseClass {
 			node.info("Batch: " + data.getBatchField());
 			node.info("Academic Plan: " + data.getAcademicPlanField());
 			node.info("Semester: " + data.getSemField());
+			node.info("Subject Value: " + data.getSubjectValue());
 
 			IHSM_ClassSchedule_SubjectCredits subject = new IHSM_ClassSchedule_SubjectCredits(getDriver());
 			subject.fillSubjectCreditInformation(data.getSessionField(), data.getBatchField(),
-					data.getAcademicPlanField(), data.getSemField());
+					data.getAcademicPlanField(), data.getSemField(), data.getSubjectValue());
 //			Assert.assertEquals(subject.modalSuccessMsg(), "Subject Aready Saved");
 			isSuccess = true;
 			node.pass("Subject Credit Information Test Passed");
@@ -62,6 +63,7 @@ public class IHSM_ClassSubjectCreditTest extends BaseClass {
 			node.info("Batch: " + data.getBatch());
 			node.info("Academic Plan: " + data.getAcademicPlan());
 			node.info("Course: " + data.getCourse());
+			node.info("Subject Name: " + data.getSubjectValue());
 			node.info("Total Credit Hours: " + data.getTotalCreditHours());
 			node.info("Credit Lecture Hours: " + data.getCreditLectureHours());
 			node.info("Credit Practical Hours: " + data.getCreditPracticalHours());
@@ -80,7 +82,7 @@ public class IHSM_ClassSubjectCreditTest extends BaseClass {
 
 			IHSM_ClassSchedule_SubjectHours hours = new IHSM_ClassSchedule_SubjectHours(getDriver());
 			hours.fillSubjectHoursInformation(data.getSession(), data.getBatch(), data.getAcademicPlan(),
-					data.getCourse(), data.getTotalCreditHours(), data.getCreditLectureHours(),
+					data.getCourse(), data.getSubjectValue(), data.getTotalCreditHours(), data.getCreditLectureHours(),
 					data.getCreditPracticalHours(), data.getSelfStudyHours(), data.getTotalAcademicsHours(),
 					data.getAcademicLecHours(), data.getAcademicPracHours(), data.getAcademicSaminarHours(),
 					data.getLabHours(), data.getFacultyHours(), data.getExamType(), data.getControlPassingMarks(),

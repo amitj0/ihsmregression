@@ -1,5 +1,6 @@
 package com.ihsm.university.ihsmpageobjects.classchedule;
 
+import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -7,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -173,6 +175,32 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 		safeClick(lectureField);
 	}
 	
+	public void clickPendingAssignment(String subjectName, String columnType) {
+
+	    int columnIndex;
+
+	    switch (columnType.toUpperCase()) {
+	        case "LEC": columnIndex = 4; break;
+	        case "PRA": columnIndex = 5; break;
+	        case "SEM": columnIndex = 6; break;
+	        case "LAB": columnIndex = 7; break;
+	        case "FAC": columnIndex = 8; break;
+	        default:
+	            System.out.println("Invalid column: " + columnType);
+	            return;
+	    }
+
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+	    
+	    WebElement cell = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+	        "//table[@id='tblTotalSubjects']//tr[@class='strRowData']" +
+	        "[td[contains(normalize-space(), '" + subjectName + "')]]/td[" + columnIndex + "]//a"
+	    )));
+
+	    cell.click();
+	    System.out.println("Clicked " + columnType + " for subject: " + subjectName);
+	}
+	
 	public void tutorial() {
 		blinkElement(tutorialField);
 		safeClick(tutorialField);
@@ -219,7 +247,7 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 
 	// fill the Faculty Group Assignment Information
 	public void fillGroupAssignmentInfo(String facList, String facBatch, String facAcad, String facSem,
-			String facSubType, String list) {
+			String facSubType, String subject, String index, String list) {
 		coursePlannerTab();
 		facGroupAssignmentTab();
 		facultySessionField();
@@ -235,7 +263,7 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 		searchButton();
 
 //		other scenario
-		lecture();
+		clickPendingAssignment(subject, index);
 		sltFacultyField();
 		facList(list);
 //		selectAllCheckboxes();
@@ -244,31 +272,20 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 		okBtn();
 
 	}
-	public void fillGroupAssignmentInfo2(String facList, String facBatch, String facAcad, String facSem,
-			String facSubType, String list) {
-		coursePlannerTab();
-		facGroupAssignmentTab();
-		facultySessionField();
-		facultySessionList(facList);
-		facultyBatchField();
-		facultyBatchFieldList(facBatch);
-		facultyAcadPlanField();
-		facultyAcadPlanFieldList(facAcad);
-		facultySemField();
-		facultySemFieldList(facSem);
-		facultySubTypeField();
-		facultySubTypeFieldList(facSubType);
-		searchButton();
-		
-//		other scenario
-		tutorial();
-		sltFacultyField();
-		facList(list);
-//		selectAllCheckboxes();
-		checkBox();
-		saveBtn();
-		okBtn();
-		
-	}
+	/*
+	 * public void fillGroupAssignmentInfo2(String facList, String facBatch, String
+	 * facAcad, String facSem, String facSubType,String subject, String index,
+	 * String list) { coursePlannerTab(); facGroupAssignmentTab();
+	 * facultySessionField(); facultySessionList(facList); facultyBatchField();
+	 * facultyBatchFieldList(facBatch); facultyAcadPlanField();
+	 * facultyAcadPlanFieldList(facAcad); facultySemField();
+	 * facultySemFieldList(facSem); facultySubTypeField();
+	 * facultySubTypeFieldList(facSubType); searchButton();
+	 * 
+	 * // other scenario clickPendingAssignment(subject, index); sltFacultyField();
+	 * facList(list); // selectAllCheckboxes(); checkBox(); saveBtn(); okBtn();
+	 * 
+	 * }
+	 */
 
 }

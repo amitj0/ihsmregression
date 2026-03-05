@@ -1,10 +1,12 @@
 package com.ihsm.university.ihsmtestcases.flows.attendance;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
@@ -21,34 +23,30 @@ public class IHSM_ClassPerformanceScoreTest extends BaseClass {
 	String[] dates = TestDataGenerator.getRandomScheduleDates();
 
 	@Test(priority = 0, description = "Verify Class Performance Score Test")
-	public void fillClassPerformanceScore() {
+	public void fillClassPerformanceScore() throws IOException, InterruptedException {
+
+		/*
+		 * WebDriver empDriver = getDriver(); loginAsEmployee(empDriver);
+		 */
 
 		String[] dates = TestDataGenerator.getRandomScheduleDates();
 
 		ExtentTest node = ExtentListener.createNode("Class Performance Score Information");
-		int failCount = 0;
+		boolean isSuccess = false;
 
 		try {
 			node.info("Entering Class Performance Details");
-			List<Integer> attendanceValues = Arrays.asList(40, 40, 40, 40, 40, 40, 40, 40);
+			List<Integer> attendanceValues = Arrays.asList(40, 40, 40, 40, 40, 40);
 			IHSM_ClassAttendance classAttendance = new IHSM_ClassAttendance(getDriver());
-			classAttendance.fillClassAttendance3(1, 1, 1, attendanceValues);
+			classAttendance.fillClassAttendancePerformanceScore(1, 1, 1, attendanceValues);
+			isSuccess = true;
 			node.pass("Class Performance added successfully");
-//			stepStatus.put("Class Attendance", "PASS");
 		} catch (Exception e) {
 			node.fail("Class Performance failed: " + e.getMessage());
-			stepStatus.put("Class Performance ", "FAIL");
-			soft.fail("Class Performance: " + e.getMessage());
-			failCount++;
+			throw new RuntimeException(e);
+		} finally {
+			stepStatus.put("Class Performance Score", isSuccess ? "PASS" : "FAIL");
 		}
-
-		if (failCount == 0) {
-			node.pass("All Class Performance sections executed successfully.");
-		} else {
-			node.fail("Total Failed Sections in Class Performance Score Flow: " + failCount);
-		}
-
-		soft.assertAll();
 	}
 
 }

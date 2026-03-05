@@ -57,6 +57,22 @@ public class IHSM_ManageExam extends BasePage {
 	
 	@FindBy(xpath = "(//div[contains(@class,'text-danger') and contains(@class,'error')])[3]")
 	private WebElement labelErrorMsg;
+	
+	// logout here
+	@FindBy(xpath = "//span[@class='d-block']")
+	private WebElement usernameFieldOfLogout;
+	
+	@FindBy(xpath = "//a[@class='dropdown-item' and normalize-space()='Sign Out']")
+	private WebElement signOutButton;
+	
+	// method to perform logout action
+	public void logout() {
+		blinkElement(usernameFieldOfLogout);
+		safeClick(usernameFieldOfLogout);
+		blinkElement(signOutButton);
+		safeClick(signOutButton);
+		handleAlertIfPresent();
+	}
 
 	// method to perform the action on the web element
 	public void examManageTab() {
@@ -154,6 +170,9 @@ public class IHSM_ManageExam extends BasePage {
 		endDate(endDate);
 		saveButton();
 		handleErrorOrOkButton();
+		
+		// logout after performing the action
+		logout();
 
 	}
 }

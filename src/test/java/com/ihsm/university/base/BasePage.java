@@ -473,6 +473,61 @@ public class BasePage {
 		}
 	}
 
+	/*
+	 * public void handleModalOk(WebElement okButton) {
+	 * 
+	 * WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+	 * 
+	 * try {
+	 * 
+	 * handleAlertIfPresent();
+	 * 
+	 * wait.until(ExpectedConditions.elementToBeClickable(okButton));
+	 * 
+	 * ((JavascriptExecutor)
+	 * driver).executeScript("arguments[0].scrollIntoView({block:'center'});",
+	 * okButton);
+	 * 
+	 * wait.until(ExpectedConditions.elementToBeClickable(okButton));
+	 * 
+	 * okButton.click();
+	 * 
+	 * wait.until(ExpectedConditions.or(ExpectedConditions.stalenessOf(okButton),
+	 * ExpectedConditions.invisibilityOf(okButton)));
+	 * 
+	 * logger.info("Modal OK clicked successfully"); }
+	 * 
+	 * catch (StaleElementReferenceException e) {
+	 * 
+	 * logger.warn("Element became stale. Re-initializing PageFactory.");
+	 * 
+	 * PageFactory.initElements(driver, this);
+	 * 
+	 * wait.until(ExpectedConditions.elementToBeClickable(okButton));
+	 * 
+	 * ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
+	 * okButton);
+	 * 
+	 * // IMPORTANT: wait after JS click
+	 * wait.until(ExpectedConditions.or(ExpectedConditions.stalenessOf(okButton),
+	 * ExpectedConditions.invisibilityOf(okButton)));
+	 * 
+	 * logger.info("Modal OK clicked successfully after re-location"); }
+	 * 
+	 * catch (Exception e) {
+	 * 
+	 * logger.warn("Normal click failed, trying JS click", e);
+	 * 
+	 * ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
+	 * okButton);
+	 * 
+	 * // IMPORTANT: wait after JS click
+	 * wait.until(ExpectedConditions.or(ExpectedConditions.stalenessOf(okButton),
+	 * ExpectedConditions.invisibilityOf(okButton)));
+	 * 
+	 * logger.info("Modal OK clicked with JS"); } }
+	 */
+
 	protected void waitForNgSelectOptions() {
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.ng-dropdown-panel-items")));
 	}
@@ -602,32 +657,27 @@ public class BasePage {
 			Thread.currentThread().interrupt();
 		}
 	}
-	
+
 	public void blinkElement2(WebElement element) {
 
-	    if (!HIGHLIGHT || element == null) {
-	        return;
-	    }
+		if (!HIGHLIGHT || element == null) {
+			return;
+		}
 
-	    try {
-	        wait.until(ExpectedConditions.visibilityOf(element));
+		try {
+			wait.until(ExpectedConditions.visibilityOf(element));
 
-	        JavascriptExecutor js = (JavascriptExecutor) driver;
-	        String originalStyle = element.getAttribute("style");
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			String originalStyle = element.getAttribute("style");
 
-	        js.executeScript(
-	            "var element = arguments[0];" +
-	            "var originalStyle = arguments[1];" +
-	            "element.setAttribute('style', 'border: 3px solid black; background-color: yellow;');" +
-	            "setTimeout(function() {" +
-	            "   element.setAttribute('style', originalStyle);" +
-	            "}, 200);",
-	            element, originalStyle
-	        );
+			js.executeScript("var element = arguments[0];" + "var originalStyle = arguments[1];"
+					+ "element.setAttribute('style', 'border: 3px solid black; background-color: yellow;');"
+					+ "setTimeout(function() {" + "   element.setAttribute('style', originalStyle);" + "}, 200);",
+					element, originalStyle);
 
-	    } catch (Exception e) {
-	        logger.debug("Unable to highlight element", e);
-	    }
+		} catch (Exception e) {
+			logger.debug("Unable to highlight element", e);
+		}
 	}
 
 	public void handleSubmissionConfirmation() {
@@ -818,6 +868,12 @@ public class BasePage {
 		}
 
 		wait.until(ExpectedConditions.urlContains("Student"));
+	}
+	
+	protected void scrollIntoView(WebElement el) {
+	    ((JavascriptExecutor) driver).executeScript(
+	        "arguments[0].scrollIntoView({block:'center', inline:'nearest'});", el
+	    );
 	}
 
 	// Utility method to capture screenshot

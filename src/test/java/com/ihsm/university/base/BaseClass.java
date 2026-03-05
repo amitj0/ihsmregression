@@ -216,8 +216,6 @@ public class BaseClass {
 
 					loginPage = new LoginPage(sharedDriver);
 					loginPage.login(prop.getProperty("username"), prop.getProperty("password"));
-					
-					
 
 					try {
 						saveCookiesToFile();
@@ -386,6 +384,31 @@ public class BaseClass {
 				System.out.println("Cleanup failed: " + e.getMessage());
 			}
 		}
+	}
+
+	// ================= NEW: Dynamic Employee Login =================
+	protected Properties loadEmployeeData() {
+		Properties employeeData = new Properties();
+		String path = System.getProperty("user.dir") + "/target/employee.data"; // generated file
+		try (FileInputStream fis = new FileInputStream(path)) {
+			employeeData.load(fis);
+		} catch (IOException e) {
+			logger.error("Failed to read employee.data file", e);
+			throw new RuntimeException(e);
+		}
+		return employeeData;
+	}
+
+	protected void loginAsEmployee(WebDriver driverToUse) throws IOException, InterruptedException {
+		Properties employeeData = loadEmployeeData();
+		String empID = employeeData.getProperty("ID"); // ID stored as username/password
+		if (empID == null || empID.trim().isEmpty()) {
+			throw new RuntimeException("Employee ID not found in employee.data");
+		}
+		LoginPage loginPage = new LoginPage(driverToUse);
+		Thread.sleep(2000); // wait for login page to load
+		loginPage.login(empID, empID);
+		logger.info("Logged in as Employee with ID: " + empID);
 	}
 
 	// ================= SCREENSHOT =================

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentTest;
@@ -55,6 +56,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 	}
 
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
+
 
 	@Test(priority = 0, groups = "Regression", dataProvider = "StudentEnrollnmentData", dataProviderClass = EnrollnmentData.class, description = "Verify Student Enrollment Information Test")
 	public void enrollmentInformation(StudentEnrollnmentData data) {

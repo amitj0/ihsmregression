@@ -202,6 +202,16 @@ public class IHSM_ClassSchedule_SubjectHours extends BasePage {
 		safeClick(actionEditButton);
 	}
 
+	public void checkboxAccordingToSubject(String subjectName) {
+		
+		WebElement checkbox = driver.findElement(By.xpath(
+				"(//table[@id='tblStudyPlan']//td[normalize-space()='" + subjectName + "']/preceding-sibling::td)[2]"));
+		
+		if (!checkbox.isSelected()) {
+			checkbox.click();
+		}
+	}
+
 	public void totalCreditHours(String marks) {
 		safeClick(totalCreditHours);
 		totalCreditHours.clear();
@@ -302,7 +312,7 @@ public class IHSM_ClassSchedule_SubjectHours extends BasePage {
 	// fill the subject hours information
 
 	public void fillSubjectHoursInformation(String session, String batch, int acadIdx, String semester,
-			 String crMarks, String lecHours, String praHours, String stHours, String acHours,
+			String subjectName, String crMarks, String lecHours, String praHours, String stHours, String acHours,
 			String lecHours2, String prHoursAcs, String semiHours, String labHours, String facHours, String examType,
 			String pMarks, String mxCtrlMark, String ePassMarks, String maxExamMarks) {
 		coursePlannerTab();
@@ -320,7 +330,7 @@ public class IHSM_ClassSchedule_SubjectHours extends BasePage {
 
 		// hours details
 //		inputSearch(inputData);
-		actionEditButton();
+		checkboxAccordingToSubject(subjectName);
 		totalCreditHours(crMarks);
 		totalLecHours(lecHours);
 		practicalHours(praHours);

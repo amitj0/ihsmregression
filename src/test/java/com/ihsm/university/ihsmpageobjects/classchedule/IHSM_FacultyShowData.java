@@ -15,6 +15,12 @@ public class IHSM_FacultyShowData extends BasePage {
 	}
 
 	// locate the web element here
+	@FindBy(xpath = "//a[@id='a6']//span[normalize-space()='Course Planner']")
+	private WebElement coursePlannerTab;
+
+	@FindBy(xpath = "//a[@href='#/AcademicFacultyGroup']")
+	private WebElement facGroupAssignmentTab;
+
 	@FindBy(xpath = "//div[@data-bs-target='#pills-contact']")
 	private WebElement showDataTab;
 
@@ -69,6 +75,13 @@ public class IHSM_FacultyShowData extends BasePage {
 	private WebElement okButton;
 
 	// method to perform the action no these element
+	public void coursePlannerTab() {
+		safeClick(coursePlannerTab);
+	}
+
+	public void facGroupAssignmentTab() {
+		safeClick(facGroupAssignmentTab);
+	}
 
 	public void showDataTab() {
 		safeClick(showDataTab);
@@ -168,6 +181,8 @@ public class IHSM_FacultyShowData extends BasePage {
 	// fill the faculty show data
 	public void fillFacultyShowData(String sessionList, String batchList, String academicList, String semList,
 			String facList) {
+		coursePlannerTab();
+		facGroupAssignmentTab();
 		showDataTab();
 		sessionField();
 		sessionFieldList(sessionList);

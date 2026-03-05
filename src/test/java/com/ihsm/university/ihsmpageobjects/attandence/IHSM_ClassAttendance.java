@@ -185,12 +185,6 @@ public class IHSM_ClassAttendance extends BasePage {
 	}
 
 	// other
-	/*
-	 * @FindBy(xpath =
-	 * "//table[@id='tblAttendanceStudentListMain']/tbody//tr//td[7]//input[@type='number']")
-	 * private List<WebElement> attendanceInputs;
-	 */
-
 	public void enterAttendanceValues(List<Integer> values) {
 
 		if (values.size() != attendanceInputs.size()) {
@@ -247,7 +241,7 @@ public class IHSM_ClassAttendance extends BasePage {
 	}
 
 	// fill the class Attendance data
-	public void fillClassAttendance(int acadIdx, int crsIdx, int subIdx) {
+	public void fillClassAttendanceForLec(int acadIdx, int crsIdx, int subIdx) {
 		chooseDegreeFaculty();
 		choosePosition();
 		teacherTab();
@@ -264,7 +258,7 @@ public class IHSM_ClassAttendance extends BasePage {
 
 	}
 
-	public void fillClassAttendance2(int acadIdx, int crsIdx, int subIdx, String practical,
+	public void fillClassAttendanceForPrac(int acadIdx, int crsIdx, int subIdx, String practical,
 			List<Integer> attendanceValues) {
 
 		teacherTab();
@@ -283,9 +277,9 @@ public class IHSM_ClassAttendance extends BasePage {
 
 	}
 
-	public void fillClassAttendance3(int acadIdx, int crsIdx, int subIdx, List<Integer> attendanceValues) {
-		chooseDegreeFaculty();
-		choosePosition();
+	public void fillClassAttendancePerformanceScore(int acadIdx, int crsIdx, int subIdx, List<Integer> attendanceValues) {
+//		chooseDegreeFaculty();
+//		choosePosition();
 		teacherTab();
 		classAttendance();
 		selectAcademicPlanByIndex(acadIdx);

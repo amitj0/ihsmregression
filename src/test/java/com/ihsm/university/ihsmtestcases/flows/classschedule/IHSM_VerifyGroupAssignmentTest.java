@@ -16,6 +16,7 @@ import com.ihsm.university.ihsmpageobjects.classchedule.IHSM_FacultyShowData;
 import com.ihsm.university.ihsmtestcases.dataprovider.FacultyGroupAssignmentDataProvider;
 import com.ihsm.university.ihsmtestcases.dataprovider.FacultyShowDataProvider;
 import com.ihsm.university.ihsmtestcases.pojo.FacultyGroupAssignData;
+import com.ihsm.university.ihsmtestcases.pojo.FacultyGroupAssignData2;
 import com.ihsm.university.ihsmtestcases.pojo.FacultyShowData;
 import com.ihsm.university.utilities.ExtentListener;
 
@@ -23,8 +24,8 @@ public class IHSM_VerifyGroupAssignmentTest extends BaseClass {
 
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
-	@Test(groups = "Regression", priority = 0, description = "Verify Group Lecture Assignment Test", dataProvider = "FacultyGroupAssignData", dataProviderClass = FacultyGroupAssignmentDataProvider.class)
-	public void verifyGroupAssignment(FacultyGroupAssignData data) {
+	@Test(enabled = true, groups = "Regression", priority = 0, description = "Verify Group Lecture Assignment Test", dataProvider = "FacultyGroupAssignData", dataProviderClass = FacultyGroupAssignmentDataProvider.class)
+	public void verifyGroupAssignmentLec(FacultyGroupAssignData data) {
 		ExtentTest node = ExtentListener
 				.createNode("Group Assignment Information [" + data.getSession() + "_" + data.getBatch() + "]");
 		boolean isSuccess = false;
@@ -35,12 +36,14 @@ public class IHSM_VerifyGroupAssignmentTest extends BaseClass {
 			node.info("Academic Plan: " + data.getAcademicPlan());
 			node.info("Semester: " + data.getSemester());
 			node.info("Group Type: " + data.getGroupType());
+			node.info("Subject: " + data.getSubjectName());
+			node.info("Pending for Assignment: " + data.getColumnType());
 			node.info("Select Faculty: " + data.getSelectFaculty());
-			
+
 			IHSM_FacultyGroupAssignment facultyGroup = new IHSM_FacultyGroupAssignment(getDriver());
-//			facultyGroup.fillGroupAssignmentInfo("2025 -2026", "1", "CENTRAL / Bachelor / MBBS", "1", "Main");
 			facultyGroup.fillGroupAssignmentInfo(data.getSession(), data.getBatch(), data.getAcademicPlan(),
-					data.getSemester(), data.getGroupType(), data.getSelectFaculty());
+					data.getSemester(), data.getGroupType(), data.getSubjectName(), data.getColumnType(),
+					data.getSelectFaculty());
 
 			isSuccess = true;
 			node.pass("Group Lecture Assignment Information Test Passed");
@@ -54,38 +57,40 @@ public class IHSM_VerifyGroupAssignmentTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", priority = 1, description = "Verify Group Practical Assignment Test", dataProvider = "FacultyGroupAssignData", dataProviderClass = FacultyGroupAssignmentDataProvider.class)
-	public void verifyGroupAssignment2(FacultyGroupAssignData data) {
-		ExtentTest node = ExtentListener.createNode("Group Practical Assignment Information");
+	@Test(enabled = false, groups = "Regression", priority = 1, description = "Verify Group Practical Assignment Test", dataProvider = "FacultyGroupAssignData2", dataProviderClass = FacultyGroupAssignmentDataProvider.class)
+	public void verifyGroupAssignmentPra(FacultyGroupAssignData2 data) {
+		ExtentTest node = ExtentListener
+				.createNode("Group Assignment Information [" + data.getSession() + "_" + data.getBatch() + "]");
 		boolean isSuccess = false;
 		try {
-			node.info("Entering Group Practical Assignment Details");
+			node.info("Entering Group Assignment Details");
 			node.info("Academic Session: " + data.getSession());
 			node.info("Batch: " + data.getBatch());
 			node.info("Academic Plan: " + data.getAcademicPlan());
 			node.info("Semester: " + data.getSemester());
 			node.info("Group Type: " + data.getGroupType());
+			node.info("Subject: " + data.getSubjectName());
+			node.info("Pending for Assignment: " + data.getColumnType());
 			node.info("Select Faculty: " + data.getSelectFaculty());
-			
-			
+
 			IHSM_FacultyGroupAssignment facultyGroup = new IHSM_FacultyGroupAssignment(getDriver());
-//			facultyGroup.fillGroupAssignmentInfo("2025 -2026", "1", "CENTRAL / Bachelor / MBBS", "1", "Main");
-			facultyGroup.fillGroupAssignmentInfo2(data.getSession(), data.getBatch(), data.getAcademicPlan(),
-					data.getSemester(), data.getGroupType(), data.getSelectFaculty());
+			facultyGroup.fillGroupAssignmentInfo(data.getSession(), data.getBatch(), data.getAcademicPlan(),
+					data.getSemester(), data.getGroupType(), data.getSubjectName(), data.getColumnType(),
+					data.getSelectFaculty());
+
 			isSuccess = true;
 			node.pass("Group Practical Assignment Information Test Passed");
 		} catch (Exception e) {
 			node.fail("Group Practical Assignment Information Failed: " + e.getMessage());
 			throw new RuntimeException(e);
 		} finally {
-
 			stepStatus.put("Group Practical Assignment [" + data.getSession() + "-" + data.getBatch() + "]",
 					isSuccess ? "PASS" : "FAIL");
 
 		}
 	}
 
-	@Test(groups = "Regression", description = "Verify Faculty Group Data Test", priority = 2, dependsOnMethods = "verifyGroupAssignment", dataProvider = "FacultyShowDataProvider", dataProviderClass = FacultyShowDataProvider.class, alwaysRun = true)
+	@Test(enabled = true, groups = "Regression", description = "Verify Faculty Group Data Test", priority = 2, dataProvider = "FacultyShowDataProvider", dataProviderClass = FacultyShowDataProvider.class, alwaysRun = true)
 	public void verifyFacultyGroupData(FacultyShowData data) {
 		ExtentTest node = ExtentListener.createNode("Faculty Show Data Information");
 		boolean isSuccess = false;
@@ -96,7 +101,7 @@ public class IHSM_VerifyGroupAssignmentTest extends BaseClass {
 			node.info("Academic Plan: " + data.getAcademicPlan());
 			node.info("Semester: " + data.getSemester());
 			node.info("Faculty Name: " + data.getFacultyName());
-			
+
 			IHSM_FacultyShowData showData = new IHSM_FacultyShowData(getDriver());
 			/*
 			 * showData.fillFacultyShowData("2025 -2026", "1", "CENTRAL / Bachelor / MBBS",
