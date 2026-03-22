@@ -92,7 +92,7 @@ public class ProfInfo_DevResearch_Rewards extends BasePage {
 	}
 
 	// fill rewards form
-	public void fillRewardsForm(String rewardType, String rewardDate, String rewardDocument, String docNumber,
+	public ProfInfo_DevResearch_Patent fillRewardsForm(String rewardType, String rewardDate, String rewardDocument, String docNumber,
 			String notes) {
 		devResearchAddBtn();
 		rewardsSubTab();
@@ -104,7 +104,7 @@ public class ProfInfo_DevResearch_Rewards extends BasePage {
 		saveRewardsBtn();
 		okButtonRewards();
 
-		// return instance for method chaining
+		return new ProfInfo_DevResearch_Patent(driver);
 	}
 
 }

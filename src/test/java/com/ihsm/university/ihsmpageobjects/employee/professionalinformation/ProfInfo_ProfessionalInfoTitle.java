@@ -162,7 +162,7 @@ public class ProfInfo_ProfessionalInfoTitle extends BasePage {
 	}
 
 	// fill the Title form
-	public void fillTitleForm(String title, String organization, String documentNumber, String titleDate, String notes,
+	public ProfInfo_DevResearch_SciResearch fillTitleForm(String title, String organization, String documentNumber, String titleDate, String notes,
 			String filePath) {
 		professionalInfoLink();
 		titleTab();
@@ -175,6 +175,7 @@ public class ProfInfo_ProfessionalInfoTitle extends BasePage {
 		uploadDocumentField(filePath);
 		saveTitleBtn();
 		okButtonSuccessPopupTitle();
+		return new ProfInfo_DevResearch_SciResearch(driver);
 	}
 
 }

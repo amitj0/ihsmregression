@@ -247,7 +247,7 @@ public class Designation_EmploymentRights extends BasePage {
 	// fill employment rights form
 	public Designation_Position fillEmploymentRightsForm(String jobType, String rating, String operationStatus,
 			String orderNo, String probationDate, String probationTillDate, String department, String positionPart,
-			String program, String basis, String pensionFrom, String employmentBookHistoryNo, String salary,
+			/* String program, String basis, */ String pensionFrom, String employmentBookHistoryNo, String salary,
 			String notes) {
 		designationTab();
 		addEmploymentRightsBtn();
@@ -264,9 +264,10 @@ public class Designation_EmploymentRights extends BasePage {
 		departmentDropdownOptions(department);
 		positionPartDropdownField();
 		positionPartDropdownOptions(positionPart);
-		programDropdownField();
-		programDropdownOptions(program);
-		basisField(basis);
+		/*
+		 * programDropdownField(); programDropdownOptions(program);
+		 */
+		/* basisField(basis); */
 		pensionFromField(pensionFrom);
 		employmentBookHistoryNoField(employmentBookHistoryNo);
 		salaryField(salary);

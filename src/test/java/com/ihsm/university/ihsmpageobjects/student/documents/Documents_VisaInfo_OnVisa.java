@@ -31,6 +31,12 @@ public class Documents_VisaInfo_OnVisa extends BasePage {
 	@FindBy(xpath = "//div[contains(@class,'ng-dropdown-panel')]//div[@role='option']")
 	private List<WebElement> visaTypeFieldList;
 
+	@FindBy(xpath = "(//div[@id='STUDENTVISA']//label[contains(normalize-space(.),'Select Address')]/following-sibling::div[1]//ng-select[@name='DOCUMENTTYPE'])[2]")
+	private WebElement selectAddField;
+
+	@FindBy(xpath = "//div[contains(@class,'ng-dropdown-panel')]//div[@role='option']")
+	private List<WebElement> selectAddFieldList;
+
 	// currentvisaexpdate --> doubt
 	@FindBy(xpath = "(//input[@name='ISSUEDATE'])[6]")
 	private WebElement currentVisaExpDateField;
@@ -82,6 +88,20 @@ public class Documents_VisaInfo_OnVisa extends BasePage {
 		}
 	}
 
+	/*
+	 * public void selectAddress(String addressType) { safeClick(selectAddField);
+	 * for (WebElement option : selectAddFieldList) { if
+	 * (option.getText().trim().equalsIgnoreCase(addressType)) { safeClick(option);
+	 * return; } } }
+	 */
+	
+	public void selectAddress() {
+	    safeClick(selectAddField);
+	    if (selectAddFieldList.size() > 1) {
+	        safeClick(selectAddFieldList.get(1));
+	    }
+	}
+
 	public void enterCurrentVisaExpDate(String currentVisaExpDate) {
 		currentVisaExpDateField.sendKeys(currentVisaExpDate);
 	}
@@ -119,11 +139,13 @@ public class Documents_VisaInfo_OnVisa extends BasePage {
 	}
 
 	// fill the online visa information
-	public Documents_VisaInfo_Register fillOnlineVisaInfo(String visaType, String currentVisaExpDate, String issueDate,
-			String visaExpDate, String visaNumber) {
+	public Documents_VisaInfo_Register fillOnlineVisaInfo(String visaType, String addressType,
+			String currentVisaExpDate, String issueDate, String visaExpDate, String visaNumber) {
 		clickVisaInfoTab();
 		clickOnlineVisaTab();
 		selectVisaType(visaType);
+		selectAddress();
+//		selectAddress(addressType);
 		enterCurrentVisaExpDate(currentVisaExpDate);
 		enterIssueDate(issueDate);
 		enterVisaExpDate(visaExpDate);

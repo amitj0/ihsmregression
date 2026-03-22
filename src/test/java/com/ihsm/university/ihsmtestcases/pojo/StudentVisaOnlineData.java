@@ -2,6 +2,7 @@ package com.ihsm.university.ihsmtestcases.pojo;
 
 public class StudentVisaOnlineData {
 	private String visaType;
+	private String visaAddress;
 	private String startDate;
 	private String endDate;
 	private String expiryDate;
@@ -13,6 +14,14 @@ public class StudentVisaOnlineData {
 
 	public void setVisaType(String visaType) {
 		this.visaType = visaType;
+	}
+	
+	public String getVisaAddress() {
+		return visaAddress;
+	}
+	
+	public void setVisaAddress(String visaAddress) {
+		this.visaAddress = visaAddress;
 	}
 
 	public String getStartDate() {

@@ -156,7 +156,7 @@ public class ProfInfo_DevResearch_Attestations extends BasePage {
 	}
 
 	// fill the Attestations form
-	public void fillAttestationsForm(String universityRules, String communityCompetition, String personality,
+	public ProfInfo_Military fillAttestationsForm(String universityRules, String communityCompetition, String personality,
 			String professional, String validationDate, String notes) {
 		addDevResearchAttestations();
 		clickAttestationsSubTab();
@@ -172,6 +172,7 @@ public class ProfInfo_DevResearch_Attestations extends BasePage {
 		notesField(notes);
 		saveAttestationsBtn();
 		okButtonAttestations();
+		return new ProfInfo_Military(driver);
 	}
 
 }

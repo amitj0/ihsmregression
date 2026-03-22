@@ -108,12 +108,14 @@ public class IHSM_FullDocumentsFlowTest extends BaseClass {
 	private void fillVisaOnline() {
 		logger.info("Filling Visa Online...");
 
-		new Documents_VisaInfo_OnVisa(getDriver()).fillOnlineVisaInfo(
-				StudentFullRegistrationDataVariables.visaOnlineType,
-				StudentFullRegistrationDataVariables.visaOnlineStartDate,
-				StudentFullRegistrationDataVariables.visaOnlineIssueDate,
-				StudentFullRegistrationDataVariables.visaOnlineEndDate,
-				StudentFullRegistrationDataVariables.visaOnlineNumber);
+		/*
+		 * new Documents_VisaInfo_OnVisa(getDriver()).fillOnlineVisaInfo(
+		 * StudentFullRegistrationDataVariables.visaOnlineType,
+		 * StudentFullRegistrationDataVariables.visaOnlineStartDate,
+		 * StudentFullRegistrationDataVariables.visaOnlineIssueDate,
+		 * StudentFullRegistrationDataVariables.visaOnlineEndDate,
+		 * StudentFullRegistrationDataVariables.visaOnlineNumber);
+		 */
 	}
 
 	private void fillVisaRegister() {

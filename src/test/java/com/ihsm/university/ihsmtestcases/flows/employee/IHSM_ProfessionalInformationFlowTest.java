@@ -20,6 +20,15 @@ import com.ihsm.university.utilities.ExtentListener;
 
 public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 
+	private ProfInfo_ProfessionalInfoDegreeLvl profInfo;
+	private ProfInfo_ProfessionalInfoAcademics profAcadInfo;
+	private ProfInfo_ProfessionalInfoTitle profTitleInfo;
+	private ProfInfo_DevResearch_SciResearch profSciResearchInfo;
+	private ProfInfo_DevResearch_Rewards profRewardsInfo;
+	private ProfInfo_DevResearch_Patent profPatentInfo;
+	private ProfInfo_DevResearch_Attestations profAttestationsInfo;
+	private ProfInfo_Military profMilitaryInfo;
+
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
 	@Test(groups = "Regression", description = "Verify Employee Professional Degree Information Test")
@@ -36,8 +45,8 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 			node.info("End Date: " + "01/01/2027");
 			node.info("Notes: " + TestDataGenerator.randomNotes());
 
-			ProfInfo_ProfessionalInfoDegreeLvl profInfo = new ProfInfo_ProfessionalInfoDegreeLvl(getDriver());
-			profInfo.fillProfessionalInformationForm("Диплом кандидата медицинских наук", "Biology",
+			profInfo = new ProfInfo_ProfessionalInfoDegreeLvl(getDriver());
+			profAcadInfo = profInfo.fillProfessionalInformationForm("Диплом кандидата медицинских наук", "Biology",
 					TestDataGenerator.randomUniversity(), TestDataGenerator.randomNumber(4), "01012026", "01012027",
 					TestDataGenerator.randomNotes());
 			isSuccess = true;
@@ -51,7 +60,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "professionalDegreeInformation", alwaysRun = true, description = "Verify Employee Professional Academics Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "professionalDegreeInformation", description = "Verify Employee Professional Academics Information Test")
 	public void professionalAcademicsInformation() {
 		ExtentTest node = ExtentListener.createNode("Professional Academics Information");
 		boolean isSuccess = false;
@@ -68,8 +77,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 			node.info("Diploma Date: " + "01/01/2028");
 			node.info("Notes: " + TestDataGenerator.randomNotes());
 
-			ProfInfo_ProfessionalInfoAcademics profAcadInfo = new ProfInfo_ProfessionalInfoAcademics(getDriver());
-			profAcadInfo.fillAcademicInfoForm("Residency", "Сертификат", "01012026", "01012027",
+			profTitleInfo = profAcadInfo.fillAcademicInfoForm("Residency", "Сертификат", "01012026", "01012027",
 					TestDataGenerator.randomAcademicDegree(), TestDataGenerator.randomUniversity(),
 					TestDataGenerator.randomSpeciality(), TestDataGenerator.randomNumber(4), "01012028",
 					TestDataGenerator.randomNotes());
@@ -84,7 +92,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "professionalAcademicsInformation", alwaysRun = true, description = "Verify Employee Professional Title Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "professionalAcademicsInformation", description = "Verify Employee Professional Title Information Test")
 	public void professionalTitleInformation() {
 		ExtentTest node = ExtentListener.createNode("Professional Title Information");
 		boolean isSuccess = false;
@@ -97,8 +105,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 			node.info("Notes: " + TestDataGenerator.randomNotes());
 //			node.info("Upload Photo: " + TestDataGenerator.randomPhotoFile());
 
-			ProfInfo_ProfessionalInfoTitle profTitleInfo = new ProfInfo_ProfessionalInfoTitle(getDriver());
-			profTitleInfo.fillTitleForm("Professor", TestDataGenerator.randomUniversity(),
+			profSciResearchInfo = profTitleInfo.fillTitleForm("Professor", TestDataGenerator.randomUniversity(),
 					TestDataGenerator.randomNumber(5), "01012026", TestDataGenerator.randomNotes(),
 					getTestDataPath("male.png"));
 			isSuccess = true;
@@ -112,7 +119,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "professionalTitleInformation", alwaysRun = true, description = "Verify Employee Professional Scientific Research Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "professionalTitleInformation", description = "Verify Employee Professional Scientific Research Information Test")
 	public void professionalScientificResearchInformation() {
 		ExtentTest node = ExtentListener.createNode("Professional Scientific Research Information");
 		boolean isSuccess = false;
@@ -127,9 +134,8 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 			node.info("Authors: " + TestDataGenerator.randomAuthors());
 			node.info("Notes: " + TestDataGenerator.randomNotes());
 
-			ProfInfo_DevResearch_SciResearch profSciResearchInfo = new ProfInfo_DevResearch_SciResearch(getDriver());
-			profSciResearchInfo.fillDevResearchForm("Методические рекомедации", "01012026", "Республикалық деңгей",
-					TestDataGenerator.randomUrl(), TestDataGenerator.randomMagazineName(),
+			profRewardsInfo = profSciResearchInfo.fillDevResearchForm("Методические рекомедации", "01012026",
+					"Республикалық деңгей", TestDataGenerator.randomUrl(), TestDataGenerator.randomMagazineName(),
 					TestDataGenerator.randomArticleName(), TestDataGenerator.randomAuthors(),
 					TestDataGenerator.randomNotes());
 			isSuccess = true;
@@ -143,7 +149,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "professionalScientificResearchInformation", alwaysRun = true, description = "Verify Employee Professional Rewards Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "professionalScientificResearchInformation", description = "Verify Employee Professional Rewards Information Test")
 	public void professionalRewardsInformation() {
 		ExtentTest node = ExtentListener.createNode("Professional Rewards Information");
 		boolean isSuccess = false;
@@ -155,8 +161,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 			node.info("Reward Number: " + TestDataGenerator.randomNumber(4));
 			node.info("Notes: " + TestDataGenerator.randomNotes());
 
-			ProfInfo_DevResearch_Rewards profRewardsInfo = new ProfInfo_DevResearch_Rewards(getDriver());
-			profRewardsInfo.fillRewardsForm(TestDataGenerator.randomDocumentType(), "01012026",
+			profPatentInfo = profRewardsInfo.fillRewardsForm(TestDataGenerator.randomDocumentType(), "01012026",
 					TestDataGenerator.randomDocumentType(), TestDataGenerator.randomNumber(4),
 					TestDataGenerator.randomNotes());
 			isSuccess = true;
@@ -170,7 +175,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "professionalRewardsInformation", alwaysRun = true, description = "Verify Employee Professional Patent Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "professionalRewardsInformation", description = "Verify Employee Professional Patent Information Test")
 	public void professionalPatentInformation() {
 		ExtentTest node = ExtentListener.createNode("Professional Patent Information");
 		boolean isSuccess = false;
@@ -185,10 +190,10 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 			node.info("Notes: " + TestDataGenerator.randomNotes());
 			node.info("Notes: " + TestDataGenerator.randomNotes());
 
-			ProfInfo_DevResearch_Patent profPatentInfo = new ProfInfo_DevResearch_Patent(getDriver());
-			profPatentInfo.fillDevResearchPatentForm("Patent", TestDataGenerator.randomInvention(), "Republican",
-					TestDataGenerator.randomAuthors(), TestDataGenerator.randomString(4), "01012026",
-					TestDataGenerator.randomNumber(5), TestDataGenerator.randomNotes());
+			profAttestationsInfo = profPatentInfo.fillDevResearchPatentForm("Patent",
+					TestDataGenerator.randomInvention(), "Republican", TestDataGenerator.randomAuthors(),
+					TestDataGenerator.randomString(4), "01012026", TestDataGenerator.randomNumber(5),
+					TestDataGenerator.randomNotes());
 			isSuccess = true;
 			node.pass("Professional Patent Information completed");
 
@@ -200,7 +205,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "professionalPatentInformation", alwaysRun = true, description = "Verify Employee Professional Attestations Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "professionalPatentInformation", description = "Verify Employee Professional Attestations Information Test")
 	public void professionalAttestationsInformation() {
 		ExtentTest node = ExtentListener.createNode("Professional Attestations Information");
 		boolean isSuccess = false;
@@ -213,9 +218,8 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 			node.info("Attestation Date: " + "01/01/2026");
 			node.info("Notes: " + TestDataGenerator.randomNotes());
 
-			ProfInfo_DevResearch_Attestations profAttestationsInfo = new ProfInfo_DevResearch_Attestations(getDriver());
-			profAttestationsInfo.fillAttestationsForm("Excellent", "Not Suitable", "Ok", "Appropriate", "01012026",
-					TestDataGenerator.randomNotes());
+			profMilitaryInfo = profAttestationsInfo.fillAttestationsForm("Excellent", "Not Suitable", "Ok",
+					"Appropriate", "01012026", TestDataGenerator.randomNotes());
 			isSuccess = true;
 			node.pass("Professional Attestations Information completed");
 
@@ -227,7 +231,7 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "professionalAttestationsInformation", alwaysRun = true, description = "Verify Employee Professional Military Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "professionalAttestationsInformation", description = "Verify Employee Professional Military Information Test")
 	public void professionalMilitaryInformation() {
 		ExtentTest node = ExtentListener.createNode("Professional Military Information");
 		boolean isSuccess = false;
@@ -238,7 +242,6 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 			node.info("Date: " + "01/01/2026");
 			node.info("Notes: " + TestDataGenerator.randomNotes());
 
-			ProfInfo_Military profMilitaryInfo = new ProfInfo_Military(getDriver());
 			profMilitaryInfo.fillMilitaryInformationForm("Lieutenant General", TestDataGenerator.randomNumber(4),
 					"01012026", TestDataGenerator.randomNotes());
 			isSuccess = true;

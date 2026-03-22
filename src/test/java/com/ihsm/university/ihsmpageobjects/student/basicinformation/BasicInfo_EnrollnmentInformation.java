@@ -1,6 +1,7 @@
 package com.ihsm.university.ihsmpageobjects.student.basicinformation;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.WebDriver;
@@ -292,11 +293,11 @@ public class BasicInfo_EnrollnmentInformation extends BasePage {
 	}
 
 	public boolean isEnrollmentInfoSavedSuccessfully() {
-		return alertOkBtn.isDisplayed();
+		return waitUntilVisible(alertOkBtn, Duration.ofSeconds(5));
 	}
 
 	// Fill the Enrollment Information
-	public BasicInfo_EnrollnmentInformation fillEnrollmentInformation(String addmissionBatch, String universityCurr,
+	public BasicInfo_PersonalInformation fillEnrollmentInformation(String addmissionBatch, String universityCurr,
 			String semester, String group, String pinNo, String firstName, String middleName, String lastName,
 			String gender, String dob, String nationality, String state, String mobileNo, String email,
 			String address) throws InterruptedException {
@@ -322,7 +323,7 @@ public class BasicInfo_EnrollnmentInformation extends BasePage {
 		saveBtn();
 //		alertOkBtn(); 
 
-		return new BasicInfo_EnrollnmentInformation(driver);
+		 return new BasicInfo_PersonalInformation(driver); // ← returns next POM
 
 	}
 

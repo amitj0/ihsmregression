@@ -1,11 +1,15 @@
 package com.ihsm.university.ihsmpageobjects.classchedule;
 
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -112,6 +116,9 @@ public class IHSM_ClassSchedule_SubjectHours extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButton;
+	
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// method to perfom the action on these locators
 	public void coursePlannerTab() {
@@ -308,13 +315,20 @@ public class IHSM_ClassSchedule_SubjectHours extends BasePage {
 		blinkElement(okButton);
 		safeClick(okButton);
 	}
+	
+	public String modalSuccessMsg() throws TimeoutException {
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
 
 	// fill the subject hours information
 
-	public void fillSubjectHoursInformation(String session, String batch, int acadIdx, String semester,
+	public String fillSubjectHoursInformation(String session, String batch, int acadIdx, String semester,
 			String subjectName, String crMarks, String lecHours, String praHours, String stHours, String acHours,
 			String lecHours2, String prHoursAcs, String semiHours, String labHours, String facHours, String examType,
-			String pMarks, String mxCtrlMark, String ePassMarks, String maxExamMarks) {
+			String pMarks, String mxCtrlMark, String ePassMarks, String maxExamMarks) throws TimeoutException {
 		coursePlannerTab();
 		subjectCredit();
 		subjectHours();
@@ -348,7 +362,11 @@ public class IHSM_ClassSchedule_SubjectHours extends BasePage {
 		examPassingMarks(ePassMarks);
 		maxExamMarks(maxExamMarks);
 		saveButton();
+		
+		String msg = modalSuccessMsg();
 		okButtonPop();
 
+		return msg;
+		
 	}
 }

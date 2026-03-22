@@ -16,6 +16,7 @@ import com.ihsm.university.utilities.ExtentListener;
 
 public class IHSM_StatusFullFlowTest2 extends BaseClass {
 
+	private Status_Status statusInfo;
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
 	// ---------------- STATUS INFORMATION ----------------
@@ -31,7 +32,7 @@ public class IHSM_StatusFullFlowTest2 extends BaseClass {
 			node.info("Notes: " + data.getNotes());
 //			node.info("Photo: " + TestDataGenerator.randomEmployeePhotoFile());
 
-			Status_Status statusInfo = new Status_Status(getDriver());
+			statusInfo = new Status_Status(getDriver());
 			statusInfo.fillStatusStatusForm(data.getStatus(), data.getStatusDate(), data.getStatusCode(),
 					data.getNotes(), getTestDataPath("male.png"));
 			isSuccess = true;

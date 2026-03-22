@@ -142,15 +142,7 @@ public class BasicInfo_PersonalInformation extends BasePage {
 	}
 
 	public boolean isPersonalInfoSavedSuccessfully() {
-		try {
-			// Wait for the success modal OK button to appear
-			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-			wait.until(ExpectedConditions.visibilityOf(alertOkBtn));
-			return alertOkBtn.isDisplayed();
-		} catch (Exception e) {
-			logger.error("Success modal did not appear", e);
-			return false;
-		}
+		return waitUntilVisible(alertOkBtn, Duration.ofSeconds(5));
 	}
 
 	// fill the personal information form
@@ -164,7 +156,7 @@ public class BasicInfo_PersonalInformation extends BasePage {
 		addressField(address);
 		saveBtn();
 		alertOkBtn();
-		return new BasicInfo_Biometrics(driver);
+		return new BasicInfo_Biometrics(driver); // ← returns next POM
 	}
 
 }

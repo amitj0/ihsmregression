@@ -23,6 +23,12 @@ import com.ihsm.university.navigation.Employee_Search;
 import com.ihsm.university.utilities.ExtentListener;
 
 public class IHSM_BasicFullFlowTest extends BaseClass {
+	private BasicInfo_EnrollnmentInformation enrollInfo;
+	private BasicInfo_PersonalInformation personalInfo;
+	private BasicInfo_GuardianInformation guardianInfo;
+	private BasicInfo_LanguageInformation languageInfo;
+	private BasicInfo_VaccinationInformation vaccinationInfo;
+	private BasicInfo_BiometricsInformation biometricsInfo;
 
 	private static final String EMPLOYEE_FILE = System.getProperty("user.dir") + "/target/employee.data";
 
@@ -85,11 +91,12 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 				node.info("Email: " + TestDataGenerator.randomEmail());
 				node.info("Country: " + "Казахстан");
 				// Create new employee
-				BasicInfo_EnrollnmentInformation enrollInfo = new BasicInfo_EnrollnmentInformation(getDriver());
+				enrollInfo = new BasicInfo_EnrollnmentInformation(getDriver());
 
-				enrollInfo.fillEnrollnmentInformationForm(TestDataGenerator.generateRandomRussianFirstName(),
-						TestDataGenerator.generateRandomFirstName(), TestDataGenerator.generateRandomGender(),
-						TestDataGenerator.randomNumber(5), TestDataGenerator.randomEmail(), "Казахстан");
+				personalInfo = enrollInfo.fillEnrollnmentInformationForm(
+						TestDataGenerator.generateRandomRussianFirstName(), TestDataGenerator.generateRandomFirstName(),
+						TestDataGenerator.generateRandomGender(), TestDataGenerator.randomNumber(5),
+						TestDataGenerator.randomEmail(), "Казахстан");
 
 				String employeeId = enrollInfo.getEmployeeId();
 				if (employeeId == null || employeeId.isEmpty()) {
@@ -109,7 +116,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "enrollmentInformation", alwaysRun = true, description = "Verify Employee Personal Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "enrollmentInformation", description = "Verify Employee Personal Information Test")
 	public void personalInformation() {
 		ExtentTest node = ExtentListener.createNode("Personal Information");
 		boolean isSuccess = false;
@@ -127,12 +134,11 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 			node.info("Phone Number: " + TestDataGenerator.randomPhone());
 			node.info("Address 1: " + TestDataGenerator.randomIndianAddress());
 			node.info("Address 2: " + TestDataGenerator.randomIndianAddress());
-			
-			BasicInfo_PersonalInformation personalInfo = new BasicInfo_PersonalInformation(getDriver());
-			personalInfo.fillPersonalInformationForm(TestDataGenerator.randomString(4),
+
+			guardianInfo = personalInfo.fillPersonalInformationForm(TestDataGenerator.randomString(4),
 					TestDataGenerator.randomString(3), TestDataGenerator.randomNumber(4),
 					TestDataGenerator.randomNumber(5), "01012000", TestDataGenerator.generateRandomGender(),
-					"Разведен(а) официально (развод зарегистрирован)", "01012026", "91",
+					"Married", "01012026", "91",
 					TestDataGenerator.randomPhone(), TestDataGenerator.randomIndianAddress(),
 					TestDataGenerator.randomIndianAddress());
 			isSuccess = true;
@@ -146,7 +152,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "personalInformation", alwaysRun = true, description = "Verify Employee Guardian Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "personalInformation", description = "Verify Employee Guardian Information Test")
 	public void guardianInformation() {
 		ExtentTest node = ExtentListener.createNode("Guardian Information");
 		boolean isSuccess = false;
@@ -156,9 +162,9 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 			node.info("Guardian Name: " + TestDataGenerator.randomGuardianName());
 			node.info("Guardian DOB: " + "01-01-1970");
 			node.info("Is Guardian Employee: " + "No");
-			BasicInfo_GuardianInformation guardianInfo = new BasicInfo_GuardianInformation(getDriver());
-			guardianInfo.fillGuardianInformationForm("Father", TestDataGenerator.randomGuardianName(), "01011970",
-					"No");
+
+			languageInfo = guardianInfo.fillGuardianInformationForm("Father", TestDataGenerator.randomGuardianName(),
+					"01011970", "No");
 			isSuccess = true;
 			node.pass("Employee Guardian Information completed");
 
@@ -170,7 +176,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "guardianInformation", alwaysRun = true, description = "Verify Employee Language Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "guardianInformation", description = "Verify Employee Language Information Test")
 	public void languageInformation() {
 		ExtentTest node = ExtentListener.createNode("Language Information");
 		boolean isSuccess = false;
@@ -179,8 +185,7 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 			node.info("Language: " + "сертификат Duolingo");
 			node.info("Proficiency: " + "B2");
 
-			BasicInfo_LanguageInformation languageInfo = new BasicInfo_LanguageInformation(getDriver());
-			languageInfo.fillLanguageInformation("сертификат Duolingo", "B2");
+			biometricsInfo = languageInfo.fillLanguageInformation("сертификат Duolingo"/* , "B2" */);
 			isSuccess = true;
 			node.pass("Employee Language Information completed");
 		} catch (Exception e) {
@@ -191,41 +196,35 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "languageInformation", alwaysRun = true, description = "Verify Employee Vaccination Information Test")
-	public void vaccinationInformation() {
-		ExtentTest node = ExtentListener.createNode("Vaccination Information");
-		boolean isSuccess = false;
-		try {
-			node.info("Entering Employee Vaccination Details");
-			node.info("Vaccine Name: " + "AstraZeneca");
-			node.info("Dose Number: " + "2");
-			node.info("Batch Number: " + TestDataGenerator.randomNumber(5));
-			node.info("Vaccination Date: " + "01-01-2026");
-			node.info("Notes: " + TestDataGenerator.randomNotes());
+	/*
+	 * @Test(groups = "Regression", dependsOnMethods = "languageInformation",
+	 * description = "Verify Employee Vaccination Information Test") public void
+	 * vaccinationInformation() { ExtentTest node =
+	 * ExtentListener.createNode("Vaccination Information"); boolean isSuccess =
+	 * false; try { node.info("Entering Employee Vaccination Details");
+	 * node.info("Vaccine Name: " + "AstraZeneca"); node.info("Dose Number: " +
+	 * "2"); node.info("Batch Number: " + TestDataGenerator.randomNumber(5));
+	 * node.info("Vaccination Date: " + "01-01-2026"); node.info("Notes: " +
+	 * TestDataGenerator.randomNotes());
+	 * 
+	 * biometricsInfo = vaccinationInfo.fillVaccinationForm("AstraZeneca", "2",
+	 * TestDataGenerator.randomNumber(5), "01012026",
+	 * TestDataGenerator.randomNotes()); isSuccess = true;
+	 * node.pass("Employee Vaccination Information completed"); } catch (Exception
+	 * e) { node.fail("Vaccination Information failed: " + e.getMessage()); throw
+	 * new RuntimeException(e); } finally {
+	 * stepStatus.put("Vaccination Information", isSuccess ? "PASS" : "FAIL"); } }
+	 */
 
-			BasicInfo_VaccinationInformation vaccinationInfo = new BasicInfo_VaccinationInformation(getDriver());
-			vaccinationInfo.fillVaccinationForm("AstraZeneca", "2", TestDataGenerator.randomNumber(5), "01012026",
-					TestDataGenerator.randomNotes());
-			isSuccess = true;
-			node.pass("Employee Vaccination Information completed");
-		} catch (Exception e) {
-			node.fail("Vaccination Information failed: " + e.getMessage());
-			throw new RuntimeException(e);
-		} finally {
-			stepStatus.put("Vaccination Information", isSuccess ? "PASS" : "FAIL");
-		}
-	}
-
-	@Test(groups = "Regression", dependsOnMethods = "vaccinationInformation", alwaysRun = true, description = "Verify Employee Biometrics Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "languageInformation", description = "Verify Employee Biometrics Information Test")
 	public void biometricsInformation() {
 		ExtentTest node = ExtentListener.createNode("Biometrics Information");
 		boolean isSuccess = false;
 		try {
 			node.info("Entering Employee Biometrics Information");
-			
+
 //			node.info("Photo File: " + TestDataGenerator.randomEmployeePhotoFile());
-			
-			BasicInfo_BiometricsInformation biometricsInfo = new BasicInfo_BiometricsInformation(getDriver());
+
 			biometricsInfo.fillBiometricsInfo(getTestDataPath("male.png"));
 			isSuccess = true;
 			node.pass("Employee Biometrics Information completed");

@@ -213,7 +213,7 @@ public class ProfInfo_DevResearch_SciResearch extends BasePage {
 	}
 
 	// fillDevResearchForm method to fill the form in one go
-	public void fillDevResearchForm(String type, String publicationPrintDate, String pubLevel, String publicationURL,
+	public ProfInfo_DevResearch_Rewards fillDevResearchForm(String type, String publicationPrintDate, String pubLevel, String publicationURL,
 			String nameOfMagazine, String nameOfArticle, String authors, String notes) {
 		devResearchAddBtn();
 		clickSciResearchSubTab();
@@ -230,7 +230,7 @@ public class ProfInfo_DevResearch_SciResearch extends BasePage {
 		saveDevResearchBtn();
 		okButtonDevResearch();
 
-		// return instance of this class
+		return new ProfInfo_DevResearch_Rewards(driver);
 	}
 
 }

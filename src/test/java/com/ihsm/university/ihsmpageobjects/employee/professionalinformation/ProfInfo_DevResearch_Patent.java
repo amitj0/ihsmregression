@@ -208,7 +208,7 @@ public class ProfInfo_DevResearch_Patent extends BasePage {
 	}
 
 	// fillDevResearchPatentForm method to fill the form in one go
-	public void fillDevResearchPatentForm(String patentType, String inventionTitle, String patentLevel,
+	public ProfInfo_DevResearch_Attestations fillDevResearchPatentForm(String patentType, String inventionTitle, String patentLevel,
 			String patentAuthors, String patentOrganization, String patentDate, String regNoteNumber, String notes) {
 		addDevResearchPatent();
 		clickPatentSubTab();
@@ -224,5 +224,6 @@ public class ProfInfo_DevResearch_Patent extends BasePage {
 		notesField(notes);
 		savePatentBtn();
 		okButtonPatent();
+		return new ProfInfo_DevResearch_Attestations(driver);
 	}
 }

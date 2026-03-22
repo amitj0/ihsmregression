@@ -205,7 +205,7 @@ public class ProfInfo_ProfessionalInfoAcademics extends BasePage {
 	}
 
 	// fill the academic info form
-	public void fillAcademicInfoForm(String academicType, String docType, String dateOfEnteringAcademicDegree,
+	public ProfInfo_ProfessionalInfoTitle fillAcademicInfoForm(String academicType, String docType, String dateOfEnteringAcademicDegree,
 			String dateOfGraduationAcademicDegree, String qualification, String organization, String speciality,
 			String certificateNumber, String certificateDate, String notes) {
 
@@ -225,6 +225,7 @@ public class ProfInfo_ProfessionalInfoAcademics extends BasePage {
 		enterNotes(notes);
 		saveAcademicInfoBtn();
 		okButtonSuccessPopupAcademicInfo();
+		return new ProfInfo_ProfessionalInfoTitle(driver);
 	}
 
 }

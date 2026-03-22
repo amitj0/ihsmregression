@@ -47,15 +47,21 @@ public class Documents_VisaInfo_PassportLocation extends BasePage {
 	public void clickPassLocationTab() {
 		safeClick(passLocationTab);
 	}
-	public void selectPassLocation(String location) {
-		safeClick(passLocationField);
-		for (WebElement option : passLocationFieldList) {
-			if (option.getText().trim().equalsIgnoreCase(location)) {
-				safeClick(option);
-				return;
-			}
-		}
+
+	/*
+	 * public void selectPassLocation(String location) {
+	 * safeClick(passLocationField); for (WebElement option : passLocationFieldList)
+	 * { if (option.getText().trim().equalsIgnoreCase(location)) {
+	 * safeClick(option); return; } } }
+	 */
+	
+	public void selectPassLocation() {
+	    safeClick(passLocationField);
+	    if (passLocationFieldList.size() > 1) {
+	        safeClick(passLocationFieldList.get(1));
+	    }
 	}
+	
 	public void enterDate(String date) {
 		dateField.sendKeys(date);
 	}
@@ -79,14 +85,15 @@ public class Documents_VisaInfo_PassportLocation extends BasePage {
 	}
 	
 	// fill the passport location information
-	public Academics_Qualification_LastEducation fillPassportLocationInfo(String location, String date) {
+	public Documents_PassportInformation fillPassportLocationInfo(String location, String date) {
 		clickPassportInfoTab();
 		clickPassLocationTab();
-		selectPassLocation(location);
+//		selectPassLocation(location);
+		selectPassLocation();
 		enterDate(date);
 		clickSaveButton();
 		clickOkButton();
-		return new Academics_Qualification_LastEducation(driver);
+		return new Documents_PassportInformation(driver);
 	}
 	
 

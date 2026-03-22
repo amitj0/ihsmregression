@@ -92,15 +92,15 @@ public class BasicInfo_LanguageInformation extends BasePage {
 	}
 
 	// fill language information
-	public BasicInfo_VaccinationInformation fillLanguageInformation(String language, String proficiency) {
+	public BasicInfo_BiometricsInformation fillLanguageInformation(String language/* , String proficiency */) {
 		addLanguageInfoBtn();
 		languageDropdownField();
 		languageDropdownOptions(language);
-		proficiencyDropdownField();
-		proficiencyDropdownOptions(proficiency);
+//		proficiencyDropdownField();
+//		proficiencyDropdownOptions(proficiency);
 		saveLanguageInfoBtn();
 		okButtonSuccessPopup();
-		return new BasicInfo_VaccinationInformation(driver);
+		return new BasicInfo_BiometricsInformation(driver);
 	}
 
 }

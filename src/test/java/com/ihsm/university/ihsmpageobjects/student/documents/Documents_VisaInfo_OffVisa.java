@@ -112,14 +112,18 @@ public class Documents_VisaInfo_OffVisa extends BasePage {
 	    }
 	}
 
-	public void selectAddress(String addressType) {
-		safeClick(selectAddField);
-		for (WebElement option : selectAddFieldList) {
-			if (option.getText().trim().equalsIgnoreCase(addressType)) {
-				safeClick(option);
-				return;
-			}
-		}
+	/*
+	 * public void selectAddress(String addressType) { safeClick(selectAddField);
+	 * for (WebElement option : selectAddFieldList) { if
+	 * (option.getText().trim().equalsIgnoreCase(addressType)) { safeClick(option);
+	 * return; } } }
+	 */
+	
+	public void selectAddress() {
+	    safeClick(selectAddField);
+	    if (selectAddFieldList.size() > 1) {
+	        safeClick(selectAddFieldList.get(1));
+	    }
 	}
 
 	public void enterCurrentVisaExpDate(String date) {
@@ -182,7 +186,8 @@ public class Documents_VisaInfo_OffVisa extends BasePage {
 		clickOfflineVisaTab();
 		selectVisaField();
 		selectVisaType(visaType);
-		selectAddress(addressType);
+		selectAddress();
+//		selectAddress(addressType);
 		enterCurrentVisaExpDate(currentVisaExpDate);
 		enterNextVisaIssDate(nextVisaIssDate);
 		enterNextVisaExpDate(nextVisaExpDate);

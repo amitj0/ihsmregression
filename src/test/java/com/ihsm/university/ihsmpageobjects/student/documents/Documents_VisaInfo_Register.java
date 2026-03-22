@@ -28,16 +28,17 @@ public class Documents_VisaInfo_Register extends BasePage {
 	@FindBy(xpath = "//div[contains(@class,'ng-dropdown-panel')]//div[@role='option']")
 	private List<WebElement> selectAddressFieldList;
 
-	@FindBy(xpath = "(//div[@id='STUDENTVISA']//input[@placeholder='Current Reg Address'])[2]")
+	@FindBy(xpath = "(//div[@id='STUDENTVISA']//input[@placeholder='Current Reg Address'])[3]")
 	private WebElement currentRegAddField;
 	
-	@FindBy(xpath = "(//div[@id='STUDENTVISA']//input[@placeholder='CURRENT_REG_ADDRESS'])[2]")
+	@FindBy(xpath = "(//div[@id='STUDENTVISA']//input[@placeholder='Current Reg Address'])[3]")
+	
 	private WebElement currentRegAddField2;
 
 	@FindBy(xpath = "//div[@id='STUDENTVISA']//div[@id='tabID27']//input[@name='REGISTRATIONSUBMISSIONDATE']")
 	private WebElement registrationSubmissionDateField;
 
-	@FindBy(xpath = "(//textarea[@placeholder='Comments'])[2]")
+	@FindBy(xpath = "(//textarea[@placeholder='Comments'])[3]")
 	private WebElement commentsField;
 
 	@FindBy(xpath = "(//div[@id='STUDENTVISA']//button[@type='button' and normalize-space()='Save'])[3]")
@@ -56,14 +57,18 @@ public class Documents_VisaInfo_Register extends BasePage {
 		safeClick(registerTab);
 	}
 
-	public void selectAddress(String address) {
-		safeClick(selectAddressField);
-		for (WebElement option : selectAddressFieldList) {
-			if (option.getText().trim().equalsIgnoreCase(address)) {
-				safeClick(option);
-				return;
-			}
-		}
+	/*
+	 * public void selectAddress(String address) { safeClick(selectAddressField);
+	 * for (WebElement option : selectAddressFieldList) { if
+	 * (option.getText().trim().equalsIgnoreCase(address)) { safeClick(option);
+	 * return; } } }
+	 */
+	
+	public void selectAddress() {
+	    safeClick(selectAddressField);
+	    if (selectAddressFieldList.size() > 1) {
+	        safeClick(selectAddressFieldList.get(1));
+	    }
 	}
 
 	public void enterCurrentRegAdd(String address) {
@@ -104,7 +109,8 @@ public class Documents_VisaInfo_Register extends BasePage {
 			String registrationSubmissionDate, String comments) {
 		clickVisaInfoTab();
 		clickRegisterTab();
-		selectAddress(addressType);
+//		selectAddress(addressType);
+		selectAddress();
 		enterCurrentRegAdd(currentRegAdd);
 		enterRegistrationSubmissionDate(registrationSubmissionDate);
 		enterComments(comments);

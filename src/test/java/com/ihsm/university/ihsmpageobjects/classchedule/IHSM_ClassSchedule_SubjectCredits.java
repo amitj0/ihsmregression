@@ -3,6 +3,7 @@ package com.ihsm.university.ihsmpageobjects.classchedule;
 import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -255,16 +256,17 @@ public class IHSM_ClassSchedule_SubjectCredits extends BasePage {
 		handleModalOk(okBtn);
 	}
 
-	public String modalSuccessMsg() {
-
-		String msg = modalSuccessMsg.getText();
-		return msg;
+	public String modalSuccessMsg() throws TimeoutException {
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
 	}
 
 	// fill the subject credit information
 
-	public IHSM_ClassSchedule fillSubjectCreditInformation(String sessionField, String batchField, String acaPlanField,
-			String semField, String subjectName /* String value */) {
+	public String fillSubjectCreditInformation(String sessionField, String batchField, String acaPlanField,
+			String semField, String subjectName /* String value */) throws TimeoutException {
 		coursePlannerTab();
 		subjectCredit();
 		sessionField();
@@ -274,9 +276,11 @@ public class IHSM_ClassSchedule_SubjectCredits extends BasePage {
 		semFieldList(semField);
 		checkboxAccordingToSubject(subjectName);
 		saveButton();
+		
+		String msg = modalSuccessMsg();
 		okBtn();
 
-		return new IHSM_ClassSchedule(driver);
+		return msg;
 
 	}
 }

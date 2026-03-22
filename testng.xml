@@ -2,65 +2,58 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="IHSM_Suite" thread-count="1">
 
-	<listeners>
-		<listener class-name="com.ihsm.university.utilities.ExtentListener" />
-	</listeners>
+    <listeners>
+        <listener class-name="com.ihsm.university.utilities.ExtentListener"/>
+    </listeners>
 
-	<!-- Chrome Test -->
-	<test name="IHSM_UNIVERSITY_Chrome_Student">
-		<parameter name="os" value="windows" />
-		<parameter name="browser" value="chrome" />
-		<classes>
+    <test name="IHSM_UNIVERSITY_Chrome_Student">
+        <parameter name="os"      value="windows"/>
+        <parameter name="browser" value="chrome"/>
 
-			<!-- Student Registration Module -->
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_BasicFullFlowTest2" />
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_DocumentFullFlowTest2" />
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_AcademicFullFlowTest2" />
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StatusFullFlowTest2" />
+        <classes>
 
-			<!-- Employee Registration Module -->
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_BasicFullFlowTest" />
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_DesignationFullFlowTest" />
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_ProfessionalInformationFlowTest" />
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_DocumentFullFlowTest" />
+            <!-- ═══ Student Registration Module ═══════════════════════════ -->
+            
+            
+            <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_BasicFullFlowTest2"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_DocumentFullFlowTest2"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_AcademicFullFlowTest2"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StatusFullFlowTest2"/>
+            
 
-			<!-- Class Scheduling -->
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_ClassSubjectCreditTest" />
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_VerifyGroupAssignmentTest" />
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_ClassSchedulingInformationTest" />
+            <!-- ═══ Employee Registration Module ══════════════════════════ -->
+            
+            <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_BasicFullFlowTest"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_DesignationFullFlowTest"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_ProfessionalInformationFlowTest"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_DocumentFullFlowTest"/>
+            
 
-			<!-- Exam Management -->
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.exammanage.IHSM_ExamManageTest" />
+            <!-- ═══ Class Scheduling ════════════════════════════════════════ -->
+            
+            <class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_ClassSubjectCreditTest"/>
+     		<class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_ClassSubjectCreditHoursTest"/>
+     		
+     		<class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_VerifyGroupAssignmentLectureTest"/>
+      		<class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_VerifyGroupAssignmentPracticalTest"/>
+     	 	<class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_VerifyGroupAssignmentGroupDataTest"/>
+     	 	
+     	 	<class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_ClassSchedulingInformationOnlineLecTest"/>
+     	
+            <!-- ═══ Exam Management ═════════════════════════════════════════ -->
+           
+            <class name="com.ihsm.university.ihsmtestcases.flows.exammanage.IHSM_ExamManageTest"/>
+           
 
-			<!-- Class Attendance -->
-			<!--<class
-				name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_ClassAttendanceTest" />
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_ClassPerformanceScoreTest" />
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_ClassAbsentStudentTest" />
-			<class
-				name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_UnitMarksTest" />
--->
-		</classes>
-	</test>
+            <!-- ═══ Class Attendance ════════════════════════════════════════ -->
+            <!--
+            <class name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_ClassAttendanceTest"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_ClassPerformanceScoreTest"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_ClassAbsentStudentTest"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_UnitMarksTest"/>
+           -->
 
+        </classes>
+    </test>
 
 </suite>
-
-
-
-
-

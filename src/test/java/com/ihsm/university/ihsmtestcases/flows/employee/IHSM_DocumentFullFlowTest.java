@@ -14,6 +14,9 @@ import com.ihsm.university.utilities.ExtentListener;
 
 public class IHSM_DocumentFullFlowTest extends BaseClass {
 
+	private Documents_Documents docInfo;
+	private Documents_Passport docPassInfo;
+
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 	private int failCount = 0;
 
@@ -26,9 +29,9 @@ public class IHSM_DocumentFullFlowTest extends BaseClass {
 			node.info("Document Type: " + "Diploma");
 			node.info("Notes: " + TestDataGenerator.randomNotes());
 //			node.info("Upload Document: " + TestDataGenerator.randomPhotoFile());
-			
-			Documents_Documents docInfo = new Documents_Documents(getDriver());
-			docInfo.fillDocumentInformation("Diploma", TestDataGenerator.randomNotes(),
+
+			docInfo = new Documents_Documents(getDriver());
+			docPassInfo = docInfo.fillDocumentInformation("Diploma", TestDataGenerator.randomNotes(),
 					getTestDataPath("male.png"));
 			isSuccess = true;
 			node.pass("Documents Information completed");
@@ -40,7 +43,7 @@ public class IHSM_DocumentFullFlowTest extends BaseClass {
 		}
 	}
 
-	@Test(enabled = true, dependsOnMethods = "documentsInformation", alwaysRun = true, description = "Verify Employee Passport Information Test")
+	@Test(enabled = true, dependsOnMethods = "documentsInformation", description = "Verify Employee Passport Information Test")
 	public void passportInformation() {
 		ExtentTest node = ExtentListener.createNode("Passport Information");
 		boolean isSuccess = false;
@@ -54,10 +57,9 @@ public class IHSM_DocumentFullFlowTest extends BaseClass {
 			node.info("Place of Issue: " + "Manchester");
 			node.info("Issue Date: " + "01/01/2026");
 			node.info("Expiry Date: " + "01/01/2027");
-			
-			Documents_Passport docPassInfo = new Documents_Passport(getDriver());
+
 			docPassInfo.fillPassportDetails("Development", "England", TestDataGenerator.randomIssueAgency(),
-					TestDataGenerator.randomNumber(5), "ABCD1234567", "Manchester", "01012026", "01012027");
+					TestDataGenerator.randomNumber(5), "ABCD1234567", "Bishkek", "01012026", "01012027");
 			isSuccess = true;
 			node.pass("Passport Information completed");
 

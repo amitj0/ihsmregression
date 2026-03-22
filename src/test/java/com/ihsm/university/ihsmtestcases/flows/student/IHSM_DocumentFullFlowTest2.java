@@ -29,6 +29,14 @@ import com.ihsm.university.utilities.TextUtility;
 
 public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 
+	private Documents_OtherDocuments otherDocuments;
+	private Documents_IdentificationCard identificationCard;
+	private Documents_VisaInfo_OffVisa visaOffline;
+	private Documents_VisaInfo_OnVisa visaOnline;
+	private Documents_VisaInfo_Register visaRegister;
+	private Documents_VisaInfo_PassportLocation passportLocation;
+	private Documents_PassportInformation passportInfo;
+
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
 	// ---------------- OTHER DOCUMENTS ----------------
@@ -41,9 +49,10 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 			node.info("Document Type: " + data.getDocumentType());
 //			node.info("Document File: " + TestDataGenerator.randomEmployeePhotoFile());
 
-			Documents_OtherDocuments documentsPage = new Documents_OtherDocuments(getDriver());
+			otherDocuments = new Documents_OtherDocuments(getDriver());
 
-			documentsPage.fillOtherDocumentsForm(data.getDocumentType(), getTestDataPath("male.png"));
+			identificationCard = otherDocuments.fillOtherDocumentsForm(data.getDocumentType(),
+					getTestDataPath("male.png"));
 			isSuccess = true;
 			node.pass("Other Documents Information completed");
 
@@ -68,9 +77,8 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 			node.info("End Date: " + data.getEndDate());
 //			node.info("Photo: " + TestDataGenerator.randomEmployeePhotoFile());
 
-			new Documents_IdentificationCard(getDriver()).fillIdentificationCardDetails(data.getIdNumber(),
-					data.getCountry(), data.getStartDate(), data.getEndDate(),
-					getTestDataPath("male.png"));
+			visaOffline = identificationCard.fillIdentificationCardDetails(data.getIdNumber(), data.getCountry(),
+					data.getStartDate(), data.getEndDate(), getTestDataPath("male.png"));
 			isSuccess = true;
 			node.pass("Identification Card Information completed");
 
@@ -100,10 +108,9 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 			node.info("Notes: " + data.getNotes());
 //			node.info("Photo: " + TestDataGenerator.randomEmployeePhotoFile());
 
-			new Documents_VisaInfo_OffVisa(getDriver()).fillVisaInfoOffVisaForm(data.getVisaType(),
-					data.getHomeCountry(), data.getStartDate(), data.getEndDate(), data.getIssueDate(),
-					data.getExpiryDate(), data.getVisaNumber(), data.getCountry(), data.getNotes(),
-					getTestDataPath("male.png"));
+			visaOnline = visaOffline.fillVisaInfoOffVisaForm(data.getVisaType(), data.getHomeCountry(),
+					data.getStartDate(), data.getEndDate(), data.getIssueDate(), data.getExpiryDate(),
+					data.getVisaNumber(), data.getCountry(), data.getNotes(), getTestDataPath("male.png"));
 			isSuccess = true;
 			node.pass("Visa Offline Information completed");
 
@@ -123,12 +130,13 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 		try {
 			node.info("Entering Visa Online Information");
 			node.info("Visa Type: " + data.getVisaType());
+			node.info("Visa Address: " + data.getVisaAddress());
 			node.info("Start Date: " + data.getStartDate());
 			node.info("End Date: " + data.getEndDate());
 			node.info("Expiry Date: " + data.getExpiryDate());
 			node.info("Online Visa Number: " + data.getOnlineVisaNumber());
 
-			new Documents_VisaInfo_OnVisa(getDriver()).fillOnlineVisaInfo(data.getVisaType(), data.getStartDate(),
+			visaRegister = visaOnline.fillOnlineVisaInfo(data.getVisaType(), data.getVisaAddress(), data.getStartDate(),
 					data.getEndDate(), data.getExpiryDate(), data.getOnlineVisaNumber());
 			isSuccess = true;
 			node.pass("Visa Online Information completed");
@@ -153,7 +161,7 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 			node.info("Register Date: " + data.getRegisterDate());
 			node.info("Notes: " + data.getNotes());
 
-			new Documents_VisaInfo_Register(getDriver()).fillRegisterInfo(data.getHomeCountry(), data.getCountry(),
+			passportLocation = visaRegister.fillRegisterInfo(data.getHomeCountry(), data.getCountry(),
 					data.getRegisterDate(), data.getNotes());
 			isSuccess = true;
 			node.pass("Visa Register Information completed");
@@ -176,8 +184,7 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 			node.info("Location: " + data.getLocation());
 			node.info("Date: " + data.getDate());
 
-			new Documents_VisaInfo_PassportLocation(getDriver()).fillPassportLocationInfo(data.getLocation(),
-					data.getDate());
+			passportInfo = passportLocation.fillPassportLocationInfo(data.getLocation(), data.getDate());
 			isSuccess = true;
 			node.pass("Passport Location Information completed");
 
@@ -201,8 +208,8 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 			node.info("Issue Date: " + data.getIssueDate());
 			node.info("Expiry Date: " + data.getExpiryDate());
 
-			new Documents_PassportInformation(getDriver()).fillPassportInformation(data.getPassportNumber(),
-					data.getPlaceOfIssue(), data.getIssueDate(), data.getExpiryDate());
+			passportInfo.fillPassportInformation(data.getPassportNumber(), data.getPlaceOfIssue(), data.getIssueDate(),
+					data.getExpiryDate());
 
 			isSuccess = true;
 			node.pass("Passport Information completed");

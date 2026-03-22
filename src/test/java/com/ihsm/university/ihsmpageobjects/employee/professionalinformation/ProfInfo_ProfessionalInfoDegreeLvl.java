@@ -226,7 +226,7 @@ public class ProfInfo_ProfessionalInfoDegreeLvl extends BasePage {
 	}
 
 	// fill the degree information here
-	public void fillProfessionalInformationForm(String degree, String sphere, String org, String diplomaNo,
+	public ProfInfo_ProfessionalInfoAcademics fillProfessionalInformationForm(String degree, String sphere, String org, String diplomaNo,
 			String protectionDt, String degreeDt, String notes) {
 		profInfoTab();
 		profInfoTabBtn();
@@ -242,7 +242,7 @@ public class ProfInfo_ProfessionalInfoDegreeLvl extends BasePage {
 		saveBtn();
 		okButton();
 
-		// return new instance
+		return new ProfInfo_ProfessionalInfoAcademics(driver);
 	}
 
 }

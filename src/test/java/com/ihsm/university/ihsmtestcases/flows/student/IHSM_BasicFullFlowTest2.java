@@ -39,6 +39,27 @@ import com.ihsm.university.utilities.TextUtility;
 
 public class IHSM_BasicFullFlowTest2 extends BaseClass {
 
+	// ── Basic Information ──────────────────────────────
+	private BasicInfo_EnrollnmentInformation enrollInfo;
+	private BasicInfo_PersonalInformation personalInfo;
+	private BasicInfo_Biometrics biometrics;
+	private BasicInfo_FamilyInformation familyInfo;
+	private BasicInfo_LanguageInformation languageInfo;
+
+	// ── General Information ────────────────────────────
+	private BasicInfo_GeneralInformation_Prerights preRightsInfo;
+	private BasicInfo_GeneralInformation_SocialStatus socialInfo;
+	private BasicInfo_GeneralInformation_SocialWorkLocation socialWorkInfo;
+
+	// ── Medical Information ────────────────────────────
+	private BasicInfo_MedicalInformation_Vaccination medicalVacInfo;
+	private BasicInfo_MedicalInforamtion_AtPoly medicalPolyInfo;
+	private BasicInfo_MedicalInformation_Insurance medicalInsInfo;
+	private BasicInfo_MedicalInformation_Disability medicalDisInfo;
+
+	// ── Student ID ─────────────────────────────────────
+	private String studentEnrollmentId;
+
 	private static final String STUDENT_FILE = System.getProperty("user.dir") + "/target/student.data";
 
 	private void saveStudentId(String id) throws Exception {
@@ -56,7 +77,6 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 	}
 
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
-
 
 	@Test(priority = 0, groups = "Regression", dataProvider = "StudentEnrollnmentData", dataProviderClass = EnrollnmentData.class, description = "Verify Student Enrollment Information Test")
 	public void enrollmentInformation(StudentEnrollnmentData data) {
@@ -107,14 +127,14 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			node.info("Email: " + data.getEmail());
 			node.info("Nationality: " + data.getNationality());
 
-			BasicInfo_EnrollnmentInformation enrollInfo = new BasicInfo_EnrollnmentInformation(getDriver());
+			enrollInfo = new BasicInfo_EnrollnmentInformation(getDriver());
 
 			// Fill enrollment form
-			enrollInfo.fillEnrollmentInformation(data.getTerm(), data.getProgram(), String.valueOf(data.getYear()),
-					String.valueOf(data.getSemester()), data.getPin(), data.getFirstName(), data.getMiddleName(),
-					data.getLastName(), data.getGender(), data.getDob(), data.getCountry(), data.getState(),
-					data.getPhone(), data.getEmail(), data.getNationality());
-			
+			personalInfo = enrollInfo.fillEnrollmentInformation(data.getTerm(), data.getProgram(),
+					String.valueOf(data.getYear()), String.valueOf(data.getSemester()), data.getPin(),
+					data.getFirstName(), data.getMiddleName(), data.getLastName(), data.getGender(), data.getDob(),
+					data.getCountry(), data.getState(), data.getPhone(), data.getEmail(), data.getNationality());
+
 			String studentEnrollmentId = enrollInfo.getStudentEnrollmentId();
 			if (studentEnrollmentId == null || studentEnrollmentId.isEmpty()) {
 				throw new RuntimeException("Student Enrollment ID not generated!");
@@ -133,7 +153,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "enrollmentInformation", dataProvider = "StudentPersonalData", dataProviderClass = PersonalData.class, alwaysRun = true, description = "Verify Student Personal Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "enrollmentInformation", dataProvider = "StudentPersonalData", dataProviderClass = PersonalData.class, description = "Verify Student Personal Information Test")
 	public void personalInformation(StudentPersonalData data) {
 		ExtentTest node = ExtentListener.createNode("Personal Information");
 
@@ -146,9 +166,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			node.info("Marital Status: " + data.getMaritalStatus());
 			node.info("Country: " + data.getCountry());
 
-			BasicInfo_PersonalInformation personalInfo = new BasicInfo_PersonalInformation(getDriver());
-			personalInfo.fillPersonalInformationForm(data.getFirstName(), data.getLastName(), data.getCityName(),
-					data.getMaritalStatus(), data.getCountry());
+			biometrics = personalInfo.fillPersonalInformationForm(data.getFirstName(), data.getLastName(),
+					data.getCityName(), data.getMaritalStatus(), data.getCountry());
 
 			isSuccess = true;
 			node.pass("Personal Information completed");
@@ -161,16 +180,15 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "personalInformation", alwaysRun = true, description = "Verify Student Biometrics Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "personalInformation", description = "Verify Student Biometrics Information Test")
 	public void biometricsInformation() {
 		ExtentTest node = ExtentListener.createNode("Biometrics Information");
 		boolean isSuccess = false;
 		try {
 
 			node.info("Entering Student Biometrics Information");
-//			node.info("Uploading Photo: " + TestDataGenerator.randomEmployeePhotoFile());
-			BasicInfo_Biometrics biometrics = new BasicInfo_Biometrics(getDriver());
-			biometrics.fillBiometricsInfo(getTestDataPath("male.png"));
+
+			familyInfo = biometrics.fillBiometricsInfo(getTestDataPath("male.png"));
 			isSuccess = true;
 			node.pass("Biometrics Information completed");
 
@@ -182,7 +200,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "biometricsInformation", dataProvider = "StudentFamilyData", dataProviderClass = FamilyData.class, alwaysRun = true, description = "Verify Student Family Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "biometricsInformation", dataProvider = "StudentFamilyData", dataProviderClass = FamilyData.class, description = "Verify Student Family Information Test")
 	public void familyInformation(StudentFamilyData data) {
 		ExtentTest node = ExtentListener.createNode("Family Information");
 		boolean isSuccess = false;
@@ -200,10 +218,9 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			node.info("City: " + data.getCity());
 			node.info("Nationality: " + data.getNationality());
 
-			BasicInfo_FamilyInformation familyInfo = new BasicInfo_FamilyInformation(getDriver());
-			familyInfo.fillFamilyInformation(data.getRelation(), data.getName(), data.getDob(), data.getOccupation(),
-					data.getCountryCode(), data.getPhone(), data.getDependent(), data.getCountry(), data.getState(),
-					data.getCity(), data.getNationality());
+			languageInfo = familyInfo.fillFamilyInformation(data.getRelation(), data.getName(), data.getDob(),
+					data.getOccupation(), data.getCountryCode(), data.getPhone(), data.getDependent(),
+					data.getCountry(), data.getState(), data.getCity(), data.getNationality());
 			isSuccess = true;
 			node.pass("Family Information completed");
 
@@ -215,7 +232,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "familyInformation", dataProvider = "StudentLanguageData", dataProviderClass = LanguageData.class, alwaysRun = true, description = "Verify Student Language Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "familyInformation", dataProvider = "StudentLanguageData", dataProviderClass = LanguageData.class, description = "Verify Student Language Information Test")
 	public void languageInformation(StudentLanguageData data) {
 		ExtentTest node = ExtentListener.createNode("Language Information");
 		boolean isSuccess = false;
@@ -224,8 +241,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			node.info("Language: " + data.getLanguage());
 			node.info("Proficiency Level: " + data.getLevel());
 
-			BasicInfo_LanguageInformation languageInfo = new BasicInfo_LanguageInformation(getDriver());
-			languageInfo.fillLanguageInformationForm(data.getLanguage(), data.getLevel());
+			preRightsInfo = languageInfo.fillLanguageInformationForm(data.getLanguage(), data.getLevel());
 
 			isSuccess = true;
 			node.pass("Language Information completed");
@@ -237,19 +253,15 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "languageInformation", dataProvider = "StudentPreRightData", dataProviderClass = PreRightData.class, alwaysRun = true, description = "Verify Student Pre Rights Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "languageInformation", dataProvider = "StudentPreRightData", dataProviderClass = PreRightData.class, description = "Verify Student Pre Rights Information Test")
 	public void preRightsInformation(StudentPreRightData data) {
 		ExtentTest node = ExtentListener.createNode("Pre Rights Information");
 		boolean isSuccess = false;
 		try {
 			node.info("Entering Student Pre Rights Information");
 			node.info("Prefer Rights: " + data.getPreferRights());
-//			node.info("Uploading Photo: " + TestDataGenerator.randomEmployeePhotoFile());
 
-			BasicInfo_GeneralInformation_Prerights prerightsInfo = new BasicInfo_GeneralInformation_Prerights(
-					getDriver());
-			prerightsInfo.fillPreferRightsInformation(data.getPreferRights(),
-					getTestDataPath("male.png"));
+			socialInfo = preRightsInfo.fillPreferRightsInformation(data.getPreferRights(), getTestDataPath("male.png"));
 			isSuccess = true;
 			node.pass("Pre Rights Information completed");
 
@@ -261,18 +273,15 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "preRightsInformation", dataProvider = "StudentSocialStatusData", dataProviderClass = SocialStatusData.class, alwaysRun = true, description = "Verify Student Social Status Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "preRightsInformation", dataProvider = "StudentSocialStatusData", dataProviderClass = SocialStatusData.class, description = "Verify Student Social Status Information Test")
 	public void socialStatusInformation(StudentSocialStatusData data) {
 		ExtentTest node = ExtentListener.createNode("Social Status Information");
 		boolean isSuccess = false;
 		try {
 			node.info("Entering Student Social Status Information");
 			node.info("Social Status: " + data.getSocialStatus());
-//			node.info("Uploading Photo: " + TestDataGenerator.randomEmployeePhotoFile());
 
-			BasicInfo_GeneralInformation_SocialStatus socialInfo = new BasicInfo_GeneralInformation_SocialStatus(
-					getDriver());
-			socialInfo.fillSocialStatusForm(data.getSocialStatus(), getTestDataPath("male.png"));
+			socialWorkInfo = socialInfo.fillSocialStatusForm(data.getSocialStatus(), getTestDataPath("male.png"));
 			isSuccess = true;
 			node.pass("Social Status Information completed");
 
@@ -284,17 +293,14 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "socialStatusInformation", alwaysRun = true, description = "Verify Student Work Location Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "socialStatusInformation", description = "Verify Student Work Location Information Test")
 	public void workLocationInformation() {
 		ExtentTest node = ExtentListener.createNode("Work Location Information");
 		boolean isSuccess = false;
 		try {
 			node.info("Entering Student Work Location Information");
-//			node.info("Uploading Photo: " + TestDataGenerator.randomEmployeePhotoFile());
 
-			BasicInfo_GeneralInformation_SocialWorkLocation socialWorkInfo = new BasicInfo_GeneralInformation_SocialWorkLocation(
-					getDriver());
-			socialWorkInfo.fillSocialWorkLocationDetails(getTestDataPath("male.png"));
+			medicalVacInfo = socialWorkInfo.fillSocialWorkLocationDetails(getTestDataPath("male.png"));
 			isSuccess = true;
 			node.pass("Work Location Information completed");
 
@@ -306,7 +312,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "workLocationInformation", dataProvider = "StudentMedicalVaccinationData", dataProviderClass = MedicalVaccination.class, alwaysRun = true, description = "Verify Student Medical Vaccination Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "workLocationInformation", dataProvider = "StudentMedicalVaccinationData", dataProviderClass = MedicalVaccination.class, description = "Verify Student Medical Vaccination Information Test")
 	public void medicalVaccinationInformation(StudentMedicalVaccinationData data) {
 		ExtentTest node = ExtentListener.createNode("Medical Vaccination Information");
 		boolean isSuccess = false;
@@ -316,13 +322,10 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			node.info("Dose: " + data.getDose());
 			node.info("Vaccination Date: " + data.getVaccinationDate());
 			node.info("Batch No: " + data.getBatchNo());
-//			node.info("Uploading Photo: " + TestDataGenerator.randomEmployeePhotoFile());
 
-			BasicInfo_MedicalInformation_Vaccination medicalInfo = new BasicInfo_MedicalInformation_Vaccination(
-					getDriver());
-
-			medicalInfo.fillVaccinationInfo(data.getVaccineName(), data.getDose(), data.getVaccinationDate(),
-					data.getBatchNo(), TestDataGenerator.randomNotes(), getTestDataPath("male.png"));
+			medicalPolyInfo = medicalVacInfo.fillVaccinationInfo(data.getVaccineName(), data.getDose(),
+					data.getVaccinationDate(), data.getBatchNo(), TestDataGenerator.randomNotes(),
+					getTestDataPath("male.png"));
 			isSuccess = true;
 			node.pass("Medical Vaccination Information completed");
 
@@ -334,7 +337,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "medicalVaccinationInformation", dataProvider = "StudentMedicalAtPolyData", dataProviderClass = MedicalAtPolyData.class, alwaysRun = true, description = "Verify Student Medical At Poly Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "medicalVaccinationInformation", dataProvider = "StudentMedicalAtPolyData", dataProviderClass = MedicalAtPolyData.class, description = "Verify Student Medical At Poly Information Test")
 	public void medicalAtPolyInformation(StudentMedicalAtPolyData data) {
 		ExtentTest node = ExtentListener.createNode("Medical At Poly Information");
 		boolean isSuccess = false;
@@ -342,10 +345,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			node.info("Entering Student Medical At Poly Information");
 			node.info("Visit Date: " + data.getVisitDate());
 			node.info("Poly Type: " + data.getPolyType());
-//			node.info("Uploading Photo: " + TestDataGenerator.randomEmployeePhotoFile());
 
-			BasicInfo_MedicalInforamtion_AtPoly medicalPolyInfo = new BasicInfo_MedicalInforamtion_AtPoly(getDriver());
-			medicalPolyInfo.fillAtPolyMedicalInformation(data.getVisitDate(), data.getPolyType(),
+			medicalInsInfo = medicalPolyInfo.fillAtPolyMedicalInformation(data.getVisitDate(), data.getPolyType(),
 					getTestDataPath("male.png"));
 			isSuccess = true;
 			node.pass("Medical At Poly Information completed");
@@ -358,7 +359,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "medicalAtPolyInformation", dataProvider = "StudentMedicalInsuranceData", dataProviderClass = MedicalInsuranceData.class, alwaysRun = true, description = "Verify Student Medical Insurance Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "medicalAtPolyInformation", dataProvider = "StudentMedicalInsuranceData", dataProviderClass = MedicalInsuranceData.class, description = "Verify Student Medical Insurance Information Test")
 	public void medicalInsuranceInformation(StudentMedicalInsuranceData data) {
 		ExtentTest node = ExtentListener.createNode("Medical Insurance Information");
 		boolean isSuccess = false;
@@ -366,16 +367,12 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			node.info("Entering Student Medical Insurance Information");
 			node.info("Insurance Start Date: " + data.getInsuranceStartDate());
 			node.info("Insurance End Date: " + data.getInsuranceEndDate());
-//			node.info("Uploading Photo: " + TestsDataGenerator.randomEmployeePhotoFile());
-			
-			BasicInfo_MedicalInformation_Insurance medicalInsuranceInfo = new BasicInfo_MedicalInformation_Insurance(
-					getDriver());
 
-			medicalInsuranceInfo.fillInsuranceInformation(data.getInsuranceStartDate(), data.getInsuranceEndDate(),
-					getTestDataPath("male.png"));
+			medicalDisInfo = medicalInsInfo.fillInsuranceInformation(data.getInsuranceStartDate(),
+					data.getInsuranceEndDate(), getTestDataPath("male.png"));
 			isSuccess = true;
 			node.pass("Medical Insurance Information completed");
-			
+
 		} catch (Exception e) {
 			node.fail("Medical Insurance Information failed: " + e.getMessage());
 			throw new RuntimeException(e);
@@ -384,7 +381,7 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 		}
 	}
 
-	@Test(groups = "Regression", dependsOnMethods = "medicalInsuranceInformation", dataProvider = "StudentMedicalDisabilityData", dataProviderClass = MedicalDisabilityData.class, alwaysRun = true, description = "Verify Student Medical Disability Information Test")
+	@Test(groups = "Regression", dependsOnMethods = "medicalInsuranceInformation", dataProvider = "StudentMedicalDisabilityData", dataProviderClass = MedicalDisabilityData.class, description = "Verify Student Medical Disability Information Test")
 	public void medicalDisabilityInformation(StudentMedicalDisabilityData data) {
 		ExtentTest node = ExtentListener.createNode("Medical Disability Information");
 		boolean isSuccess = false;
@@ -393,16 +390,12 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			node.info("Disability Type: " + data.getDisabilityType());
 			node.info("Disability Document No: " + data.getDisabilityDocumentNo());
 			node.info("Disability Date: " + data.getDisabilityDate());
-//			node.info("Uploading Photo: " + TestDataGenerator.randomEmployeePhotoFile());
-		
-			BasicInfo_MedicalInformation_Disability medicalDisabilityInfo = new BasicInfo_MedicalInformation_Disability(
-					getDriver());
 
-			medicalDisabilityInfo.fillDisabilityForm(data.getDisabilityType(), data.getDisabilityDocumentNo(),
+			medicalDisInfo.fillDisabilityForm(data.getDisabilityType(), data.getDisabilityDocumentNo(),
 					data.getDisabilityDate(), getTestDataPath("male.png"));
 			isSuccess = true;
 			node.pass("Medical Disability Information completed");
-			
+
 		} catch (Exception e) {
 			node.fail("Medical Disability Information failed: " + e.getMessage());
 			throw new RuntimeException(e);

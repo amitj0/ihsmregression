@@ -104,11 +104,7 @@ public class IHSM_ClassSchedule extends BasePage {
 	@FindBy(xpath = "//div[contains(label,'Room')]//option")
 	private List<WebElement> roomList;
 
-	private WebElement waitForTimeDropdown() {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-		return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
-				"//ng-select[.//span[contains(text(),'Time')]] | //label[contains(text(),'Time')]/following::ng-select[1]")));
-	}
+	
 
 	@FindBy(xpath = "//div[@role='listbox']//span[@class='ng-option-label']")
 	private List<WebElement> timeSlt;
@@ -236,8 +232,14 @@ public class IHSM_ClassSchedule extends BasePage {
 
 	public void clickSubjectWiseDistribution(String subjectName, String columnType) {
 
-		String xpath = "//div[contains(@class,'subject-wise-box')]" + "[.//div[@class='fw-bold'][contains(.,'"
-				+ subjectName + "')]]" + "//a[div[contains(.,'" + columnType + "')]]";
+		/*
+		 * String xpath = "//div[contains(@class,'subject-wise-box')]" +
+		 * "[.//div[@class='fw-bold'][contains(.,'" + subjectName + "')]]" +
+		 * "//a[div[contains(.,'" + columnType + "')]]";
+		 */
+
+		String xpath = "//div[contains(@class,'subject-wise-box')]" + "[.//div[contains(@class,'fw-bold')][contains(.,'"
+				+ subjectName + "')]]" + "//a[contains(.,'" + columnType + "')]";
 
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
@@ -425,10 +427,18 @@ public class IHSM_ClassSchedule extends BasePage {
 			}
 		}
 	}
+
+	
+	private WebElement waitForTimeDropdown() {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+				"//ng-select[.//span[contains(text(),'Time')]] | //label[contains(text(),'Time')]/following::ng-select[1]")));
+	}
 	
 	public void selectTimeSlot(String timeValue) {
-
+		
 		WebElement timeDropdown = waitForTimeDropdown();
+		safeClick(timeDropdown); // Open the dropdown first to load options
 		safeClick(timeDropdown);
 
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));

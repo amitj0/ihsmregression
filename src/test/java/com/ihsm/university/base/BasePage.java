@@ -20,6 +20,7 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 
@@ -148,6 +149,52 @@ public class BasePage {
 				jsClick(element);
 			}
 		}
+	}
+	
+	
+	public void selectDateFromCalendar(WebElement calendarIcon, String inputDate) {
+	    
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	    LocalDate targetDate = LocalDate.parse(inputDate, formatter);
+	    
+	    int targetDay   = targetDate.getDayOfMonth();
+	    int targetMonth = targetDate.getMonthValue();
+	    int targetYear  = targetDate.getYear();
+	    
+	    wait.until(ExpectedConditions.elementToBeClickable(calendarIcon)).click();
+	    
+	    while (true) {
+	        String headerText = driver.findElement(
+	            By.cssSelector(".month-title")
+	        ).getText().trim();
+	        
+	        LocalDate currentCalDate = LocalDate.parse(
+	            "01 " + headerText,
+	            DateTimeFormatter.ofPattern("dd MMMM, yyyy", Locale.ENGLISH)
+	        );
+	        
+	        if (currentCalDate.getMonthValue() == targetMonth &&
+	            currentCalDate.getYear() == targetYear) {
+	            break;
+	        }
+	        
+	        if (LocalDate.of(currentCalDate.getYear(), currentCalDate.getMonthValue(), 1)
+	                .isBefore(LocalDate.of(targetYear, targetMonth, 1))) {
+	            driver.findElement(
+	                By.xpath("//button[@aria-label='Next']")
+	            ).click();
+	        } else {
+	            driver.findElement(
+	                By.xpath("//button[@aria-label='Previous']")
+	            ).click();
+	        }
+	        
+	        try { Thread.sleep(500); } catch (InterruptedException e) {}
+	    }
+	    
+	    wait.until(ExpectedConditions.elementToBeClickable(
+	        By.xpath("//td[contains(@class,'active') and text()='" + targetDay + "']")
+	    )).click();
 	}
 
 	public boolean isElementVisible(WebElement element) {
