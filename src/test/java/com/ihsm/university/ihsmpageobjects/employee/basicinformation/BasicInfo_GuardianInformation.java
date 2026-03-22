@@ -1,10 +1,14 @@
 package com.ihsm.university.ihsmpageobjects.employee.basicinformation;
 
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -13,6 +17,8 @@ public class BasicInfo_GuardianInformation extends BasePage {
 	public BasicInfo_GuardianInformation(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web elements here
 	@FindBy(xpath = "//div[@id='divbtnfamliyinfo']//span")
@@ -50,6 +56,9 @@ public class BasicInfo_GuardianInformation extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButtonSuccessPopup;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform the action
 
@@ -117,15 +126,28 @@ public class BasicInfo_GuardianInformation extends BasePage {
 		return okButtonSuccessPopup.isDisplayed();
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill the guardian information form
 	public BasicInfo_LanguageInformation fillGuardianInformationForm(String guardianType, String guardianFullName,
-			String guardianDob, String guardianDisability) {
+			String guardianDob, String guardianDisability) throws TimeoutException {
 		addGuardianInfoBtn();
 		selectGuardianTypeOption(guardianType);
 		guardianFullNameField(guardianFullName);
 		guardianDobField(guardianDob);
 		guardianDisabilityOptions(guardianDisability);
 		saveGuardianInfoBtn();
+		lastSuccessMsg = modalSuccessMsg();
+
 		okButtonSuccessPopup();
 		return new BasicInfo_LanguageInformation(driver);
 

@@ -1,11 +1,15 @@
 package com.ihsm.university.ihsmpageobjects.student.documents;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -14,6 +18,8 @@ public class Documents_VisaInfo_Register extends BasePage {
 	public Documents_VisaInfo_Register(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//span[@data-bs-target='#STUDENTVISA']")
@@ -30,9 +36,9 @@ public class Documents_VisaInfo_Register extends BasePage {
 
 	@FindBy(xpath = "(//div[@id='STUDENTVISA']//input[@placeholder='Current Reg Address'])[3]")
 	private WebElement currentRegAddField;
-	
+
 	@FindBy(xpath = "(//div[@id='STUDENTVISA']//input[@placeholder='Current Reg Address'])[3]")
-	
+
 	private WebElement currentRegAddField2;
 
 	@FindBy(xpath = "//div[@id='STUDENTVISA']//div[@id='tabID27']//input[@name='REGISTRATIONSUBMISSIONDATE']")
@@ -46,6 +52,9 @@ public class Documents_VisaInfo_Register extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButton;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform actions on the web elements can be added here
 	public void clickVisaInfoTab() {
@@ -63,12 +72,12 @@ public class Documents_VisaInfo_Register extends BasePage {
 	 * (option.getText().trim().equalsIgnoreCase(address)) { safeClick(option);
 	 * return; } } }
 	 */
-	
+
 	public void selectAddress() {
-	    safeClick(selectAddressField);
-	    if (selectAddressFieldList.size() > 1) {
-	        safeClick(selectAddressFieldList.get(1));
-	    }
+		safeClick(selectAddressField);
+		if (selectAddressFieldList.size() > 1) {
+			safeClick(selectAddressFieldList.get(1));
+		}
 	}
 
 	public void enterCurrentRegAdd(String address) {
@@ -98,15 +107,27 @@ public class Documents_VisaInfo_Register extends BasePage {
 		blinkElement(okButton);
 		handleModalOk(okButton);
 	}
-	
+
 	public boolean isRegisterInfoSavedSuccessfully() {
 		return okButton.isDisplayed();
 	}
+	
+	public String modalSuccessMsg() throws TimeoutException {
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+	
+	public String getLastSuccessMsg() {
+        return lastSuccessMsg;
+    }
+
 
 	// fill the register information
 
 	public Documents_VisaInfo_PassportLocation fillRegisterInfo(String addressType, String currentRegAdd,
-			String registrationSubmissionDate, String comments) {
+			String registrationSubmissionDate, String comments) throws TimeoutException {
 		clickVisaInfoTab();
 		clickRegisterTab();
 //		selectAddress(addressType);
@@ -115,6 +136,8 @@ public class Documents_VisaInfo_Register extends BasePage {
 		enterRegistrationSubmissionDate(registrationSubmissionDate);
 		enterComments(comments);
 		clickSaveButton();
+		lastSuccessMsg = modalSuccessMsg();
+
 		clickOkButton();
 		return new Documents_VisaInfo_PassportLocation(driver);
 	}

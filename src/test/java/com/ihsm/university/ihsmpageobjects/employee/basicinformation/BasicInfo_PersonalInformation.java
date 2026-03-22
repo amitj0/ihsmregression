@@ -2,6 +2,7 @@ package com.ihsm.university.ihsmpageobjects.employee.basicinformation;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,6 +17,8 @@ public class BasicInfo_PersonalInformation extends BasePage {
 	public BasicInfo_PersonalInformation(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web element
 	@FindBy(xpath = "//div[@id='divbtnemppersonalinfo']//span")
@@ -65,6 +68,9 @@ public class BasicInfo_PersonalInformation extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement saveOkButtonPersonalInfo;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform the action
 
@@ -167,10 +173,22 @@ public class BasicInfo_PersonalInformation extends BasePage {
 		handleModalOk(saveOkButtonPersonalInfo);
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill the personal information form
 	public BasicInfo_GuardianInformation fillPersonalInformationForm(String russianName, String englishName,
 			String tinNumber, String workOrderNumber, String dob, String gender, String maritalStatus,
-			String dateOfJoining, String countryCode, String mobileNumber, String address, String addressLine2) {
+			String dateOfJoining, String countryCode, String mobileNumber, String address, String addressLine2)
+			throws TimeoutException {
 		addPersonalInfoBtn();
 		workOrderNumberField(workOrderNumber);
 		dobFieldPersonalInfo(dob);
@@ -181,6 +199,8 @@ public class BasicInfo_PersonalInformation extends BasePage {
 		addressField(address);
 		addressLine2Field(addressLine2);
 		saveButtonPersonalInfo();
+		lastSuccessMsg = modalSuccessMsg();
+
 		okButtonPersonalInfo();
 		return new BasicInfo_GuardianInformation(driver);
 	}

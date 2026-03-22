@@ -18,7 +18,7 @@ import com.ihsm.university.utilities.ExamManageDataProvider;
 import com.ihsm.university.utilities.ExtentListener;
 import com.ihsm.university.utilities.RetryAnalyzer;
 
-public class IHSM_ExamManageTest extends BaseClass {
+public class IHSM_ExamManagementTest extends BaseClass {
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
 	@Test(priority = 0, groups = "Regression", description = "Verify the Exam Manage (Not Saved) Test", dataProvider = "ExamManageData", dataProviderClass = ExamManageDataProvider.class)

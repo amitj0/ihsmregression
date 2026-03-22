@@ -1,11 +1,15 @@
 package com.ihsm.university.ihsmpageobjects.student.status;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -14,6 +18,8 @@ public class Status_Status extends BasePage {
 	public Status_Status(WebDriver driver) {
 		super(driver);
 	}
+	
+	private String lastSuccessMsg;
 
 	// locate the web element here
 
@@ -61,6 +67,10 @@ public class Status_Status extends BasePage {
 
 	@FindBy(xpath = "(//table[@id='tblStudentInfo']//tbody//td)[7]")
 	private WebElement studentEnrollnmentNumber;
+	
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
+
 
 	// methods to perform actions on the web elements
 	public void statusTab() {
@@ -145,10 +155,21 @@ public class Status_Status extends BasePage {
 
 		Thread.sleep(5000);
 	}
+	
+	public String modalSuccessMsg() throws TimeoutException {
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+	
+	public String getLastSuccessMsg() {
+        return lastSuccessMsg;
+    }
 
 	// fill status status form
 	public Status_ExamStatus fillStatusStatusForm(String statusOption, String date, String orderNo, String comments,
-			String filePath) {
+			String filePath) throws TimeoutException {
 		statusTab();
 		statusStatusTab();
 		chooseDocStatusOptions(statusOption);
@@ -157,6 +178,7 @@ public class Status_Status extends BasePage {
 		commentsField(comments);
 		uploadDocField(filePath);
 		saveBtn();
+		lastSuccessMsg = modalSuccessMsg();
 		okButtonSuccessPopup();
 
 		return new Status_ExamStatus(driver);

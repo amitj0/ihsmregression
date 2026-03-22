@@ -3,6 +3,7 @@ package com.ihsm.university.ihsmpageobjects.student.basicinformation;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,6 +18,8 @@ public class BasicInfo_PersonalInformation extends BasePage {
 	public BasicInfo_PersonalInformation(WebDriver driver) {
 		super(driver);
 	}
+	
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//*[@data-bs-target='#basicInfoId']")
@@ -57,6 +60,12 @@ public class BasicInfo_PersonalInformation extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement alertOkBtn;
+	
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
+	
+	
+	
 
 	// methods to perform the action
 
@@ -144,10 +153,21 @@ public class BasicInfo_PersonalInformation extends BasePage {
 	public boolean isPersonalInfoSavedSuccessfully() {
 		return waitUntilVisible(alertOkBtn, Duration.ofSeconds(5));
 	}
+	
+	public String modalSuccessMsg() throws TimeoutException {
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+	
+	public String getLastSuccessMsg() {
+        return lastSuccessMsg;
+    }
 
 	// fill the personal information form
 	public BasicInfo_Biometrics fillPersonalInformationForm(String firstNameRussian, String lastNameRussian,
-			String city, String maritalStatus, String address) {
+			String city, String maritalStatus, String address) throws TimeoutException {
 		addPersonalInfoBtn();
 		firstNameRussianLangField(firstNameRussian);
 		lastNameRussianLangField(lastNameRussian);
@@ -155,6 +175,9 @@ public class BasicInfo_PersonalInformation extends BasePage {
 		maritalStatusFieldList(maritalStatus);
 		addressField(address);
 		saveBtn();
+		
+		lastSuccessMsg = modalSuccessMsg();
+		
 		alertOkBtn();
 		return new BasicInfo_Biometrics(driver); // ← returns next POM
 	}

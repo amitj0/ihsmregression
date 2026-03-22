@@ -21,6 +21,8 @@ public class Documents_Passport extends BasePage {
 		super(driver);
 	}
 
+	private String lastSuccessMsg;
+
 	// locate the web element here
 	@FindBy(xpath = "//div[@id='divbtnpassportID']//span")
 	private WebElement addPassportBtn;
@@ -78,6 +80,9 @@ public class Documents_Passport extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButtonSuccessPopup;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform the action
 	public void addPassportBtn() {
@@ -290,6 +295,17 @@ public class Documents_Passport extends BasePage {
 		return okButtonSuccessPopup.isDisplayed();
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill passport details in one method
 	public void fillPassportDetails(String passportType, String countryIssueBy, String agency, String passportSeries,
 			String passportNumber, String issuePlace, String issueDate, String expiryDate) {
@@ -306,6 +322,8 @@ public class Documents_Passport extends BasePage {
 		enterIssueDate(issueDate);
 
 		savePassportBtn();
+		lastSuccessMsg = modalSuccessMsg();
+
 		okButtonSuccessPopup();
 
 		// return here

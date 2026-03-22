@@ -3,6 +3,7 @@ package com.ihsm.university.ihsmtestcases.flows.employee;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
@@ -12,7 +13,7 @@ import com.ihsm.university.ihsmpageobjects.employee.documents.Documents_Document
 import com.ihsm.university.ihsmpageobjects.employee.documents.Documents_Passport;
 import com.ihsm.university.utilities.ExtentListener;
 
-public class IHSM_DocumentFullFlowTest extends BaseClass {
+public class IHSM_EmployeeDocumentFullFlowTest extends BaseClass {
 
 	private Documents_Documents docInfo;
 	private Documents_Passport docPassInfo;
@@ -33,6 +34,8 @@ public class IHSM_DocumentFullFlowTest extends BaseClass {
 			docInfo = new Documents_Documents(getDriver());
 			docPassInfo = docInfo.fillDocumentInformation("Diploma", TestDataGenerator.randomNotes(),
 					getTestDataPath("male.png"));
+			String actualMsg = docInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Employee Document Inserted Successfully");
 			isSuccess = true;
 			node.pass("Documents Information completed");
 		} catch (Exception e) {
@@ -60,6 +63,8 @@ public class IHSM_DocumentFullFlowTest extends BaseClass {
 
 			docPassInfo.fillPassportDetails("Development", "England", TestDataGenerator.randomIssueAgency(),
 					TestDataGenerator.randomNumber(5), "ABCD1234567", "Bishkek", "01012026", "01012027");
+			String actualMsg = docPassInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Passport Data saved");
 			isSuccess = true;
 			node.pass("Passport Information completed");
 

@@ -3,6 +3,7 @@ package com.ihsm.university.ihsmtestcases.flows.student;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
@@ -18,7 +19,7 @@ import com.ihsm.university.ihsmtestcases.pojo.StudentAcademicsLastEducation;
 import com.ihsm.university.ihsmtestcases.pojo.StudentAcademicsQualification;
 import com.ihsm.university.utilities.ExtentListener;
 
-public class IHSM_AcademicFullFlowTest2 extends BaseClass {
+public class IHSM_StudentAcademicFullFlowTest extends BaseClass {
 
 	private Academics_Qualification_LastEducation lastInfo;
 	private Academics_Qualification_Diploma diplomaInfo;
@@ -48,6 +49,9 @@ public class IHSM_AcademicFullFlowTest2 extends BaseClass {
 			diplomaInfo = lastInfo.fillLastEducationInfo(data.getEducationType(), data.getSchoolName(),
 					data.getStartDate(), data.getEndDate(), data.getGraduationDate(), data.getScore(), data.getMajor(),
 					data.getPercentage(), getTestDataPath("male.png"));
+			
+			String actualMsg = lastInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Data Saved");
 			isSuccess = true;
 			node.pass("Last Education Information completed");
 
@@ -81,6 +85,8 @@ public class IHSM_AcademicFullFlowTest2 extends BaseClass {
 			qualificationInfo = diplomaInfo.fillDiplomaDetails(data.getDiplomaNo(), data.getDnCode(), data.getDrCode(),
 					data.getStartDate(), data.getEndDate(), data.getCollegeName(), data.getStatus(), data.getType(),
 					data.getScore(), data.getGraduationDate(), getTestDataPath("male.png"));
+			String actualMsg = diplomaInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Data Saved");
 			isSuccess = true;
 			node.pass("Diploma Information completed");
 
@@ -114,6 +120,8 @@ public class IHSM_AcademicFullFlowTest2 extends BaseClass {
 			qualificationInfo.fillQualificationInformation(data.getLastEducation(), data.getSchoolName(),
 					data.getQualificationCode(), data.getStartDate(), data.getEndDate(), data.getGraduationDate(),
 					data.getStatus(), data.getCountry(), data.getState(), data.getCity(), getTestDataPath("male.png"));
+			String actualMsg = qualificationInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Student Qualification Inserted Successfully");
 			isSuccess = true;
 			node.pass("Qualification Information completed");
 

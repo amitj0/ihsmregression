@@ -1,11 +1,15 @@
 package com.ihsm.university.ihsmpageobjects.student.basicinformation;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -14,6 +18,8 @@ public class BasicInfo_FamilyInformation extends BasePage {
 	public BasicInfo_FamilyInformation(WebDriver driver) {
 		super(driver);
 	}
+	
+	private String lastSuccessMsg;
 
 	// locate the web element here
 
@@ -124,6 +130,9 @@ public class BasicInfo_FamilyInformation extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement saveOkBtn;
+	
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform the action
 
@@ -295,11 +304,22 @@ public class BasicInfo_FamilyInformation extends BasePage {
 	public boolean isAddFamilyButtonDisplayed() {
 		return saveOkBtn.isDisplayed();
 	}
+	
+	public String modalSuccessMsg() throws TimeoutException {
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+	
+	public String getLastSuccessMsg() {
+        return lastSuccessMsg;
+    }
 
 	// fill the Family Information
 	public BasicInfo_LanguageInformation fillFamilyInformation(String guardianType, String fullName, String dob,
 			String occupationType, String mobCountryCode, String mobileNo, String disabilityType, String countryName,
-			String stateName, String cityName, String address) {
+			String stateName, String cityName, String address) throws TimeoutException {
 		addFamilyBtn();
 		guardianField();
 		guardianFieldList(guardianType);
@@ -314,6 +334,8 @@ public class BasicInfo_FamilyInformation extends BasePage {
 		cityFieldList(cityName);
 		enterAddress(address);
 		saveBtn();
+		
+		lastSuccessMsg = modalSuccessMsg();
 		saveOkBtn();
 
 		return new BasicInfo_LanguageInformation(driver);

@@ -1,8 +1,13 @@
 package com.ihsm.university.ihsmpageobjects.employee.professionalinformation;
 
+import java.time.Duration;
+
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -10,6 +15,8 @@ public class ProfInfo_DevResearch_Rewards extends BasePage {
 	public ProfInfo_DevResearch_Rewards(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web elements here
 
@@ -39,6 +46,9 @@ public class ProfInfo_DevResearch_Rewards extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButtonRewards;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform the action
 
@@ -86,14 +96,25 @@ public class ProfInfo_DevResearch_Rewards extends BasePage {
 		blinkElement(okButtonRewards);
 		handleModalOk(okButtonRewards);
 	}
-	
+
 	public boolean isRewardInfoSavedSuccessfully() {
 		return okButtonRewards.isDisplayed();
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill rewards form
-	public ProfInfo_DevResearch_Patent fillRewardsForm(String rewardType, String rewardDate, String rewardDocument, String docNumber,
-			String notes) {
+	public ProfInfo_DevResearch_Patent fillRewardsForm(String rewardType, String rewardDate, String rewardDocument,
+			String docNumber, String notes) {
 		devResearchAddBtn();
 		rewardsSubTab();
 		typeOfRewardField(rewardType);
@@ -102,6 +123,7 @@ public class ProfInfo_DevResearch_Rewards extends BasePage {
 		documentNumberField(docNumber);
 		notesField(notes);
 		saveRewardsBtn();
+		lastSuccessMsg = modalSuccessMsg();
 		okButtonRewards();
 
 		return new ProfInfo_DevResearch_Patent(driver);

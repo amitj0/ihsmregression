@@ -3,6 +3,7 @@ package com.ihsm.university.ihsmtestcases.flows.student;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
@@ -14,7 +15,7 @@ import com.ihsm.university.ihsmtestcases.flows.classschedule.TestDataGenerator;
 import com.ihsm.university.ihsmtestcases.pojo.StudentStatusData;
 import com.ihsm.university.utilities.ExtentListener;
 
-public class IHSM_StatusFullFlowTest2 extends BaseClass {
+public class IHSM_StudentStatusFullFlowTest extends BaseClass {
 
 	private Status_Status statusInfo;
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
@@ -35,6 +36,9 @@ public class IHSM_StatusFullFlowTest2 extends BaseClass {
 			statusInfo = new Status_Status(getDriver());
 			statusInfo.fillStatusStatusForm(data.getStatus(), data.getStatusDate(), data.getStatusCode(),
 					data.getNotes(), getTestDataPath("male.png"));
+			
+			String actualMsg = statusInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Student Status Inserted Successfully");
 			isSuccess = true;
 			node.pass("Status Information completed");
 

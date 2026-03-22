@@ -1,11 +1,15 @@
 package com.ihsm.university.ihsmpageobjects.student.documents;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -14,6 +18,8 @@ public class Documents_OtherDocuments extends BasePage {
 	public Documents_OtherDocuments(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//div[@data-bs-target='#pills-documents']")
@@ -36,15 +42,20 @@ public class Documents_OtherDocuments extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButton;
-	
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
+
 	// methods to perform actions on the web elements can be added here
 	public void clickDocumentTab() {
 		safeClick(documentTab);
 	}
+
 	public void clickOtherDocTab() {
 		blinkElement(otherDocTab);
 		safeClick(otherDocTab);
 	}
+
 	public void selectDocumentType(String documentType) {
 		safeClick(documentField);
 		for (WebElement option : documentFieldList) {
@@ -54,10 +65,12 @@ public class Documents_OtherDocuments extends BasePage {
 			}
 		}
 	}
+
 	public void uploadDocumentFile(String filePath) {
-		
+
 		fileUploadField.sendKeys(filePath);
 	}
+
 	public void clickSaveButton() {
 		blinkElement(saveBtn);
 		try {
@@ -68,28 +81,38 @@ public class Documents_OtherDocuments extends BasePage {
 		safeClick(saveBtn);
 		handleAlertIfPresent();
 	}
+
 	public void clickOkButton() {
 		blinkElement(okButton);
 		handleModalOk(okButton);
 	}
-	
+
 	public boolean isOtherDocumentSavedSuccessfully() {
 		return okButton.isDisplayed();
 	}
-	
+
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill other documents form
-	public Documents_IdentificationCard fillOtherDocumentsForm(String documentType, String filePath) {
+	public Documents_IdentificationCard fillOtherDocumentsForm(String documentType, String filePath) throws TimeoutException {
 		clickDocumentTab();
 		clickOtherDocTab();
 		selectDocumentType(documentType);
 		uploadDocumentFile(filePath);
 		clickSaveButton();
+		lastSuccessMsg = modalSuccessMsg();
 		clickOkButton();
 		return new Documents_IdentificationCard(driver);
-		
+
 	}
-	
-	
-	
-	
+
 }

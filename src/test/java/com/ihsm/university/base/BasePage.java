@@ -942,4 +942,6 @@ public class BasePage {
 		logger.info("Screenshot captured: " + screenshotPath);
 		return screenshotPath;
 	}
+	
+	
 }

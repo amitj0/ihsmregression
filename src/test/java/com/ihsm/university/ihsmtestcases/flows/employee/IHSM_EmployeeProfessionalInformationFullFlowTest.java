@@ -3,6 +3,7 @@ package com.ihsm.university.ihsmtestcases.flows.employee;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
@@ -18,7 +19,7 @@ import com.ihsm.university.ihsmpageobjects.employee.professionalinformation.Prof
 import com.ihsm.university.ihsmpageobjects.employee.professionalinformation.ProfInfo_ProfessionalInfoTitle;
 import com.ihsm.university.utilities.ExtentListener;
 
-public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
+public class IHSM_EmployeeProfessionalInformationFullFlowTest extends BaseClass {
 
 	private ProfInfo_ProfessionalInfoDegreeLvl profInfo;
 	private ProfInfo_ProfessionalInfoAcademics profAcadInfo;
@@ -49,6 +50,8 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 			profAcadInfo = profInfo.fillProfessionalInformationForm("Диплом кандидата медицинских наук", "Biology",
 					TestDataGenerator.randomUniversity(), TestDataGenerator.randomNumber(4), "01012026", "01012027",
 					TestDataGenerator.randomNotes());
+			String actualMsg = profInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Degree Level Data Saved");
 			isSuccess = true;
 			node.pass("Professional Degree Information completed");
 
@@ -81,6 +84,8 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 					TestDataGenerator.randomAcademicDegree(), TestDataGenerator.randomUniversity(),
 					TestDataGenerator.randomSpeciality(), TestDataGenerator.randomNumber(4), "01012028",
 					TestDataGenerator.randomNotes());
+			String actualMsg = profAcadInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Data Saved");
 			isSuccess = true;
 			node.pass("Professional Academics Information completed");
 
@@ -108,6 +113,8 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 			profSciResearchInfo = profTitleInfo.fillTitleForm("Professor", TestDataGenerator.randomUniversity(),
 					TestDataGenerator.randomNumber(5), "01012026", TestDataGenerator.randomNotes(),
 					getTestDataPath("male.png"));
+			String actualMsg = profTitleInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Academic Degree Saved");
 			isSuccess = true;
 			node.pass("Professional Title Information completed");
 
@@ -138,6 +145,8 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 					"Республикалық деңгей", TestDataGenerator.randomUrl(), TestDataGenerator.randomMagazineName(),
 					TestDataGenerator.randomArticleName(), TestDataGenerator.randomAuthors(),
 					TestDataGenerator.randomNotes());
+			String actualMsg = profSciResearchInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Data Saved");
 			isSuccess = true;
 			node.pass("Professional Scientific Research Information completed");
 
@@ -164,6 +173,8 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 			profPatentInfo = profRewardsInfo.fillRewardsForm(TestDataGenerator.randomDocumentType(), "01012026",
 					TestDataGenerator.randomDocumentType(), TestDataGenerator.randomNumber(4),
 					TestDataGenerator.randomNotes());
+			String actualMsg = profRewardsInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Rewards Data Saved");
 			isSuccess = true;
 			node.pass("Professional Rewards Information completed");
 
@@ -194,6 +205,8 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 					TestDataGenerator.randomInvention(), "Republican", TestDataGenerator.randomAuthors(),
 					TestDataGenerator.randomString(4), "01012026", TestDataGenerator.randomNumber(5),
 					TestDataGenerator.randomNotes());
+			String actualMsg = profPatentInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Data Saved");
 			isSuccess = true;
 			node.pass("Professional Patent Information completed");
 
@@ -220,6 +233,11 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 
 			profMilitaryInfo = profAttestationsInfo.fillAttestationsForm("Excellent", "Not Suitable", "Ok",
 					"Appropriate", "01012026", TestDataGenerator.randomNotes());
+			/*
+			 * String actualMsg = profAttestationsInfo.getLastSuccessMsg();
+			 * Assert.assertEquals(actualMsg,
+			 * "No Information added here from the developer side");
+			 */
 			isSuccess = true;
 			node.pass("Professional Attestations Information completed");
 
@@ -244,6 +262,8 @@ public class IHSM_ProfessionalInformationFlowTest extends BaseClass {
 
 			profMilitaryInfo.fillMilitaryInformationForm("Lieutenant General", TestDataGenerator.randomNumber(4),
 					"01012026", TestDataGenerator.randomNotes());
+			String actualMsg = profMilitaryInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Millatry Rank Data Saved");
 			isSuccess = true;
 			node.pass("Professional Military Information completed");
 

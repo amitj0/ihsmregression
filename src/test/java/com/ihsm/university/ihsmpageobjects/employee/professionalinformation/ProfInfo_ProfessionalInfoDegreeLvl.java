@@ -1,10 +1,14 @@
 package com.ihsm.university.ihsmpageobjects.employee.professionalinformation;
 
+import java.time.Duration;
 import java.util.List;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -13,6 +17,8 @@ public class ProfInfo_ProfessionalInfoDegreeLvl extends BasePage {
 	public ProfInfo_ProfessionalInfoDegreeLvl(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//div[@data-bs-target=\"#pills-position\"]")
@@ -47,7 +53,7 @@ public class ProfInfo_ProfessionalInfoDegreeLvl extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AddMasterDataModal3']//input[@name='strMasterName']")
 	private WebElement addSphereValue;
-	
+
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okSuccessPop;
 
@@ -71,6 +77,9 @@ public class ProfInfo_ProfessionalInfoDegreeLvl extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButton;
+	
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// method to perform the action here
 
@@ -220,14 +229,27 @@ public class ProfInfo_ProfessionalInfoDegreeLvl extends BasePage {
 		blinkElement(okButton);
 		handleModalOk(okButton);
 	}
-	
+
 	public boolean isDegLvlInfoSavedSuccessfully() {
 		return okButton.isDisplayed();
 	}
 
+	
+
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill the degree information here
-	public ProfInfo_ProfessionalInfoAcademics fillProfessionalInformationForm(String degree, String sphere, String org, String diplomaNo,
-			String protectionDt, String degreeDt, String notes) {
+	public ProfInfo_ProfessionalInfoAcademics fillProfessionalInformationForm(String degree, String sphere, String org,
+			String diplomaNo, String protectionDt, String degreeDt, String notes) {
 		profInfoTab();
 		profInfoTabBtn();
 		degreeField();
@@ -240,6 +262,7 @@ public class ProfInfo_ProfessionalInfoDegreeLvl extends BasePage {
 		degreeDate(degreeDt);
 		notesField(notes);
 		saveBtn();
+		lastSuccessMsg = modalSuccessMsg();
 		okButton();
 
 		return new ProfInfo_ProfessionalInfoAcademics(driver);

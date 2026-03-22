@@ -3,6 +3,7 @@ package com.ihsm.university.ihsmpageobjects.employee.professionalinformation;
 import java.time.Duration;
 import java.util.List;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -16,6 +17,8 @@ public class ProfInfo_Military extends BasePage {
 	public ProfInfo_Military(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//div[@id='divbtnmilitaryrank']//span")
@@ -53,6 +56,9 @@ public class ProfInfo_Military extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButtonMilitry;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform the action
 	public void addMilitaryInfoBtn() {
@@ -162,6 +168,17 @@ public class ProfInfo_Military extends BasePage {
 		return addMilitaryInfoBtn.isDisplayed();
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill military information form
 	public void fillMilitaryInformationForm(String rank, String militaryOrder, String militaryOrderDate, String notes) {
 
@@ -172,6 +189,7 @@ public class ProfInfo_Military extends BasePage {
 		enterMilitaryOrderDate(militaryOrderDate);
 		enterNotes(notes);
 		saveMilitaryInfoBtn();
+		lastSuccessMsg = modalSuccessMsg();
 		okButtonMilitry();
 
 		// return instance of this class

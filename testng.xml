@@ -15,19 +15,20 @@
             <!-- ═══ Student Registration Module ═══════════════════════════ -->
             
             
-            <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_BasicFullFlowTest2"/>
-            <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_DocumentFullFlowTest2"/>
-            <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_AcademicFullFlowTest2"/>
-            <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StatusFullFlowTest2"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentBasicInformationFullFlowTest"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentDocumentFullFlowTest"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentAcademicFullFlowTest"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentStatusFullFlowTest"/>
             
 
             <!-- ═══ Employee Registration Module ══════════════════════════ -->
             
-            <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_BasicFullFlowTest"/>
-            <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_DesignationFullFlowTest"/>
-            <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_ProfessionalInformationFlowTest"/>
-            <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_DocumentFullFlowTest"/>
-            
+
+            <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_EmployeeBasicInformationFullFlowTest"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_EmployeeDesignationFullFlowTest"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_EmployeeProfessionalInformationFullFlowTest"/>
+            <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_EmployeeDocumentFullFlowTest"/>
+           
 
             <!-- ═══ Class Scheduling ════════════════════════════════════════ -->
             
@@ -39,10 +40,10 @@
      	 	<class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_VerifyGroupAssignmentGroupDataTest"/>
      	 	
      	 	<class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_ClassSchedulingInformationOnlineLecTest"/>
-     	
+     		
             <!-- ═══ Exam Management ═════════════════════════════════════════ -->
-           
-            <class name="com.ihsm.university.ihsmtestcases.flows.exammanage.IHSM_ExamManageTest"/>
+          
+            <class name="com.ihsm.university.ihsmtestcases.flows.exammanage.IHSM_ExamManagementTest"/>
            
 
             <!-- ═══ Class Attendance ════════════════════════════════════════ -->

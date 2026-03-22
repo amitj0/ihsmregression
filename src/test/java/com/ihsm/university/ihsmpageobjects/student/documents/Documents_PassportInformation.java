@@ -1,12 +1,15 @@
 package com.ihsm.university.ihsmpageobjects.student.documents;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 import com.ihsm.university.ihsmpageobjects.student.academics.Academics_Qualification_LastEducation;
@@ -16,6 +19,8 @@ public class Documents_PassportInformation extends BasePage {
 	public Documents_PassportInformation(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//span[@data-bs-target='#PassportId']")
@@ -41,6 +46,9 @@ public class Documents_PassportInformation extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButton;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform actions on the web elements can be added here
 	public void clickPassportTab() {
@@ -101,15 +109,28 @@ public class Documents_PassportInformation extends BasePage {
 		return okButton.isDisplayed();
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill passport information
 	public Academics_Qualification_LastEducation fillPassportInformation(String passportNumber, String placeOfIssue,
-			String issueDate, String expiryDate) {
+			String issueDate, String expiryDate) throws TimeoutException {
 		clickPassportTab();
 		enterPassportNumber(passportNumber);
 		selectPlaceOfIssue(placeOfIssue);
 		enterIssueDate(issueDate);
 		enterExpiryDate(expiryDate);
 		clickSaveButton();
+		lastSuccessMsg = modalSuccessMsg();
+
 		clickOkButton();
 
 		return new Academics_Qualification_LastEducation(driver);

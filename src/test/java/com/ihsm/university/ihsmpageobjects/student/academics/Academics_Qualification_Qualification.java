@@ -1,11 +1,15 @@
 package com.ihsm.university.ihsmpageobjects.student.academics;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 import com.ihsm.university.ihsmpageobjects.student.status.Status_Status;
@@ -15,6 +19,8 @@ public class Academics_Qualification_Qualification extends BasePage {
 	public Academics_Qualification_Qualification(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//span[@data-bs-target='#divQualificationModel']")
@@ -32,7 +38,7 @@ public class Academics_Qualification_Qualification extends BasePage {
 	@FindBy(xpath = "//div[@id='divQualificationModel']//label[normalize-space()='School/College']//following-sibling::div/input")
 	private WebElement schoolField;
 
-	//developer mistake here
+	// developer mistake here
 	@FindBy(xpath = "//div[@id='divQualificationModel']//label[normalize-space()='Certificate No']//following-sibling::div/input")
 	private WebElement certificateNoField;
 
@@ -77,6 +83,9 @@ public class Academics_Qualification_Qualification extends BasePage {
 
 	@FindBy(xpath = "//div[@id='divQualificationModel']//div[contains(@class,'modal-header')]//button[@data-bs-dismiss='modal']")
 	private WebElement popCut;
+	
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform actions on the web elements
 
@@ -188,6 +197,17 @@ public class Academics_Qualification_Qualification extends BasePage {
 		return okButtonSuccessPopup.isDisplayed();
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// Fill the Qualification Information
 	public Status_Status fillQualificationInformation(String qualification, String school, String certificateNo,
 			String fromDate, String issueDate, String issueDateTo, String occupation, String country, String region,
@@ -207,6 +227,8 @@ public class Academics_Qualification_Qualification extends BasePage {
 		selectCity(city);
 		uploadQualificationDocument(filePath);
 		saveQualification();
+		lastSuccessMsg = modalSuccessMsg();
+
 		okButtonSuccessPopup();
 
 		return new Status_Status(driver);

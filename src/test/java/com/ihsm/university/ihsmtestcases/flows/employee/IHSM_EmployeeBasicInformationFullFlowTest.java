@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
@@ -22,7 +23,7 @@ import com.ihsm.university.ihsmpageobjects.employee.basicinformation.BasicInfo_V
 import com.ihsm.university.navigation.Employee_Search;
 import com.ihsm.university.utilities.ExtentListener;
 
-public class IHSM_BasicFullFlowTest extends BaseClass {
+public class IHSM_EmployeeBasicInformationFullFlowTest extends BaseClass {
 	private BasicInfo_EnrollnmentInformation enrollInfo;
 	private BasicInfo_PersonalInformation personalInfo;
 	private BasicInfo_GuardianInformation guardianInfo;
@@ -137,10 +138,11 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 
 			guardianInfo = personalInfo.fillPersonalInformationForm(TestDataGenerator.randomString(4),
 					TestDataGenerator.randomString(3), TestDataGenerator.randomNumber(4),
-					TestDataGenerator.randomNumber(5), "01012000", TestDataGenerator.generateRandomGender(),
-					"Married", "01012026", "91",
-					TestDataGenerator.randomPhone(), TestDataGenerator.randomIndianAddress(),
+					TestDataGenerator.randomNumber(5), "01012000", TestDataGenerator.generateRandomGender(), "Married",
+					"01012026", "91", TestDataGenerator.randomPhone(), TestDataGenerator.randomIndianAddress(),
 					TestDataGenerator.randomIndianAddress());
+			String actualMsg = personalInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Employee Data Updated");
 			isSuccess = true;
 			node.pass("Employee Personal Information completed");
 
@@ -165,6 +167,8 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 
 			languageInfo = guardianInfo.fillGuardianInformationForm("Father", TestDataGenerator.randomGuardianName(),
 					"01011970", "No");
+			String actualMsg = guardianInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Family Information Inserted Successfully");
 			isSuccess = true;
 			node.pass("Employee Guardian Information completed");
 
@@ -186,6 +190,9 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 			node.info("Proficiency: " + "B2");
 
 			biometricsInfo = languageInfo.fillLanguageInformation("сертификат Duolingo"/* , "B2" */);
+
+			String actualMsg = languageInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Languages Data Saved");
 			isSuccess = true;
 			node.pass("Employee Language Information completed");
 		} catch (Exception e) {
@@ -226,6 +233,9 @@ public class IHSM_BasicFullFlowTest extends BaseClass {
 //			node.info("Photo File: " + TestDataGenerator.randomEmployeePhotoFile());
 
 			biometricsInfo.fillBiometricsInfo(getTestDataPath("male.png"));
+
+			String actualMsg = biometricsInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Information Saved Successfully");
 			isSuccess = true;
 			node.pass("Employee Biometrics Information completed");
 

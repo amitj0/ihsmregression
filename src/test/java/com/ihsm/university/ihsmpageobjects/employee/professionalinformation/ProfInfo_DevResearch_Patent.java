@@ -1,10 +1,14 @@
 package com.ihsm.university.ihsmpageobjects.employee.professionalinformation;
 
+import java.time.Duration;
 import java.util.List;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -12,6 +16,8 @@ public class ProfInfo_DevResearch_Patent extends BasePage {
 	public ProfInfo_DevResearch_Patent(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web elements here
 	@FindBy(xpath = "//div[@id='BTNDIVDEVELOPMENT']//span")
@@ -79,6 +85,9 @@ public class ProfInfo_DevResearch_Patent extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButtonPatent;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform the action
 
@@ -207,9 +216,21 @@ public class ProfInfo_DevResearch_Patent extends BasePage {
 		return okButtonPatent.isDisplayed();
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fillDevResearchPatentForm method to fill the form in one go
-	public ProfInfo_DevResearch_Attestations fillDevResearchPatentForm(String patentType, String inventionTitle, String patentLevel,
-			String patentAuthors, String patentOrganization, String patentDate, String regNoteNumber, String notes) {
+	public ProfInfo_DevResearch_Attestations fillDevResearchPatentForm(String patentType, String inventionTitle,
+			String patentLevel, String patentAuthors, String patentOrganization, String patentDate,
+			String regNoteNumber, String notes) {
 		addDevResearchPatent();
 		clickPatentSubTab();
 		selectPatentTypeField();
@@ -223,6 +244,7 @@ public class ProfInfo_DevResearch_Patent extends BasePage {
 		regNoteNumberField(regNoteNumber);
 		notesField(notes);
 		savePatentBtn();
+		lastSuccessMsg = modalSuccessMsg();
 		okButtonPatent();
 		return new ProfInfo_DevResearch_Attestations(driver);
 	}

@@ -1,9 +1,12 @@
 package com.ihsm.university.ihsmpageobjects.employee.professionalinformation;
 
+import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -11,6 +14,8 @@ public class ProfInfo_DevResearch_Attestations extends BasePage {
 	public ProfInfo_DevResearch_Attestations(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web elements here
 
@@ -55,6 +60,9 @@ public class ProfInfo_DevResearch_Attestations extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButtonAttestations;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform the action
 
@@ -150,14 +158,25 @@ public class ProfInfo_DevResearch_Attestations extends BasePage {
 		blinkElement(okButtonAttestations);
 		handleModalOk(okButtonAttestations);
 	}
-	
+
 	public boolean isAttestationsSavedSuccessfully() {
 		return okButtonAttestations.isDisplayed();
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill the Attestations form
-	public ProfInfo_Military fillAttestationsForm(String universityRules, String communityCompetition, String personality,
-			String professional, String validationDate, String notes) {
+	public ProfInfo_Military fillAttestationsForm(String universityRules, String communityCompetition,
+			String personality, String professional, String validationDate, String notes) {
 		addDevResearchAttestations();
 		clickAttestationsSubTab();
 		selectUniversityRulesDrop();
@@ -171,6 +190,7 @@ public class ProfInfo_DevResearch_Attestations extends BasePage {
 		attestationValidationDateField(validationDate);
 		notesField(notes);
 		saveAttestationsBtn();
+//		lastSuccessMsg = modalSuccessMsg();
 		okButtonAttestations();
 		return new ProfInfo_Military(driver);
 	}

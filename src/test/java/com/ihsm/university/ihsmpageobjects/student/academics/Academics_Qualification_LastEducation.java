@@ -1,11 +1,15 @@
 package com.ihsm.university.ihsmpageobjects.student.academics;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -14,6 +18,8 @@ public class Academics_Qualification_LastEducation extends BasePage {
 	public Academics_Qualification_LastEducation(WebDriver driver) {
 		super(driver);
 	}
+	
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//div[@data-bs-target='#pills-academic']")
@@ -63,6 +69,9 @@ public class Academics_Qualification_LastEducation extends BasePage {
 
 	@FindBy(xpath = "//div[@id='divQualificationModel']//div[contains(@class,'modal-header')]//button[@data-bs-dismiss='modal']")
 	private WebElement popCut;
+	
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform actions on the web elements
 	public void academicsTab() {
@@ -143,9 +152,21 @@ public class Academics_Qualification_LastEducation extends BasePage {
 		return okButtonSuccessPopup.isDisplayed();
 	}
 
+	
+	public String modalSuccessMsg() throws TimeoutException {
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+	
+	public String getLastSuccessMsg() {
+        return lastSuccessMsg;
+    }
+	
 	// fill the Last Education information
 	public Academics_Qualification_Diploma fillLastEducationInfo(String eduType, String school, String startDate,
-			String endDate, String docDate, String docFieldNo, String subject, String marks, String file) {
+			String endDate, String docDate, String docFieldNo, String subject, String marks, String file) throws TimeoutException {
 		academicsTab();
 		qualificationTab();
 		lastEducationTab();
@@ -160,6 +181,7 @@ public class Academics_Qualification_LastEducation extends BasePage {
 		enterMarks(marks);
 		uploadDocument(file);
 		saveLastEducationDetails();
+		lastSuccessMsg = modalSuccessMsg();
 		handleSuccessPopup();
 
 		return new Academics_Qualification_Diploma(driver);

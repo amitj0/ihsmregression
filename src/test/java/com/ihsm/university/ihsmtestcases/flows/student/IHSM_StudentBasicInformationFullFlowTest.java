@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -37,7 +38,7 @@ import com.ihsm.university.navigation.Student_Search;
 import com.ihsm.university.utilities.ExtentListener;
 import com.ihsm.university.utilities.TextUtility;
 
-public class IHSM_BasicFullFlowTest2 extends BaseClass {
+public class IHSM_StudentBasicInformationFullFlowTest extends BaseClass {
 
 	// ── Basic Information ──────────────────────────────
 	private BasicInfo_EnrollnmentInformation enrollInfo;
@@ -168,7 +169,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 
 			biometrics = personalInfo.fillPersonalInformationForm(data.getFirstName(), data.getLastName(),
 					data.getCityName(), data.getMaritalStatus(), data.getCountry());
-
+			String actualMsg = personalInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "The information has been saved and updated in the system.");
 			isSuccess = true;
 			node.pass("Personal Information completed");
 
@@ -189,6 +191,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			node.info("Entering Student Biometrics Information");
 
 			familyInfo = biometrics.fillBiometricsInfo(getTestDataPath("male.png"));
+			String actualMsg = biometrics.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Student Image Saved");
 			isSuccess = true;
 			node.pass("Biometrics Information completed");
 
@@ -221,6 +225,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			languageInfo = familyInfo.fillFamilyInformation(data.getRelation(), data.getName(), data.getDob(),
 					data.getOccupation(), data.getCountryCode(), data.getPhone(), data.getDependent(),
 					data.getCountry(), data.getState(), data.getCity(), data.getNationality());
+			String actualMsg = familyInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "success");
 			isSuccess = true;
 			node.pass("Family Information completed");
 
@@ -242,7 +248,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			node.info("Proficiency Level: " + data.getLevel());
 
 			preRightsInfo = languageInfo.fillLanguageInformationForm(data.getLanguage(), data.getLevel());
-
+			String actualMsg = languageInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "The information has been saved and updated in the system.");
 			isSuccess = true;
 			node.pass("Language Information completed");
 		} catch (Exception e) {
@@ -262,6 +269,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			node.info("Prefer Rights: " + data.getPreferRights());
 
 			socialInfo = preRightsInfo.fillPreferRightsInformation(data.getPreferRights(), getTestDataPath("male.png"));
+			String actualMsg = preRightsInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "success");
 			isSuccess = true;
 			node.pass("Pre Rights Information completed");
 
@@ -282,6 +291,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			node.info("Social Status: " + data.getSocialStatus());
 
 			socialWorkInfo = socialInfo.fillSocialStatusForm(data.getSocialStatus(), getTestDataPath("male.png"));
+			String actualMsg = socialInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "The information has been saved and updated in the system.");
 			isSuccess = true;
 			node.pass("Social Status Information completed");
 
@@ -301,6 +312,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			node.info("Entering Student Work Location Information");
 
 			medicalVacInfo = socialWorkInfo.fillSocialWorkLocationDetails(getTestDataPath("male.png"));
+			String actualMsg = socialWorkInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "success");
 			isSuccess = true;
 			node.pass("Work Location Information completed");
 
@@ -326,6 +339,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 			medicalPolyInfo = medicalVacInfo.fillVaccinationInfo(data.getVaccineName(), data.getDose(),
 					data.getVaccinationDate(), data.getBatchNo(), TestDataGenerator.randomNotes(),
 					getTestDataPath("male.png"));
+			String actualMsg = medicalVacInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "success");
 			isSuccess = true;
 			node.pass("Medical Vaccination Information completed");
 
@@ -348,6 +363,9 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 
 			medicalInsInfo = medicalPolyInfo.fillAtPolyMedicalInformation(data.getVisitDate(), data.getPolyType(),
 					getTestDataPath("male.png"));
+			String actualMsg = medicalPolyInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "The information has been saved and updated in the system.");
+			
 			isSuccess = true;
 			node.pass("Medical At Poly Information completed");
 
@@ -370,6 +388,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 
 			medicalDisInfo = medicalInsInfo.fillInsuranceInformation(data.getInsuranceStartDate(),
 					data.getInsuranceEndDate(), getTestDataPath("male.png"));
+			String actualMsg = medicalInsInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "The information has been saved and updated in the system.");
 			isSuccess = true;
 			node.pass("Medical Insurance Information completed");
 
@@ -393,6 +413,8 @@ public class IHSM_BasicFullFlowTest2 extends BaseClass {
 
 			medicalDisInfo.fillDisabilityForm(data.getDisabilityType(), data.getDisabilityDocumentNo(),
 					data.getDisabilityDate(), getTestDataPath("male.png"));
+			String actualMsg = medicalDisInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "success");
 			isSuccess = true;
 			node.pass("Medical Disability Information completed");
 

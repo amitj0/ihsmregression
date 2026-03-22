@@ -1,10 +1,14 @@
 package com.ihsm.university.ihsmpageobjects.employee.professionalinformation;
 
+import java.time.Duration;
 import java.util.List;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -13,6 +17,8 @@ public class ProfInfo_ProfessionalInfoAcademics extends BasePage {
 	public ProfInfo_ProfessionalInfoAcademics(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web element here
 
@@ -75,6 +81,9 @@ public class ProfInfo_ProfessionalInfoAcademics extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButtonSuccessPopupAcademicInfo;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform the action
 	public void professionalInfoLink() {
@@ -199,15 +208,26 @@ public class ProfInfo_ProfessionalInfoAcademics extends BasePage {
 		blinkElement(okButtonSuccessPopupAcademicInfo);
 		handleModalOk(okButtonSuccessPopupAcademicInfo);
 	}
-	
+
 	public boolean isProfAcadInfoSavedSuccessfully() {
 		return okButtonSuccessPopupAcademicInfo.isDisplayed();
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill the academic info form
-	public ProfInfo_ProfessionalInfoTitle fillAcademicInfoForm(String academicType, String docType, String dateOfEnteringAcademicDegree,
-			String dateOfGraduationAcademicDegree, String qualification, String organization, String speciality,
-			String certificateNumber, String certificateDate, String notes) {
+	public ProfInfo_ProfessionalInfoTitle fillAcademicInfoForm(String academicType, String docType,
+			String dateOfEnteringAcademicDegree, String dateOfGraduationAcademicDegree, String qualification,
+			String organization, String speciality, String certificateNumber, String certificateDate, String notes) {
 
 		professionalInfoLink();
 		academicsSubTab();
@@ -224,6 +244,7 @@ public class ProfInfo_ProfessionalInfoAcademics extends BasePage {
 		enterCertificateDate(certificateDate);
 		enterNotes(notes);
 		saveAcademicInfoBtn();
+		lastSuccessMsg = modalSuccessMsg();
 		okButtonSuccessPopupAcademicInfo();
 		return new ProfInfo_ProfessionalInfoTitle(driver);
 	}

@@ -3,6 +3,7 @@ package com.ihsm.university.ihsmtestcases.flows.employee;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
@@ -15,7 +16,7 @@ import com.ihsm.university.ihsmpageobjects.employee.designation.Designation_Empl
 import com.ihsm.university.ihsmpageobjects.employee.designation.Designation_Position;
 import com.ihsm.university.utilities.ExtentListener;
 
-public class IHSM_DesignationFullFlowTest extends BaseClass {
+public class IHSM_EmployeeDesignationFullFlowTest extends BaseClass {
 
 	private Designation_EmploymentRights empRights;
 	private Designation_Position empPosition;
@@ -49,6 +50,8 @@ public class IHSM_DesignationFullFlowTest extends BaseClass {
 					"Faculty",
 					/* "CENTRAL / Bachelor / MBBS", "2", */ "01012026",
 					TestDataGenerator.randomNumber(3), "200000", TestDataGenerator.randomNotes());
+			String actualMsg = empRights.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Data Saved");
 			isSuccess = true;
 			node.pass("Employee Rights Information completed");
 
@@ -76,6 +79,8 @@ public class IHSM_DesignationFullFlowTest extends BaseClass {
 			empPosition.fillPositionInOtherOrgForm("Experience in IHSM", "01/01/2026", "01/01/2027",
 					TestDataGenerator.randomUniversity(), TestDataGenerator.randomUniversityPosition(),
 					TestDataGenerator.randomNotes());
+			String actualMsg = empPosition.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Add Position In Other Organization Data Saved");
 			isSuccess = true;
 			node.pass("Employee Position Information completed");
 

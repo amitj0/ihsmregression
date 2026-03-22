@@ -3,6 +3,7 @@ package com.ihsm.university.ihsmtestcases.flows.student;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
@@ -27,7 +28,7 @@ import com.ihsm.university.ihsmtestcases.pojo.StudentVisaRegisterData;
 import com.ihsm.university.utilities.ExtentListener;
 import com.ihsm.university.utilities.TextUtility;
 
-public class IHSM_DocumentFullFlowTest2 extends BaseClass {
+public class IHSM_StudentDocumentFullFlowTest extends BaseClass {
 
 	private Documents_OtherDocuments otherDocuments;
 	private Documents_IdentificationCard identificationCard;
@@ -53,6 +54,10 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 
 			identificationCard = otherDocuments.fillOtherDocumentsForm(data.getDocumentType(),
 					getTestDataPath("male.png"));
+
+			String actualMsg = otherDocuments.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "The information has been saved and updated in the system.");
+
 			isSuccess = true;
 			node.pass("Other Documents Information completed");
 
@@ -79,6 +84,9 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 
 			visaOffline = identificationCard.fillIdentificationCardDetails(data.getIdNumber(), data.getCountry(),
 					data.getStartDate(), data.getEndDate(), getTestDataPath("male.png"));
+
+			String actualMsg = identificationCard.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "The information has been saved and updated in the system.");
 			isSuccess = true;
 			node.pass("Identification Card Information completed");
 
@@ -111,6 +119,8 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 			visaOnline = visaOffline.fillVisaInfoOffVisaForm(data.getVisaType(), data.getHomeCountry(),
 					data.getStartDate(), data.getEndDate(), data.getIssueDate(), data.getExpiryDate(),
 					data.getVisaNumber(), data.getCountry(), data.getNotes(), getTestDataPath("male.png"));
+			String actualMsg = visaOffline.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Student Visa Document Inserted Successfully");
 			isSuccess = true;
 			node.pass("Visa Offline Information completed");
 
@@ -138,6 +148,8 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 
 			visaRegister = visaOnline.fillOnlineVisaInfo(data.getVisaType(), data.getVisaAddress(), data.getStartDate(),
 					data.getEndDate(), data.getExpiryDate(), data.getOnlineVisaNumber());
+			String actualMsg = visaOnline.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "The information has been saved and updated in the system.");
 			isSuccess = true;
 			node.pass("Visa Online Information completed");
 
@@ -163,6 +175,8 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 
 			passportLocation = visaRegister.fillRegisterInfo(data.getHomeCountry(), data.getCountry(),
 					data.getRegisterDate(), data.getNotes());
+			String actualMsg = visaRegister.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "The information has been saved and updated in the system.");
 			isSuccess = true;
 			node.pass("Visa Register Information completed");
 			stepStatus.put("Visa Register", "PASS");
@@ -185,6 +199,8 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 			node.info("Date: " + data.getDate());
 
 			passportInfo = passportLocation.fillPassportLocationInfo(data.getLocation(), data.getDate());
+			String actualMsg = passportLocation.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Passport Location Saved");
 			isSuccess = true;
 			node.pass("Passport Location Information completed");
 
@@ -210,7 +226,8 @@ public class IHSM_DocumentFullFlowTest2 extends BaseClass {
 
 			passportInfo.fillPassportInformation(data.getPassportNumber(), data.getPlaceOfIssue(), data.getIssueDate(),
 					data.getExpiryDate());
-
+			String actualMsg = passportInfo.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "The information has been saved and updated in the system.");
 			isSuccess = true;
 			node.pass("Passport Information completed");
 

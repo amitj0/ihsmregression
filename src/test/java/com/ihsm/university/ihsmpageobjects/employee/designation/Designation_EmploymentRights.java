@@ -1,10 +1,14 @@
 package com.ihsm.university.ihsmpageobjects.employee.designation;
 
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -13,6 +17,8 @@ public class Designation_EmploymentRights extends BasePage {
 	public Designation_EmploymentRights(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//div[@data-bs-target='#pills-professional']")
@@ -89,6 +95,10 @@ public class Designation_EmploymentRights extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButtonSuccessPopup;
+	
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
+
 
 	// methods to perform the action
 	public void designationTab() {
@@ -239,16 +249,28 @@ public class Designation_EmploymentRights extends BasePage {
 		blinkElement(okButtonSuccessPopup);
 		handleModalOk(okButtonSuccessPopup);
 	}
-	
+
 	public boolean isDesEmpRightInfoSavedSuccessfully() {
 		return okButtonSuccessPopup.isDisplayed();
 	}
+	
+	public String modalSuccessMsg() throws TimeoutException {
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+	
+	public String getLastSuccessMsg() {
+        return lastSuccessMsg;
+    }
+
 
 	// fill employment rights form
 	public Designation_Position fillEmploymentRightsForm(String jobType, String rating, String operationStatus,
 			String orderNo, String probationDate, String probationTillDate, String department, String positionPart,
 			/* String program, String basis, */ String pensionFrom, String employmentBookHistoryNo, String salary,
-			String notes) {
+			String notes) throws TimeoutException {
 		designationTab();
 		addEmploymentRightsBtn();
 		jobTypeDropdownField();
@@ -274,6 +296,9 @@ public class Designation_EmploymentRights extends BasePage {
 		notesField(notes);
 		mainPositionCheckbox();
 		saveBtn();
+
+		lastSuccessMsg = modalSuccessMsg();
+
 		okButtonSuccessPopup();
 		return new Designation_Position(driver);
 

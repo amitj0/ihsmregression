@@ -1,11 +1,15 @@
 package com.ihsm.university.ihsmpageobjects.student.basicinformation;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -14,6 +18,8 @@ public class BasicInfo_MedicalInformation_Vaccination extends BasePage {
 	public BasicInfo_MedicalInformation_Vaccination(WebDriver driver) {
 		super(driver);
 	}
+	
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//span[@data-bs-target='#MadicalInfoId']")
@@ -77,6 +83,9 @@ public class BasicInfo_MedicalInformation_Vaccination extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okBtn;
+	
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform the action
 	public void medicalInfoTab() {
@@ -178,11 +187,22 @@ public class BasicInfo_MedicalInformation_Vaccination extends BasePage {
 	public boolean isVaccinationInfoSavedSuccessfully() {
 		return okBtn.isDisplayed();
 	}
+	
+	public String modalSuccessMsg() throws TimeoutException {
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+	
+	public String getLastSuccessMsg() {
+        return lastSuccessMsg;
+    }
 
 	// fill the Vaccination Information
 
 	public BasicInfo_MedicalInforamtion_AtPoly fillVaccinationInfo(String vaccType, String vaccDose, String dob,
-			String certNo, String comment, String filePath) {
+			String certNo, String comment, String filePath) throws TimeoutException {
 		medicalInfoTab();
 		vaccinationTab();
 		vaccChooseField();
@@ -194,6 +214,7 @@ public class BasicInfo_MedicalInformation_Vaccination extends BasePage {
 		commentField(comment);
 		uploadFieldVacc(filePath);
 		saveBtn();
+		lastSuccessMsg = modalSuccessMsg();
 		okBtn();
 		return new BasicInfo_MedicalInforamtion_AtPoly(driver);
 	}

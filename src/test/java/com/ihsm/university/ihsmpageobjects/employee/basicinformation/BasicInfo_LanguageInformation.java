@@ -1,10 +1,14 @@
 package com.ihsm.university.ihsmpageobjects.employee.basicinformation;
 
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -13,6 +17,8 @@ public class BasicInfo_LanguageInformation extends BasePage {
 	public BasicInfo_LanguageInformation(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//div[@id='divbtnlanguages']//span")
@@ -35,6 +41,9 @@ public class BasicInfo_LanguageInformation extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButtonSuccessPopup;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform the action
 	public void addLanguageInfoBtn() {
@@ -91,14 +100,27 @@ public class BasicInfo_LanguageInformation extends BasePage {
 		return okButtonSuccessPopup.isDisplayed();
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill language information
-	public BasicInfo_BiometricsInformation fillLanguageInformation(String language/* , String proficiency */) {
+	public BasicInfo_BiometricsInformation fillLanguageInformation(String language/* , String proficiency */) throws TimeoutException {
 		addLanguageInfoBtn();
 		languageDropdownField();
 		languageDropdownOptions(language);
 //		proficiencyDropdownField();
 //		proficiencyDropdownOptions(proficiency);
 		saveLanguageInfoBtn();
+		lastSuccessMsg = modalSuccessMsg();
+
 		okButtonSuccessPopup();
 		return new BasicInfo_BiometricsInformation(driver);
 	}

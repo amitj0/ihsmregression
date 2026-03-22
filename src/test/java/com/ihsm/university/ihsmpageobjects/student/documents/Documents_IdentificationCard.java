@@ -1,10 +1,14 @@
 package com.ihsm.university.ihsmpageobjects.student.documents;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -13,6 +17,8 @@ public class Documents_IdentificationCard extends BasePage {
 	public Documents_IdentificationCard(WebDriver driver) {
 		super(driver);
 	}
+	
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//span[@data-bs-target='#identificationInfo']")
@@ -38,6 +44,9 @@ public class Documents_IdentificationCard extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButton;
+	
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform actions on the web elements can be added here
 	public void clickIdentificationTab() {
@@ -82,16 +91,25 @@ public class Documents_IdentificationCard extends BasePage {
 		blinkElement(okButton);
 		handleModalOk(okButton);
 	}
-	
-	
 
 	public boolean isIdentificationCardDetailsSavedSuccessfully() {
 		return okButton.isDisplayed();
 	}
-	
+
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill identification card details
-	public Documents_VisaInfo_OffVisa fillIdentificationCardDetails(String idNumber, String issuePlace, String issueDate, String expiryDate,
-			String filePath) {
+	public Documents_VisaInfo_OffVisa fillIdentificationCardDetails(String idNumber, String issuePlace,
+			String issueDate, String expiryDate, String filePath) throws TimeoutException {
 		clickIdentificationTab();
 		enterIDNumber(idNumber);
 		enterIssuePlace(issuePlace);
@@ -99,8 +117,9 @@ public class Documents_IdentificationCard extends BasePage {
 		enterExpiryDate(expiryDate);
 		uploadIdentificationCardDocument(filePath);
 		clickSaveButton();
+		lastSuccessMsg = modalSuccessMsg();
 		clickOkButton();
-		
+
 		return new Documents_VisaInfo_OffVisa(driver);
 	}
 

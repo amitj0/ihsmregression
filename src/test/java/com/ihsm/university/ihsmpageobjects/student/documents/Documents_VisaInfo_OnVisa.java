@@ -3,6 +3,7 @@ package com.ihsm.university.ihsmpageobjects.student.documents;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,6 +18,8 @@ public class Documents_VisaInfo_OnVisa extends BasePage {
 	public Documents_VisaInfo_OnVisa(WebDriver driver) {
 		super(driver);
 	}
+	
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//span[@data-bs-target='#STUDENTVISA']")
@@ -55,6 +58,9 @@ public class Documents_VisaInfo_OnVisa extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButton;
+	
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform actions on the web elements can be added here
 	public void clickVisaInfoTab() {
@@ -137,10 +143,21 @@ public class Documents_VisaInfo_OnVisa extends BasePage {
 	public boolean isOnlineVisaInfoSavedSuccessfully() {
 		return okButton.isDisplayed();
 	}
+	
+	public String modalSuccessMsg() throws TimeoutException {
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+	
+	public String getLastSuccessMsg() {
+        return lastSuccessMsg;
+    }
 
 	// fill the online visa information
 	public Documents_VisaInfo_Register fillOnlineVisaInfo(String visaType, String addressType,
-			String currentVisaExpDate, String issueDate, String visaExpDate, String visaNumber) {
+			String currentVisaExpDate, String issueDate, String visaExpDate, String visaNumber) throws TimeoutException {
 		clickVisaInfoTab();
 		clickOnlineVisaTab();
 		selectVisaType(visaType);
@@ -151,6 +168,7 @@ public class Documents_VisaInfo_OnVisa extends BasePage {
 		enterVisaExpDate(visaExpDate);
 		enterVisaNumber(visaNumber);
 		clickSaveButton();
+		lastSuccessMsg = modalSuccessMsg();
 		clickOkButton();
 		return new Documents_VisaInfo_Register(driver);
 	}

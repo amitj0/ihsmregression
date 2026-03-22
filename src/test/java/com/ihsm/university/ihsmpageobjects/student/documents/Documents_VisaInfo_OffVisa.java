@@ -3,6 +3,7 @@ package com.ihsm.university.ihsmpageobjects.student.documents;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,6 +18,8 @@ public class Documents_VisaInfo_OffVisa extends BasePage {
 	public Documents_VisaInfo_OffVisa(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//span[@data-bs-target='#STUDENTVISA']")
@@ -66,7 +69,7 @@ public class Documents_VisaInfo_OffVisa extends BasePage {
 
 	@FindBy(xpath = "(//input[@placeholder='CURRENT_REG_ADDRESS'])[1]")
 	private WebElement currentRegAdd;
-	
+
 	@FindBy(xpath = "(//input[contains(@placeholder,'Current Reg Address')])[1]")
 	private WebElement currentRegAddField;
 
@@ -82,6 +85,9 @@ public class Documents_VisaInfo_OffVisa extends BasePage {
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButton;
 
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
+
 	// methods to perform actions on the web elements can be added here
 	public void clickVisaInfoTab() {
 		blinkElement(visaInfoTab);
@@ -96,20 +102,19 @@ public class Documents_VisaInfo_OffVisa extends BasePage {
 		safeClick(visaTypeField);
 	}
 
-	
 	public void selectVisaType(String visaType) {
-	    safeClick(visaTypeField);
-	    
-	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-	    wait.until(ExpectedConditions.visibilityOfAllElements(visaTypeFieldList));
-	    
-	    for (WebElement option : visaTypeFieldList) {
-	        if (option.getText().trim().equalsIgnoreCase(visaType)) {
-	            wait.until(ExpectedConditions.elementToBeClickable(option));
-	           safeClick(option);
-	            return;
-	        }
-	    }
+		safeClick(visaTypeField);
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+		wait.until(ExpectedConditions.visibilityOfAllElements(visaTypeFieldList));
+
+		for (WebElement option : visaTypeFieldList) {
+			if (option.getText().trim().equalsIgnoreCase(visaType)) {
+				wait.until(ExpectedConditions.elementToBeClickable(option));
+				safeClick(option);
+				return;
+			}
+		}
 	}
 
 	/*
@@ -118,12 +123,12 @@ public class Documents_VisaInfo_OffVisa extends BasePage {
 	 * (option.getText().trim().equalsIgnoreCase(addressType)) { safeClick(option);
 	 * return; } } }
 	 */
-	
+
 	public void selectAddress() {
-	    safeClick(selectAddField);
-	    if (selectAddFieldList.size() > 1) {
-	        safeClick(selectAddFieldList.get(1));
-	    }
+		safeClick(selectAddField);
+		if (selectAddFieldList.size() > 1) {
+			safeClick(selectAddFieldList.get(1));
+		}
 	}
 
 	public void enterCurrentVisaExpDate(String date) {
@@ -178,10 +183,21 @@ public class Documents_VisaInfo_OffVisa extends BasePage {
 		return okButton.isDisplayed();
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill visa info offline visa form
 	public Documents_VisaInfo_OnVisa fillVisaInfoOffVisaForm(String visaType, String addressType,
 			String currentVisaExpDate, String nextVisaIssDate, String nextVisaExpDate, String expiryDateNotary,
-			String visaNumber, String currentRegAdd, String comments, String filePath) {
+			String visaNumber, String currentRegAdd, String comments, String filePath) throws TimeoutException {
 		clickVisaInfoTab();
 		clickOfflineVisaTab();
 		selectVisaField();
@@ -197,6 +213,8 @@ public class Documents_VisaInfo_OffVisa extends BasePage {
 		enterComments(comments);
 		uploadVisaDocument(filePath);
 		clickSaveButton();
+
+		lastSuccessMsg = modalSuccessMsg();
 		clickOkButton();
 		return new Documents_VisaInfo_OnVisa(driver);
 

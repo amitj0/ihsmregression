@@ -1,10 +1,14 @@
 package com.ihsm.university.ihsmpageobjects.student.academics;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -13,6 +17,8 @@ public class Academics_Qualification_Diploma extends BasePage {
 	public Academics_Qualification_Diploma(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web element here
 
@@ -57,7 +63,10 @@ public class Academics_Qualification_Diploma extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButtonSuccessPopup;
-	
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
+
 	// method to perform the action
 
 	public void qualDiplomaTab() {
@@ -128,10 +137,21 @@ public class Academics_Qualification_Diploma extends BasePage {
 		return okButtonSuccessPopup.isDisplayed();
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill the Qualification Diploma information
 	public Academics_Qualification_Qualification fillDiplomaDetails(String serialNo, String documentNo,
 			String certificateNo, String protectionDate, String diplomaDate, String studentProfession, String advice,
-			String topicOfDiploma, String transcriptNo, String dateOfTranscript, String documentFilePath) {
+			String topicOfDiploma, String transcriptNo, String dateOfTranscript, String documentFilePath) throws TimeoutException {
 
 		qualDiplomaTab();
 		enterSerialNo(serialNo);
@@ -146,6 +166,8 @@ public class Academics_Qualification_Diploma extends BasePage {
 		enterDateOfTranscript(dateOfTranscript);
 		uploadDocument(documentFilePath);
 		saveQualificationDiploma();
+		lastSuccessMsg = modalSuccessMsg();
+
 		okButtonSuccessPopup();
 
 		return new Academics_Qualification_Qualification(driver);

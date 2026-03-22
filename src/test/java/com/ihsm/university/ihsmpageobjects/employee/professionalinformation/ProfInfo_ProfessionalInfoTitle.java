@@ -1,10 +1,14 @@
 package com.ihsm.university.ihsmpageobjects.employee.professionalinformation;
 
+import java.time.Duration;
 import java.util.List;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -13,6 +17,8 @@ public class ProfInfo_ProfessionalInfoTitle extends BasePage {
 	public ProfInfo_ProfessionalInfoTitle(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//span[@data-bs-target=\"#ProfessionalInformationid\"]")
@@ -59,6 +65,9 @@ public class ProfInfo_ProfessionalInfoTitle extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButtonSuccessPopupTitle;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform the action
 
@@ -156,14 +165,25 @@ public class ProfInfo_ProfessionalInfoTitle extends BasePage {
 		blinkElement(okButtonSuccessPopupTitle);
 		handleModalOk(okButtonSuccessPopupTitle);
 	}
-	
+
 	public boolean isProfInfoTitleSavedSuccessfully() {
 		return okButtonSuccessPopupTitle.isDisplayed();
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill the Title form
-	public ProfInfo_DevResearch_SciResearch fillTitleForm(String title, String organization, String documentNumber, String titleDate, String notes,
-			String filePath) {
+	public ProfInfo_DevResearch_SciResearch fillTitleForm(String title, String organization, String documentNumber,
+			String titleDate, String notes, String filePath) {
 		professionalInfoLink();
 		titleTab();
 		titleDropdownField();
@@ -174,6 +194,7 @@ public class ProfInfo_ProfessionalInfoTitle extends BasePage {
 		notesField(notes);
 		uploadDocumentField(filePath);
 		saveTitleBtn();
+		lastSuccessMsg = modalSuccessMsg();
 		okButtonSuccessPopupTitle();
 		return new ProfInfo_DevResearch_SciResearch(driver);
 	}

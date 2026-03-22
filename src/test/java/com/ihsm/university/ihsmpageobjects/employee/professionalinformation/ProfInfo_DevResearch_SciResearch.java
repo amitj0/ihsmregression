@@ -1,10 +1,14 @@
 package com.ihsm.university.ihsmpageobjects.employee.professionalinformation;
 
+import java.time.Duration;
 import java.util.List;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -13,6 +17,8 @@ public class ProfInfo_DevResearch_SciResearch extends BasePage {
 	public ProfInfo_DevResearch_SciResearch(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web elements here
 	@FindBy(xpath = "//div[@id='BTNDIVDEVELOPMENT']//span")
@@ -65,7 +71,7 @@ public class ProfInfo_DevResearch_SciResearch extends BasePage {
 
 	@FindBy(xpath = "//div[@id='DevelopmentResearchID']//label[contains(normalize-space(),'Name Of Magazine')]//following-sibling::div//input[@name='FULLNAME']")
 	private WebElement nameOfMagazineField;
-	
+
 	@FindBy(xpath = "//div[@id='DevelopmentResearchID']//label[contains(normalize-space(),'Name Of Magzine')]//following-sibling::div//input[@name='FULLNAME']")
 	private WebElement nameOfMagazineField2;
 
@@ -83,6 +89,9 @@ public class ProfInfo_DevResearch_SciResearch extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButtonDevResearch;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// methods to perform the action
 	public void devResearchAddBtn() {
@@ -212,9 +221,20 @@ public class ProfInfo_DevResearch_SciResearch extends BasePage {
 		return okButtonDevResearch.isDisplayed();
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fillDevResearchForm method to fill the form in one go
-	public ProfInfo_DevResearch_Rewards fillDevResearchForm(String type, String publicationPrintDate, String pubLevel, String publicationURL,
-			String nameOfMagazine, String nameOfArticle, String authors, String notes) {
+	public ProfInfo_DevResearch_Rewards fillDevResearchForm(String type, String publicationPrintDate, String pubLevel,
+			String publicationURL, String nameOfMagazine, String nameOfArticle, String authors, String notes) {
 		devResearchAddBtn();
 		clickSciResearchSubTab();
 		selectTypeField();
@@ -228,6 +248,7 @@ public class ProfInfo_DevResearch_SciResearch extends BasePage {
 		authorsField(authors);
 		notesField(notes);
 		saveDevResearchBtn();
+		lastSuccessMsg = modalSuccessMsg();
 		okButtonDevResearch();
 
 		return new ProfInfo_DevResearch_Rewards(driver);
