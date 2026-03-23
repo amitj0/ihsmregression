@@ -14,21 +14,21 @@
 
             <!-- ═══ Student Registration Module ═══════════════════════════ -->
             
-            <!--
+            
             <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentBasicInformationFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentDocumentFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentAcademicFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentStatusFullFlowTest"/>
-            -->
+            
 
             <!-- ═══ Employee Registration Module ══════════════════════════ -->
             
-			<!--
+			
             <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_EmployeeBasicInformationFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_EmployeeDesignationFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_EmployeeProfessionalInformationFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_EmployeeDocumentFullFlowTest"/>
-           -->
+           
 
             <!-- ═══ Class Scheduling ════════════════════════════════════════ -->
           
