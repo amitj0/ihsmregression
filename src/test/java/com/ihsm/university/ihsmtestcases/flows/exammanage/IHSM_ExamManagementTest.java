@@ -24,21 +24,23 @@ public class IHSM_ExamManagementTest extends BaseClass {
 	@Test(priority = 0, groups = "Regression", description = "Verify the Exam Manage (Not Saved) Test", dataProvider = "ExamManageData", dataProviderClass = ExamManageDataProvider.class)
 	public void verifyExamManage_NotSaved(ExamManage data) {
 
-		ExtentTest node = ExtentListener.createNode("Exam Manage (Not Saved) Information");
+//		ExtentTest node = ExtentListener.createNode("Exam Manage (Not Saved) Information");
+		ExtentTest node = ExtentListener.createNode("[" + data.getTestId() + "] Exam Manage (Not Saved) - " + data.getProgram());
 		boolean isSuccess = false;
 		try {
 			node.info("Entering Exam Manage (Not Saved) Details");
-			
+			node.info("Test ID: " + data.getTestId());
 			node.info("Program: " + data.getProgram());
 			node.info("Semester: " + data.getSemester());
 			node.info("Start Date: " + data.getStartDate());
 			node.info("End Date: " + data.getEndDate());
-			
+
 			IHSM_ManageExam exam = new IHSM_ManageExam(getDriver());
 
 			exam.fillExamManageInfo(data.getProgram(), data.getSemester(), data.getStartDate(), data.getEndDate());
-			// String errorMsg = exam.isExamErrorMsg();
-			// assertEquals(errorMsg, "Exam Not Saved.");
+
+			String actualMsg = exam.getLastErrorMsg();
+			Assert.assertEquals(actualMsg, data.getExpectedMessage(), "Failed for Test ID: " + data.getTestId());
 			isSuccess = true;
 			node.pass("Exam Manage (Not Saved) Information Test Passed");
 		} catch (Exception e) {
@@ -48,8 +50,14 @@ public class IHSM_ExamManagementTest extends BaseClass {
 			stepStatus.put("Exam Manage (Not Saved) [" + data.getProgram() + "-" + data.getSemester() + "]",
 					isSuccess ? "PASS" : "FAIL");
 		}
-		
-		
+
+	}
+
+	@AfterClass
+	public void printSummary() {
+		System.out.println("========== TEST SUMMARY ==========");
+		stepStatus.forEach((step, status) -> System.out.println(step + "  -->  " + status));
+		System.out.println("==================================");
 	}
 
 }

@@ -3,6 +3,7 @@ package com.ihsm.university.ihsmtestcases.flows.classschedule;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -44,7 +45,8 @@ public class IHSM_VerifyGroupAssignmentLectureTest extends BaseClass {
 			facultyGroup.fillGroupAssignmentInfo(data.getSession(), data.getBatch(), data.getAcademicPlan(),
 					data.getSemester(), data.getGroupType(), data.getSubjectName(), data.getColumnType(),
 					data.getSelectFaculty());
-
+			String actualMsg = facultyGroup.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Combination Saved Successfully");
 			isSuccess = true;
 			node.pass("Group Lecture Assignment Information Test Passed");
 		} catch (Exception e) {

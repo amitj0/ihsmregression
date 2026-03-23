@@ -1,10 +1,14 @@
 package com.ihsm.university.ihsmpageobjects.exammanagement;
 
+import java.time.Duration;
 import java.util.List;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -14,6 +18,9 @@ public class IHSM_ManageExam extends BasePage {
 		super(driver);
 	}
 
+	private String lastSuccessMsg;
+
+	
 	// locate the webelement here
 	@FindBy(xpath = "//a[@id='a5']//span[normalize-space()='Exam Management']")
 	private WebElement examManageTab;
@@ -64,6 +71,17 @@ public class IHSM_ManageExam extends BasePage {
 	
 	@FindBy(xpath = "//a[@class='dropdown-item' and normalize-space()='Sign Out']")
 	private WebElement signOutButton;
+	
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
+	
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnErrorTextContent'])[1]")
+	private WebElement modalErrorMsg;
+	
+	@FindBy(xpath = "(//div[@class='text-danger error' and text()='This Field is Required.'])[1]")
+	private WebElement fieldRequiredErrorMsg;
+
+
 	
 	// method to perform logout action
 	public void logout() {
@@ -157,6 +175,18 @@ public class IHSM_ManageExam extends BasePage {
 		System.out.println("Label Error Message: " + errorMsg);
 		return errorMsg;
 	}
+	
+	public String modalErrorMsg() throws TimeoutException {
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalErrorMsg));
+		wait.until(d -> !modalErrorMsg.getText().trim().isEmpty());
+		return modalErrorMsg.getText().trim();
+	}
+	
+	public String getLastErrorMsg() {
+        return lastSuccessMsg;
+    }
+
 
 	// fill the manage exam information
 	public void fillExamManageInfo(String exam, String zacotSem, String startDate, String endDate) {
@@ -169,6 +199,8 @@ public class IHSM_ManageExam extends BasePage {
 		startDate(startDate);
 		endDate(endDate);
 		saveButton();
+		
+		lastSuccessMsg = modalErrorMsg();
 		handleErrorOrOkButton();
 		
 		// logout after performing the action

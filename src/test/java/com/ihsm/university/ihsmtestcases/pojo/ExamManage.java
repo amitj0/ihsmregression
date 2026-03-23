@@ -2,12 +2,30 @@ package com.ihsm.university.ihsmtestcases.pojo;
 
 public class ExamManage {
 
+	private String testId;
 	private String program;
 	private String semester;
 	private String startDate;
 	private String endDate;
+	private String expectedMessage;
 
 	// Getters & Setters
+
+	public String getTestId() {
+		return testId;
+	}
+
+	public void setTestId(String testId) {
+		this.testId = testId;
+	}
+
+	public String getExpectedMessage() {
+		return expectedMessage;
+	}
+
+	public void setExpectedMessage(String expectedMessage) {
+		this.expectedMessage = expectedMessage;
+	}
 
 	public String getProgram() {
 		return program;

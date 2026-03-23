@@ -438,7 +438,7 @@ public class IHSM_ClassSchedule extends BasePage {
 	public void selectTimeSlot(String timeValue) {
 		
 		WebElement timeDropdown = waitForTimeDropdown();
-		safeClick(timeDropdown); // Open the dropdown first to load options
+//		safeClick(timeDropdown); // Open the dropdown first to load options
 		safeClick(timeDropdown);
 
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -527,7 +527,7 @@ public class IHSM_ClassSchedule extends BasePage {
 		saveBtn();
 		okButton();
 		errorButton();
-		refreshPageSafely();
+//		refreshPageSafely();
 	}
 
 	public void fillClassSchedulingOffline(String session, String batch, String academicPlan, int sem, int subject,

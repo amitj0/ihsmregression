@@ -3,6 +3,7 @@ package com.ihsm.university.ihsmtestcases.flows.classschedule;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -24,7 +25,7 @@ public class IHSM_VerifyGroupAssignmentPracticalTest extends BaseClass {
 
 	private Map<String, String> stepStatus = new LinkedHashMap<>();
 
-	@Test(enabled = false, groups = "Regression", priority = 1, description = "Verify Group Practical Assignment Test", dataProvider = "FacultyGroupAssignData2", dataProviderClass = FacultyGroupAssignmentDataProvider.class)
+	@Test(enabled = true, groups = "Regression", priority = 1, description = "Verify Group Practical Assignment Test", dataProvider = "FacultyGroupAssignData2", dataProviderClass = FacultyGroupAssignmentDataProvider.class)
 	public void verifyGroupAssignmentPra(FacultyGroupAssignData2 data) {
 		ExtentTest node = ExtentListener
 				.createNode("Group Assignment Information [" + data.getSession() + "_" + data.getBatch() + "]");
@@ -44,7 +45,8 @@ public class IHSM_VerifyGroupAssignmentPracticalTest extends BaseClass {
 			facultyGroup.fillGroupAssignmentInfo(data.getSession(), data.getBatch(), data.getAcademicPlan(),
 					data.getSemester(), data.getGroupType(), data.getSubjectName(), data.getColumnType(),
 					data.getSelectFaculty());
-
+			String actualMsg = facultyGroup.getLastSuccessMsg();
+			Assert.assertEquals(actualMsg, "Combination Saved Successfully");
 			isSuccess = true;
 			node.pass("Group Practical Assignment Information Test Passed");
 		} catch (Exception e) {

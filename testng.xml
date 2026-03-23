@@ -14,45 +14,48 @@
 
             <!-- ═══ Student Registration Module ═══════════════════════════ -->
             
-            
+            <!--
             <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentBasicInformationFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentDocumentFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentAcademicFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentStatusFullFlowTest"/>
-            
+            -->
 
             <!-- ═══ Employee Registration Module ══════════════════════════ -->
             
-
+			<!--
             <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_EmployeeBasicInformationFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_EmployeeDesignationFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_EmployeeProfessionalInformationFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_EmployeeDocumentFullFlowTest"/>
-           
+           -->
 
             <!-- ═══ Class Scheduling ════════════════════════════════════════ -->
-            
+          
             <class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_ClassSubjectCreditTest"/>
      		<class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_ClassSubjectCreditHoursTest"/>
      		
      		<class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_VerifyGroupAssignmentLectureTest"/>
-      		<class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_VerifyGroupAssignmentPracticalTest"/>
-     	 	<class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_VerifyGroupAssignmentGroupDataTest"/>
+     		<class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_VerifyGroupAssignmentPracticalTest"/>
+      		<class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_VerifyGroupAssignmentGroupDataTest"/>
+      		
+      		
      	 	
+     	 	<!--
      	 	<class name="com.ihsm.university.ihsmtestcases.flows.classschedule.IHSM_ClassSchedulingInformationOnlineLecTest"/>
-     		
+     		-->
             <!-- ═══ Exam Management ═════════════════════════════════════════ -->
           
             <class name="com.ihsm.university.ihsmtestcases.flows.exammanage.IHSM_ExamManagementTest"/>
-           
+         
 
             <!-- ═══ Class Attendance ════════════════════════════════════════ -->
-            <!--
+           <!--
             <class name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_ClassAttendanceTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_ClassPerformanceScoreTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_ClassAbsentStudentTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.attendance.IHSM_UnitMarksTest"/>
-           -->
+       		-->
 
         </classes>
     </test>

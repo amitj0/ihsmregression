@@ -18,6 +18,8 @@ public class IHSM_ClassSchedule_SubjectHours extends BasePage {
 	public IHSM_ClassSchedule_SubjectHours(WebDriver driver) {
 		super(driver);
 	}
+	
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//a[@id='a6']//span[normalize-space()='Course Planner']")
@@ -322,6 +324,11 @@ public class IHSM_ClassSchedule_SubjectHours extends BasePage {
 		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
 		return modalSuccessMsg.getText().trim();
 	}
+	
+	public String getLastSuccessMsg() {
+        return lastSuccessMsg;
+    }
+
 
 	// fill the subject hours information
 

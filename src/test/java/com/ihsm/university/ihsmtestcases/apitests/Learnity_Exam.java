@@ -132,7 +132,7 @@ public class Learnity_Exam {
 		System.out.println(">>> Exam saved successfully for: " + arrStudentIds);
 	}
 
-	/** Option C — uncomment @Test to run all students in a single API call */
+	
 	// @Test
 	public void saveExamAllStudents() {
 		saveExamLearnity(allStudentIdsAsOneString());

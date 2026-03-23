@@ -1,10 +1,14 @@
 package com.ihsm.university.ihsmpageobjects.classchedule;
 
+import java.time.Duration;
 import java.util.List;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ihsm.university.base.BasePage;
 
@@ -13,6 +17,8 @@ public class IHSM_FacultyShowData extends BasePage {
 	public IHSM_FacultyShowData(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//a[@id='a6']//span[normalize-space()='Course Planner']")
@@ -73,6 +79,9 @@ public class IHSM_FacultyShowData extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okButton;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// method to perform the action no these element
 	public void coursePlannerTab() {
@@ -178,6 +187,17 @@ public class IHSM_FacultyShowData extends BasePage {
 		handleModalOk(okButton);
 	}
 
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
+	}
+
 	// fill the faculty show data
 	public void fillFacultyShowData(String sessionList, String batchList, String academicList, String semList,
 			String facList) {
@@ -200,6 +220,7 @@ public class IHSM_FacultyShowData extends BasePage {
 		facultyChooseField();
 		facultyChooseFieldList(facList);
 		changeFacultyButton();
+		lastSuccessMsg = modalSuccessMsg();
 		okButton();
 
 	}

@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -17,6 +18,8 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 	public IHSM_FacultyGroupAssignment(WebDriver driver) {
 		super(driver);
 	}
+
+	private String lastSuccessMsg;
 
 	// locate the web element here
 	@FindBy(xpath = "//a[@id='a6']//span[normalize-space()='Course Planner']")
@@ -61,7 +64,7 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 	// other
 	@FindBy(xpath = "(//table[@id='tblTotalSubjects']//tbody//tr//td[4])[1]//a")
 	private WebElement lectureField;
-	
+
 	@FindBy(xpath = "(//table[@id='tblTotalSubjects']//tbody//tr//td[6])[1]//a")
 	private WebElement tutorialField;
 
@@ -79,6 +82,9 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertSuccesModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement okBtn;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+	private WebElement modalSuccessMsg;
 
 	// method to perform the action
 
@@ -174,33 +180,42 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 		blinkElement(lectureField);
 		safeClick(lectureField);
 	}
-	
+
 	public void clickPendingAssignment(String subjectName, String columnType) {
 
-	    int columnIndex;
+		int columnIndex;
 
-	    switch (columnType.toUpperCase()) {
-	        case "LEC": columnIndex = 4; break;
-	        case "PRA": columnIndex = 5; break;
-	        case "SEM": columnIndex = 6; break;
-	        case "LAB": columnIndex = 7; break;
-	        case "FAC": columnIndex = 8; break;
-	        default:
-	            System.out.println("Invalid column: " + columnType);
-	            return;
-	    }
+		switch (columnType.toUpperCase()) {
+		case "LEC":
+			columnIndex = 4;
+			break;
+		case "PRA":
+			columnIndex = 5;
+			break;
+		case "SEM":
+			columnIndex = 6;
+			break;
+		case "LAB":
+			columnIndex = 7;
+			break;
+		case "FAC":
+			columnIndex = 8;
+			break;
+		default:
+			System.out.println("Invalid column: " + columnType);
+			return;
+		}
 
-	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-	    
-	    WebElement cell = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
-	        "//table[@id='tblTotalSubjects']//tr[@class='strRowData']" +
-	        "[td[contains(normalize-space(), '" + subjectName + "')]]/td[" + columnIndex + "]//a"
-	    )));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
-	    cell.click();
-	    System.out.println("Clicked " + columnType + " for subject: " + subjectName);
+		WebElement cell = wait.until(ExpectedConditions
+				.elementToBeClickable(By.xpath("//table[@id='tblTotalSubjects']//tr[@class='strRowData']"
+						+ "[td[contains(normalize-space(), '" + subjectName + "')]]/td[" + columnIndex + "]//a")));
+
+		cell.click();
+		System.out.println("Clicked " + columnType + " for subject: " + subjectName);
 	}
-	
+
 	public void tutorial() {
 		blinkElement(tutorialField);
 		safeClick(tutorialField);
@@ -217,9 +232,10 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 	public List<WebElement> getAllCheckboxes() {
 		return driver.findElements(By.xpath("//div[@id='dvGroupStudentCount']//table//tbody//tr//td[2]//input"));
 	}
-	
+
 	@FindBy(xpath = "(//div[@id='dvGroupStudentCount']//table//tbody//tr//td[2]//input)[1]")
 	private WebElement checkBox;
+
 	public void selectAllCheckboxes() {
 		List<WebElement> checkboxes = getAllCheckboxes();
 
@@ -229,7 +245,7 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 			}
 		}
 	}
-	
+
 	public void checkBox() {
 		safeClick(checkBox);
 	}
@@ -243,6 +259,17 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 	public void okBtn() {
 		blinkElement(okBtn);
 		safeClick(okBtn);
+	}
+
+	public String modalSuccessMsg() throws TimeoutException {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
 	}
 
 	// fill the Faculty Group Assignment Information
@@ -269,7 +296,10 @@ public class IHSM_FacultyGroupAssignment extends BasePage {
 //		selectAllCheckboxes();
 		checkBox();
 		saveBtn();
+
+		lastSuccessMsg = modalSuccessMsg();
 		okBtn();
+		refreshPageSafely();
 
 	}
 	/*

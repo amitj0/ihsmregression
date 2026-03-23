@@ -19,6 +19,8 @@ public class IHSM_ClassSchedule_SubjectCredits extends BasePage {
 	public IHSM_ClassSchedule_SubjectCredits(WebDriver driver) {
 		super(driver);
 	}
+	
+	private String lastSuccessMsg;
 
 	@FindBy(xpath = "//a[@id='a6']//span[normalize-space()='Course Planner']")
 	private WebElement coursePlannerTab;
@@ -203,36 +205,35 @@ public class IHSM_ClassSchedule_SubjectCredits extends BasePage {
 	 * 
 	 * }
 	 */
-	
+
 	public void semFieldList(String value) {
 
-	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
-	    // Dropdown visible + clickable
-	    wait.until(ExpectedConditions.visibilityOf(semField));
-	    wait.until(ExpectedConditions.elementToBeClickable(semField));
-	    scrollIntoView(semField);
-	    safeClick(semField);
+		// Dropdown visible + clickable
+		wait.until(ExpectedConditions.visibilityOf(semField));
+		wait.until(ExpectedConditions.elementToBeClickable(semField));
+		scrollIntoView(semField);
+		safeClick(semField);
 
-	    // Options visible
-	    wait.until(ExpectedConditions.visibilityOfAllElements(semFieldList));
+		// Options visible
+		wait.until(ExpectedConditions.visibilityOfAllElements(semFieldList));
 
-	    for (WebElement option : semFieldList) {
-	        String text = option.getText().trim();
-	        if (text.equalsIgnoreCase(value.trim())) {
+		for (WebElement option : semFieldList) {
+			String text = option.getText().trim();
+			if (text.equalsIgnoreCase(value.trim())) {
 
-	            // Option visible + clickable
-	            wait.until(ExpectedConditions.visibilityOf(option));
-	            wait.until(ExpectedConditions.elementToBeClickable(option));
-	            scrollIntoView(option);
-	            safeClick(option);
-	            return;
-	        }
-	    }
+				// Option visible + clickable
+				wait.until(ExpectedConditions.visibilityOf(option));
+				wait.until(ExpectedConditions.elementToBeClickable(option));
+				scrollIntoView(option);
+				safeClick(option);
+				return;
+			}
+		}
 
-	    throw new NoSuchElementException("Semester option not found: " + value);
+		throw new NoSuchElementException("Semester option not found: " + value);
 	}
-
 
 	public void checkboxAccordingToSubject(String subjectName) {
 		WebElement checkbox = driver.findElement(By.xpath(
@@ -257,10 +258,14 @@ public class IHSM_ClassSchedule_SubjectCredits extends BasePage {
 	}
 
 	public String modalSuccessMsg() throws TimeoutException {
-	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
 		wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
 		return modalSuccessMsg.getText().trim();
+	}
+
+	public String getLastSuccessMsg() {
+		return lastSuccessMsg;
 	}
 
 	// fill the subject credit information
@@ -276,7 +281,7 @@ public class IHSM_ClassSchedule_SubjectCredits extends BasePage {
 		semFieldList(semField);
 		checkboxAccordingToSubject(subjectName);
 		saveButton();
-		
+
 		String msg = modalSuccessMsg();
 		okBtn();
 
