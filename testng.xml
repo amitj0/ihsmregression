@@ -14,12 +14,20 @@
 
             <!-- ═══ Student Registration Module ═══════════════════════════ -->
             
+<<<<<<< HEAD
           	
+=======
+            
+>>>>>>> d29e8f20d250b8b31a13d8b401dfb6bb35ae26c3
             <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentBasicInformationFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentDocumentFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentAcademicFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.student.IHSM_StudentStatusFullFlowTest"/>
+<<<<<<< HEAD
           	
+=======
+            
+>>>>>>> d29e8f20d250b8b31a13d8b401dfb6bb35ae26c3
 
             <!-- ═══ Employee Registration Module ══════════════════════════ -->
             
@@ -28,7 +36,11 @@
             <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_EmployeeDesignationFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_EmployeeProfessionalInformationFullFlowTest"/>
             <class name="com.ihsm.university.ihsmtestcases.flows.employee.IHSM_EmployeeDocumentFullFlowTest"/>
+<<<<<<< HEAD
          	
+=======
+           
+>>>>>>> d29e8f20d250b8b31a13d8b401dfb6bb35ae26c3
 
             <!-- ═══ Class Scheduling ════════════════════════════════════════ -->
           
