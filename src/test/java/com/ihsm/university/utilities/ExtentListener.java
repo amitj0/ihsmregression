@@ -8,14 +8,12 @@ import com.aventstack.extentreports.reporter.configuration.Theme;
 import com.ihsm.university.base.BaseClass;
 
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.logging.*;
 import org.openqa.selenium.support.FindBy;
 import org.testng.*;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
 
 public class ExtentListener implements ITestListener {
 
@@ -102,7 +100,7 @@ public class ExtentListener implements ITestListener {
 		extent.setSystemInfo("Executed By", System.getProperty("user.name"));
 		extent.setSystemInfo("Operating System", System.getProperty("os.name"));
 		extent.setSystemInfo("Java Version", System.getProperty("java.version"));
-		extent.setSystemInfo("Build Version", "2.0.0.49");
+		extent.setSystemInfo("Build Version", "2.0.0.50");
 	}
 
 	// ================= TEST START =================

@@ -1,12 +1,17 @@
 package com.ihsm.university.ihsmpageobjects.classchedule;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -21,6 +26,8 @@ public class IHSM_ClassSchedule extends BasePage {
 	public IHSM_ClassSchedule(WebDriver driver) {
 		super(driver);
 	}
+	
+	private String errorModalMessage;
 
 	// locate the web element here
 	@FindBy(xpath = "(//div[@class='departmentbox'])[2]")
@@ -104,8 +111,6 @@ public class IHSM_ClassSchedule extends BasePage {
 	@FindBy(xpath = "//div[contains(label,'Room')]//option")
 	private List<WebElement> roomList;
 
-	
-
 	@FindBy(xpath = "//div[@role='listbox']//span[@class='ng-option-label']")
 	private List<WebElement> timeSlt;
 
@@ -123,6 +128,9 @@ public class IHSM_ClassSchedule extends BasePage {
 
 	@FindBy(xpath = "//div[@id='AlertErrorModal' and contains(@class,'show')]//button[normalize-space()='Ok']")
 	private WebElement errorButton;
+	
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnErrorTextContent'])[1]")
+	private WebElement errorModalMsg;
 
 	// method to perform the action on these elements
 	// -------------------- Navigation --------------------
@@ -339,18 +347,46 @@ public class IHSM_ClassSchedule extends BasePage {
 				+ "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));"
 				+ "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", dateField, dateIso);
 	}
-
-	public void fromDateField(String date) { // setDate(fromDateField, date); //
-
-		scrollToElement(fromDateField);
-		enterDate(fromDateField, date);
+	
+	public String getCurrentDate() {
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return today.format(formatter);
+    }
+	
+	public String getCurrentDayName() {
+	    LocalDate today = LocalDate.now();
+	    return today.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toUpperCase();
 	}
+	
+	
 
-	public void toDateField(String date) { // setDate(toDateField, date); //
+	public void fromDateField() {
+        String currentDate = getCurrentDate();
+        scrollToElement(fromDateField);
+        enterDate(fromDateField, currentDate);
+        System.out.println("From Date set to: " + currentDate);
+    }
 
-		scrollToElement(toDateField);
-		enterDate(toDateField, date);
-	}
+    
+    public void toDateField() {
+        String currentDate = getCurrentDate();
+        scrollToElement(toDateField);
+        enterDate(toDateField, currentDate);
+        System.out.println("To Date set to: " + currentDate);
+    }
+    
+    
+	
+	/*
+	 * public void fromDateField(String date) { // setDate(fromDateField, date); //
+	 * 
+	 * scrollToElement(fromDateField); enterDate(fromDateField, date); }
+	 * 
+	 * public void toDateField(String date) { // setDate(toDateField, date); //
+	 * 
+	 * scrollToElement(toDateField); enterDate(toDateField, date); }
+	 */
 
 	void clearWeekSelection() {
 		// Wait for week buttons to be visible first
@@ -428,15 +464,14 @@ public class IHSM_ClassSchedule extends BasePage {
 		}
 	}
 
-	
 	private WebElement waitForTimeDropdown() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
 				"//ng-select[.//span[contains(text(),'Time')]] | //label[contains(text(),'Time')]/following::ng-select[1]")));
 	}
-	
+
 	public void selectTimeSlot(String timeValue) {
-		
+
 		WebElement timeDropdown = waitForTimeDropdown();
 //		safeClick(timeDropdown); // Open the dropdown first to load options
 		safeClick(timeDropdown);
@@ -496,6 +531,38 @@ public class IHSM_ClassSchedule extends BasePage {
 			e.getMessage();
 		}
 	}
+	
+	public String errorModalMsg() throws TimeoutException {
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOf(errorModalMsg));
+		wait.until(d -> !errorModalMsg.getText().trim().isEmpty());
+		return errorModalMsg.getText().trim();
+	}
+	
+	public String errorModalMessage() {
+        return errorModalMessage;
+    }
+	
+	private String lastSuccessMsg;
+
+	@FindBy(xpath = "(//div[@class='modal-body']//span[@id='spnSuccessTextContent'])[1]")
+		private WebElement modalSuccessMsg;
+
+
+	public String modalSuccessMsg() throws TimeoutException {
+		    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+			wait.until(ExpectedConditions.visibilityOf(modalSuccessMsg));
+			wait.until(d -> !modalSuccessMsg.getText().trim().isEmpty());
+			return modalSuccessMsg.getText().trim();
+		}
+		
+		public String getLastSuccessMsg() {
+	        return lastSuccessMsg;
+	    }
+
+	
+
+
 
 	/*
 	 * fill the class scheduling information
@@ -503,7 +570,7 @@ public class IHSM_ClassSchedule extends BasePage {
 
 	public void fillClassSchedulingInformation(String session, String batch, String academicPlan, int sem, int subject,
 			String subName, String column, String sub, String teacher, String grpName, String enterFromDate,
-			String enterToDate, String week, String conList, String timeSelect) throws InterruptedException {
+			String enterToDate, String week, String timeSelect, String conList) throws InterruptedException {
 		openCoursePlannerTab();
 		openClassSchedule();
 		sessionField();
@@ -516,17 +583,52 @@ public class IHSM_ClassSchedule extends BasePage {
 		clickSubjectWiseDistribution(subName, column);
 		selectCheckboxBySubjectAndGroup(sub, teacher, grpName);
 
-		fromDateField(enterFromDate);
+		fromDateField();
 		Thread.sleep(2000);
-		toDateField(enterToDate);
-		weekSelect(week);
+		toDateField();
+		weekSelect(getCurrentDayName());
 		onlineClass();
 		selectTimeSlot(timeSelect);
 
 		constList(conList);
 		saveBtn();
+		lastSuccessMsg = modalSuccessMsg();
+		okButton();
+		
+
+//		errorButton();
+//		refreshPageSafely();
+	}
+	public void fillClassSchedulingInformatio3(String session, String batch, String academicPlan, int sem, int subject,
+			String subName, String column, String sub, String teacher, String grpName, String enterFromDate,
+			String enterToDate, String week, String timeSelect, String conList) throws InterruptedException {
+		openCoursePlannerTab();
+		openClassSchedule();
+		sessionField();
+		selectSession(session);
+		selectBatch(batch);
+		selectAcademicPlan(academicPlan);
+		selectSemester(sem);
+		selectSubjectType(subject);
+		clickSearch();
+		clickSubjectWiseDistribution(subName, column);
+		selectCheckboxBySubjectAndGroup(sub, teacher, grpName);
+		
+		fromDateField();
+		Thread.sleep(2000);
+		toDateField();
+		weekSelect(getCurrentDayName());
+		onlineClass();
+		selectTimeSlot(timeSelect);
+		
+		constList(conList);
+		saveBtn();
+		errorModalMessage = errorModalMsg();
 		okButton();
 		errorButton();
+		
+		
+//		errorButton();
 //		refreshPageSafely();
 	}
 
@@ -536,6 +638,7 @@ public class IHSM_ClassSchedule extends BasePage {
 			throws InterruptedException {
 		openCoursePlannerTab();
 		openClassSchedule();
+		sessionField();
 		selectSession(session);
 		selectBatch(batch);
 		selectAcademicPlan(academicPlan);
@@ -545,10 +648,10 @@ public class IHSM_ClassSchedule extends BasePage {
 		clickSubjectWiseDistribution(subName, column);
 		selectCheckboxBySubjectAndGroup(sub, teacher, grpName);
 
-		fromDateField(enterFromDate);
+		fromDateField();
 		Thread.sleep(2000);
-		toDateField(enterToDate);
-		weekSelect(week);
+		toDateField();
+		weekSelect(getCurrentDayName());
 		offlineClass();
 		roomField();
 		roomList(roomName);
@@ -557,6 +660,38 @@ public class IHSM_ClassSchedule extends BasePage {
 
 		constList(conList);
 		saveBtn();
+		okButton();
+		errorButton();
+	}
+	public void fillClassSchedulingOffline2(String session, String batch, String academicPlan, int sem, int subject,
+			String subName, String column, String sub, String teacher, String grpName, String enterFromDate,
+			String enterToDate, String week, String roomName, String conList, String timeSelect)
+					throws InterruptedException {
+		openCoursePlannerTab();
+		openClassSchedule();
+		sessionField();
+		selectSession(session);
+		selectBatch(batch);
+		selectAcademicPlan(academicPlan);
+		selectSemester(sem);
+		selectSubjectType(subject);
+		clickSearch();
+		clickSubjectWiseDistribution(subName, column);
+		selectCheckboxBySubjectAndGroup(sub, teacher, grpName);
+		
+		fromDateField();
+		Thread.sleep(2000);
+		toDateField();
+		weekSelect(getCurrentDayName());
+		offlineClass();
+		roomField();
+		roomList(roomName);
+		
+		selectTimeSlot(timeSelect);
+		
+		constList(conList);
+		saveBtn();
+		errorModalMessage = errorModalMsg();
 		okButton();
 		errorButton();
 	}

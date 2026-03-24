@@ -15,6 +15,9 @@ public class ClassSchedulingData2 {
 	private String startDate;
 	private String endDate;
 	private String day;
+	private String room;
+	
+
 	private String frequency;
 	private String timeSlot;
 
@@ -118,6 +121,14 @@ public class ClassSchedulingData2 {
 
 	public void setDay(String day) {
 		this.day = day;
+	}
+	
+	public String getRoom() {
+		return room;
+	}
+
+	public void setRoom(String room) {
+		this.room = room;
 	}
 
 	public String getFrequency() {
