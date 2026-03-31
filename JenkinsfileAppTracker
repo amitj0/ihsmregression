@@ -29,7 +29,7 @@ pipeline {
     post {
         always {
             emailext(
-                to:       'ajangra@ismedusoftsol.com',
+                to:       'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
                 subject:  "${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - ${currentBuild.result}",
                 body:     """
                     <h2>Build Report</h2>
@@ -45,7 +45,7 @@ pipeline {
 
         success {
             emailext(
-                to:      'ajangra@ismedusoftsol.com',
+                to:      'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
                 subject: "✅ SUCCESS - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body:    "<p>Build passed successfully!</p><p>${env.BUILD_URL}</p>",
                 mimeType: 'text/html'
