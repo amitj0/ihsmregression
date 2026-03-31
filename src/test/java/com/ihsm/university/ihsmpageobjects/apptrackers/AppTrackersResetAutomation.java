@@ -89,7 +89,7 @@ public class AppTrackersResetAutomation {
 
 	public void login(String email, String password) {
 		log.info("----------------------------------------");
-		log.info(">> STEP 1: Logging in as → {}", email);
+		log.info(">> STEP 1: Logging in as -> {}", email);
 		log.info("----------------------------------------");
 		emailField.sendKeys(email);
 		log.info(">> Email entered: {}", email);
@@ -142,23 +142,38 @@ public class AppTrackersResetAutomation {
 
 		Logger log = LogManager.getLogger(AppTrackersResetAutomation.class);
 
+		// -----------------------------------------------
+		// Change this flag to switch modes
+		// false = UI Mode   (Local / Debugging)
+		// true  = Headless  (Jenkins / Server)
+		// -----------------------------------------------
+		boolean headless = false;
+
 		log.info("========================================");
 		log.info("   JENKINS JOB STARTED                  ");
 		log.info("   AppTrackers Reset Automation          ");
+		log.info("   Mode: {}", headless ? "HEADLESS" : "UI");
 		log.info("========================================");
 
-		// ✅ Headless Chrome Setup
 		log.info(">> Setting up WebDriverManager...");
 		WebDriverManager.chromedriver().setup();
 		log.info(">> WebDriverManager setup complete");
 
 		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--headless");
-		options.addArguments("--no-sandbox");
-		options.addArguments("--disable-dev-shm-usage");
-		options.addArguments("--disable-gpu");
-		options.addArguments("--window-size=1920,1080");
-		log.info(">> Chrome headless options configured");
+
+		if (headless) {
+			// Headless Mode - For Jenkins
+			options.addArguments("--headless");
+			options.addArguments("--no-sandbox");
+			options.addArguments("--disable-dev-shm-usage");
+			options.addArguments("--disable-gpu");
+			options.addArguments("--window-size=1920,1080");
+			log.info(">> Running in HEADLESS mode - Jenkins");
+		} else {
+			// UI Mode - For Local Testing
+			options.addArguments("--start-maximized");
+			log.info(">> Running in UI mode - Local");
+		}
 
 		WebDriver driver = new ChromeDriver(options);
 		log.info(">> ChromeDriver started successfully");
@@ -182,12 +197,12 @@ public class AppTrackersResetAutomation {
 			log.info(">> Assertion PASSED");
 
 			log.info("========================================");
-			log.info("   ✅ APP TRACKERS RESET - SUCCESS      ");
+			log.info("   APP TRACKERS RESET - SUCCESS         ");
 			log.info("========================================");
 
 		} catch (Exception e) {
 			log.error("========================================");
-			log.error("   ❌ APP TRACKERS RESET - FAILED       ");
+			log.error("   APP TRACKERS RESET - FAILED          ");
 			log.error("   Error: {}", e.getMessage());
 			log.error("========================================");
 			throw e;
