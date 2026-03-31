@@ -1,0 +1,69 @@
+pipeline {
+    agent any
+
+    triggers {
+        cron('30 10 * * *')   // Every day at 10:30 AM
+    }
+
+    tools {
+        maven 'MAVEN1'       
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'master',
+                    credentialsId: 'github-pat',
+                    url: 'https://github.com/amitj0/ihsmregression.git'
+            }
+        }
+
+        stage('Run AppTrackers Reset Script') {
+            steps {
+                bat 'mvn clean test -Dtest=AppTrackersResetAutomation'
+            }
+        }
+    }
+
+    post {
+        always {
+            emailext(
+                to:       'ajangra@ismedusoftsol.com',
+                subject:  "${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - ${currentBuild.result}",
+                body:     """
+                    <h2>Build Report</h2>
+                    <p><b>Project:</b> ${env.JOB_NAME}</p>
+                    <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                    <p><b>Status:</b> ${currentBuild.result}</p>
+                    <p><b>Duration:</b> ${currentBuild.durationString}</p>
+                    <p><b>Logs:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                """,
+                mimeType: 'text/html'
+            )
+        }
+
+        success {
+            emailext(
+                to:      'ajangra@ismedusoftsol.com',
+                subject: "✅ SUCCESS - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body:    "<p>Build passed successfully!</p><p>${env.BUILD_URL}</p>",
+                mimeType: 'text/html'
+            )
+        }
+
+        failure {
+            emailext(
+                to:      'ajangra@ismedusoftsol.com',
+                subject: "❌ FAILED - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body:    """
+                    <h3>Build Failed!</h3>
+                    <p><b>Job:</b> ${env.JOB_NAME}</p>
+                    <p><b>Build:</b> ${env.BUILD_NUMBER}</p>
+                    <p>Check logs here: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                """,
+                mimeType: 'text/html'
+            )
+        }
+    }
+}
