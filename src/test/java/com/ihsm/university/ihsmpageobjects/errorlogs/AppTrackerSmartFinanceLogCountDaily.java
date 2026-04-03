@@ -37,11 +37,10 @@ public class AppTrackerSmartFinanceLogCountDaily {
 	@FindBy(xpath = "//span[@title='Personal']")
 	private WebElement whatsappTargetChat;
 
-	private final By whatsappSearchBox =
-			By.xpath("//div[@contenteditable='true' and (@data-tab='3' or @data-tab='2')]");
+	private final By whatsappSearchBox = By
+			.xpath("//div[@contenteditable='true' and (@data-tab='3' or @data-tab='2')]");
 	private final By whatsappLeftPanel = By.xpath("//div[@id='pane-side' or @id='side']");
-	private final By whatsappMessageBox =
-			By.xpath("(//div[@contenteditable='true' and @role='textbox'])[last()]");
+	private final By whatsappMessageBox = By.xpath("(//div[@contenteditable='true' and @role='textbox'])[last()]");
 	private final By whatsappSendButton = By.xpath("//span[@data-icon='wds-ic-send-filled']");
 
 	@BeforeClass
@@ -70,20 +69,15 @@ public class AppTrackerSmartFinanceLogCountDaily {
 	}
 
 	@Test
-	public void testLogCountsAndSendWhatsAppMessage() {
+	public void testLogCountsAndSendWhatsAppMessage() throws InterruptedException {
 		log.info(">> Starting log count retrieval...");
 
-		String appTrackerCount = getCountByUrlAndCurrentDateOrZero(
-				"gvLogsKsam",
-				"https://apptracker.in/Application/");
+		String appTrackerCount = getCountByUrlAndCurrentDateOrZero("gvLogsKsam", "https://apptracker.in/Application/");
 
-		String smartFinanceCount = getCountByUrlAndCurrentDateOrZero(
-				"gvLogs",
+		String smartFinanceCount = getCountByUrlAndCurrentDateOrZero("gvLogs",
 				"https://fin.smartedutech.in/FeeReceipt/");
 
-		String smartEduTechCount = getCountByUrlAndCurrentDateOrZero(
-				"gvLogs",
-				"https://smartedutech.in/Student/");
+		String smartEduTechCount = getCountByUrlAndCurrentDateOrZero("gvLogs", "https://smartedutech.in/Student/");
 
 		log.info(">> App Tracker Daily Log Count: " + appTrackerCount);
 		log.info(">> Smart Finance Daily Log Count: " + smartFinanceCount);
@@ -91,12 +85,11 @@ public class AppTrackerSmartFinanceLogCountDaily {
 
 		String currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MMMM-yyyy hh:mm a"));
 
-		String whatsappMessage =
-				"*APP TRACKER / SMART FINANCE / SMART EDUTECH -> Error Count Details:*"
-				+ "\nApp Tracker Count: " + appTrackerCount
-				+ "\nFinance Module Count: " + smartFinanceCount
-				+ "\nSmart EduTech Count: " + smartEduTechCount
-				+ "\nDate: " + currentDateTime;
+		String whatsappMessage = "*APP TRACKER / SMART FINANCE / SMART EDUTECH -> Error Count Details:* "
+				+ "App Tracker Count: " + appTrackerCount
+				+ " | Finance Module Count: " + smartFinanceCount
+				+ " | Smart EduTech Count: " + smartEduTechCount
+				+ " | Date: " + currentDateTime;
 
 		log.info(">> Final WhatsApp Message: " + whatsappMessage);
 		System.out.println(whatsappMessage);
@@ -106,14 +99,15 @@ public class AppTrackerSmartFinanceLogCountDaily {
 		openTargetWhatsAppChat();
 		enterMessageInChatBox(whatsappMessage);
 		sendMessage();
+		Thread.sleep(2000);
 	}
 
 	public String getCountByUrlAndCurrentDateOrZero(String tableId, String urlText) {
 		String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
 		try {
-			List<WebElement> matchedRows = driver.findElements(
-					By.xpath("//table[@id='" + tableId + "']//tbody//tr[td[contains(normalize-space(), '" + urlText + "')]]"));
+			List<WebElement> matchedRows = driver.findElements(By.xpath(
+					"//table[@id='" + tableId + "']//tbody//tr[td[contains(normalize-space(), '" + urlText + "')]]"));
 
 			if (matchedRows == null || matchedRows.isEmpty()) {
 				log.info(">> No matching row found for URL: " + urlText + " | Returning count as 0");
@@ -210,8 +204,7 @@ public class AppTrackerSmartFinanceLogCountDaily {
 				String originalStyle = element.getAttribute("style");
 
 				for (int i = 0; i < 2; i++) {
-					js.executeScript(
-							"arguments[0].setAttribute('style','border:3px solid black; background: yellow;')",
+					js.executeScript("arguments[0].setAttribute('style','border:3px solid black; background: yellow;')",
 							element);
 					Thread.sleep(100);
 
@@ -269,8 +262,8 @@ public class AppTrackerSmartFinanceLogCountDaily {
 			searchBox.sendKeys(Keys.DELETE);
 			searchBox.sendKeys("Personal");
 
-			WebElement searchedChat = wait.until(
-					ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@title='Personal']")));
+			WebElement searchedChat = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@title='Personal']")));
 			blinkElement(searchedChat);
 			safeClick(searchedChat);
 			log.info(">> WhatsApp target chat opened via search");
@@ -304,10 +297,9 @@ public class AppTrackerSmartFinanceLogCountDaily {
 		log.info("   APP TRACKER / SMART FINANCE / SMART EDUTECH LOG COUNT DAILY TEST - COMPLETED ");
 		log.info("========================================");
 
-		/*
 		if (driver != null) {
 			driver.quit();
 		}
-		*/  
+
 	}
 }

@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,27 +27,24 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class BiuErrorLogsCountDaily {
+public class AfsirErrorLogCountDaily {
 
-	private static final Logger log = LogManager.getLogger(BiuErrorLogsCountDaily.class);
+	private static final Logger log = LogManager.getLogger(AfsirErrorLogCountDaily.class);
 
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private JavascriptExecutor js;
 
-	@FindBy(xpath = "//div[@class='loginboxs']//input[@placeholder='Enter Email Address']")
-	private WebElement emailField;
+	@FindBy(xpath = "//input[@id='exampleFormControlInput1']")
+	private WebElement dateInput;
 
-	@FindBy(xpath = "//div[@class='loginboxs']//input[@placeholder='Enter Password']")
-	private WebElement passwordField;
-
-	@FindBy(xpath = "//div[@class='loginboxs']//button[@value='Log In']")
-	private WebElement loginButton;
+	@FindBy(xpath = "//button[normalize-space()='Search']")
+	private WebElement searchButton;
 
 	@FindBy(xpath = "//span[@title='Personal']")
 	private WebElement whatsappTargetChat;
 
-	private final By errorLogRows = By.xpath("//table[@id='errorlogcount']//tbody//tr");
+	private final By errorLogCountTableRows = By.xpath("//table[@id='errorlogcount']//tbody//tr");
 	private final By whatsappSearchBox = By
 			.xpath("//div[@contenteditable='true' and (@data-tab='3' or @data-tab='2')]");
 	private final By whatsappLeftPanel = By.xpath("//div[@id='pane-side' or @id='side']");
@@ -58,7 +54,7 @@ public class BiuErrorLogsCountDaily {
 	@BeforeClass
 	public void setUp() {
 		log.info("========================================");
-		log.info("   BIU ERROR LOGS COUNT DAILY TEST - STARTING ");
+		log.info("   AFSIR ERROR LOGS COUNT DAILY TEST - STARTING ");
 		log.info("========================================");
 
 		ChromeOptions options = new ChromeOptions();
@@ -72,7 +68,7 @@ public class BiuErrorLogsCountDaily {
 		js = (JavascriptExecutor) driver;
 
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-		driver.get("https://biu.softsolanalytics.com/#/");
+		driver.get("https://data.afsir.in/#/ErrorLog");
 
 		PageFactory.initElements(driver, this);
 
@@ -80,80 +76,69 @@ public class BiuErrorLogsCountDaily {
 		log.info(">> Using Chrome profile: C:\\WhatsappAutomationProfile");
 	}
 
-	public void login(String email, String password) {
-		wait.until(ExpectedConditions.visibilityOf(emailField)).clear();
-		emailField.sendKeys(email);
+	public void enterCurrentDateAndSearch() {
+		String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
-		wait.until(ExpectedConditions.visibilityOf(passwordField)).clear();
-		passwordField.sendKeys(password);
+		wait.until(ExpectedConditions.visibilityOf(dateInput));
+		dateInput.click();
+		dateInput.sendKeys(Keys.CONTROL + "a");
+		dateInput.sendKeys(Keys.DELETE);
+		dateInput.sendKeys(currentDate);
 
-		wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
-		log.info(">> Login submitted with email: " + email);
-	}
+		log.info(">> Current date entered: " + currentDate);
 
-	@Test
-	public void verifyErrorLogCount() throws InterruptedException {
-		String email = "admin@biu.com";
-		String password = "biu123";
+		wait.until(ExpectedConditions.elementToBeClickable(searchButton));
+		searchButton.click();
 
-		login(email, password);
-		Thread.sleep(3000);
-
-		driver.get("https://biu.softsolanalytics.com/#/Masters/ErrorLog");
-		Thread.sleep(2000);
-
-		String errorCount = getTodayErrorLogCount();
-		String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MMMM-yyyy hh:mm a"));
-
-		String whatsappMessage = "*BIU -> Error Count Details:* " + "Error Count: " + errorCount + " | Date: "
-				+ currentDate;
-
-		log.info(">> Final BIU Error Count Details Message: " + whatsappMessage);
-		System.out.println(whatsappMessage);
-
-		Assert.assertFalse(errorCount.isEmpty(), "Error count should not be empty");
-
-		openWhatsAppWebInNewTab();
-		waitForWhatsAppLogin();
-		openTargetWhatsAppChat();
-		enterMessageInChatBox(whatsappMessage);
-		sendMessage();
-		Thread.sleep(2000);
+		log.info(">> Search button clicked");
 	}
 
 	public String getTodayErrorLogCount() {
 		String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		String errorCount = "0";
 
-		List<WebElement> rows = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(errorLogRows));
+		try {
+			Thread.sleep(2000); // optional small wait after search
 
-		log.info(">> Current system date for matching: " + currentDate);
-		log.info(">> Total rows found in error log table: " + rows.size());
+			List<WebElement> rows = driver.findElements(errorLogCountTableRows);
 
-		for (WebElement row : rows) {
-			List<WebElement> columns = row.findElements(By.tagName("td"));
+			log.info(">> Current system date for matching: " + currentDate);
+			log.info(">> Total rows found in error log table: " + rows.size());
 
-			if (columns.size() >= 3) {
-				String rowSerialNo = columns.get(0).getText().trim();
-				String rowCount = columns.get(1).getText().trim();
-				String rowDate = columns.get(2).getText().trim();
+			if (rows == null || rows.isEmpty()) {
+				log.info(">> No rows found in error log table. Using default Error Count: 0");
+				return "0";
+			}
 
-				log.info(
-						">> Checking Row -> Serial No: " + rowSerialNo + ", Count: " + rowCount + ", Date: " + rowDate);
+			for (WebElement row : rows) {
+				try {
+					List<WebElement> columns = row.findElements(By.tagName("td"));
 
-				if (currentDate.equals(rowDate)) {
-					errorCount = rowCount;
-					log.info(">> Match found for current date: " + currentDate + " | Error Count: " + errorCount);
-					break;
+					if (columns.size() >= 3) {
+						String rowSerialNo = columns.get(0).getText().trim();
+						String rowCount = columns.get(1).getText().trim();
+						String rowDate = columns.get(2).getText().trim();
+
+						log.info(">> Checking Row -> Serial No: " + rowSerialNo + ", Count: " + rowCount + ", Date: " + rowDate);
+
+						if (currentDate.equals(rowDate)) {
+							errorCount = rowCount;
+							log.info(">> Match found for current date: " + currentDate + " | Error Count: " + errorCount);
+							return errorCount;
+						}
+					}
+				} catch (StaleElementReferenceException e) {
+					log.info(">> Row became stale while reading, skipping one row");
 				}
 			}
-		}
 
-		if ("0".equals(errorCount)) {
-			log.info(">> No row found for current date: " + currentDate + " | Using default Error Count: 0");
-		}
+			log.info(">> No matching row found for current date: " + currentDate + " | Using default Error Count: 0");
+			return "0";
 
-		return errorCount;
+		} catch (Exception e) {
+			log.error(">> Error while fetching error log count. Using default Error Count: 0", e);
+			return "0";
+		}
 	}
 
 	public void openWhatsAppWebInNewTab() {
@@ -161,20 +146,6 @@ public class BiuErrorLogsCountDaily {
 		switchToNewestTab();
 		wait.until(ExpectedConditions.urlContains("web.whatsapp.com"));
 		log.info(">> WhatsApp Web opened in new tab");
-	}
-
-	protected void switchToNewTab(String parentWindow) {
-		wait.until(driver -> driver.getWindowHandles().size() > 1);
-
-		Set<String> allWindows = driver.getWindowHandles();
-
-		for (String windowHandle : allWindows) {
-			if (!windowHandle.equals(parentWindow)) {
-				driver.switchTo().window(windowHandle);
-				driver.manage().window().maximize();
-				break;
-			}
-		}
 	}
 
 	protected void switchToNewestTab() {
@@ -312,10 +283,38 @@ public class BiuErrorLogsCountDaily {
 		}
 	}
 
+	@Test
+	public void testErrorLogCountAndSendWhatsAppMessage() throws InterruptedException {
+
+		driver.get("https://data.afsir.in/#/ErrorLog");
+		Thread.sleep(2000);
+
+		enterCurrentDateAndSearch();
+		Thread.sleep(2000);
+
+		String errorCount = getTodayErrorLogCount();
+		String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MMMM-yyyy hh:mm a"));
+
+		String whatsappMessage = "*AFSIR -> Error Count Details:* " + "Error Count: " + errorCount + " | Date: "
+				+ currentDate;
+
+		log.info(">> Final AFSIR Error Count Details Message: " + whatsappMessage);
+		System.out.println(whatsappMessage);
+
+		Assert.assertFalse(errorCount.isEmpty(), "Error count should not be empty");
+
+		openWhatsAppWebInNewTab();
+		waitForWhatsAppLogin();
+		openTargetWhatsAppChat();
+		enterMessageInChatBox(whatsappMessage);
+		sendMessage();
+		Thread.sleep(2000);
+	}
+
 	@AfterClass
 	public void tearDown() {
 		log.info("========================================");
-		log.info("   BIU ERROR LOGS COUNT DAILY TEST - COMPLETED ");
+		log.info("   AFSIR ERROR LOGS COUNT DAILY TEST - COMPLETED ");
 		log.info("========================================");
 
 		if (driver != null) {

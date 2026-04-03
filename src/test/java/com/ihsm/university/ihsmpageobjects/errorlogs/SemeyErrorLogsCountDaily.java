@@ -104,7 +104,7 @@ public class SemeyErrorLogsCountDaily {
 	}
 
 	@Test
-	public void verifyErrorLogCount() {
+	public void verifyErrorLogCount() throws InterruptedException {
 		String email = "admin@gmail.com";
 		String password = "N2SVJE5JOZJL3063";
 
@@ -112,12 +112,10 @@ public class SemeyErrorLogsCountDaily {
 		navigateToErrorLog();
 
 		String errorCount = getTodayErrorLogCount();
-		String currentDate = LocalDateTime.now()
-				.format(DateTimeFormatter.ofPattern("dd-MMMM-yyyy hh:mm a"));
+		String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MMMM-yyyy hh:mm a"));
 
-		String whatsappMessage = "*SEMEY -> Error Count Details:* "
-				+ "Error Count: " + errorCount
-				+ " | Date: " + currentDate;
+		String whatsappMessage = "*SEMEY -> Error Count Details:* " + "Error Count: " + errorCount + " | Date: "
+				+ currentDate;
 
 		log.info(">> Final Semey Error Count Details Message: " + whatsappMessage);
 		System.out.println(whatsappMessage);
@@ -129,6 +127,7 @@ public class SemeyErrorLogsCountDaily {
 		openTargetWhatsAppChat();
 		enterMessageInChatBox(whatsappMessage);
 		sendMessage();
+		Thread.sleep(2000);
 	}
 
 	public void navigateToErrorLog() {
@@ -355,8 +354,9 @@ public class SemeyErrorLogsCountDaily {
 		log.info("   SEMEY ERROR LOGS COUNT DAILY TEST - COMPLETED ");
 		log.info("========================================");
 
-		/*
-		 * if (driver != null) { driver.quit(); }
-		 */
+		if (driver != null) {
+			driver.quit();
+		}
+
 	}
 }

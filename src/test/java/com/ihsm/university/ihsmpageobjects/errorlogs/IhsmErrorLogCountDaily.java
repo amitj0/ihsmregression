@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,22 +27,31 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class BiuErrorLogsCountDaily {
+public class IhsmErrorLogCountDaily {
 
-	private static final Logger log = LogManager.getLogger(BiuErrorLogsCountDaily.class);
+	private static final Logger log = LogManager.getLogger(IhsmErrorLogCountDaily.class);
 
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private JavascriptExecutor js;
 
-	@FindBy(xpath = "//div[@class='loginboxs']//input[@placeholder='Enter Email Address']")
-	private WebElement emailField;
+	@FindBy(name = "txtEmail")
+	private WebElement emailInput;
 
-	@FindBy(xpath = "//div[@class='loginboxs']//input[@placeholder='Enter Password']")
-	private WebElement passwordField;
+	@FindBy(name = "txtPassword")
+	private WebElement passwordInput;
 
-	@FindBy(xpath = "//div[@class='loginboxs']//button[@value='Log In']")
+	@FindBy(xpath = "//button[contains(normalize-space(), 'Log In')] ")
 	private WebElement loginButton;
+
+	@FindBy(xpath = "//input[@id='dateInput']")
+	private WebElement dateInputField;
+
+	@FindBy(xpath = "//input[@id='countInput']")
+	private WebElement countInputField;
+
+	@FindBy(xpath = "//button[normalize-space()='Search']")
+	private WebElement searchButton;
 
 	@FindBy(xpath = "//span[@title='Personal']")
 	private WebElement whatsappTargetChat;
@@ -58,7 +66,7 @@ public class BiuErrorLogsCountDaily {
 	@BeforeClass
 	public void setUp() {
 		log.info("========================================");
-		log.info("   BIU ERROR LOGS COUNT DAILY TEST - STARTING ");
+		log.info("   IHSM ERROR LOGS COUNT DAILY TEST - STARTING ");
 		log.info("========================================");
 
 		ChromeOptions options = new ChromeOptions();
@@ -72,7 +80,7 @@ public class BiuErrorLogsCountDaily {
 		js = (JavascriptExecutor) driver;
 
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-		driver.get("https://biu.softsolanalytics.com/#/");
+		driver.get("https://universityism.com/#/");
 
 		PageFactory.initElements(driver, this);
 
@@ -81,11 +89,11 @@ public class BiuErrorLogsCountDaily {
 	}
 
 	public void login(String email, String password) {
-		wait.until(ExpectedConditions.visibilityOf(emailField)).clear();
-		emailField.sendKeys(email);
+		wait.until(ExpectedConditions.visibilityOf(emailInput)).clear();
+		emailInput.sendKeys(email);
 
-		wait.until(ExpectedConditions.visibilityOf(passwordField)).clear();
-		passwordField.sendKeys(password);
+		wait.until(ExpectedConditions.visibilityOf(passwordInput)).clear();
+		passwordInput.sendKeys(password);
 
 		wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
 		log.info(">> Login submitted with email: " + email);
@@ -93,22 +101,23 @@ public class BiuErrorLogsCountDaily {
 
 	@Test
 	public void verifyErrorLogCount() throws InterruptedException {
-		String email = "admin@biu.com";
-		String password = "biu123";
+		String email = "admin@gmail.com";
+		String password = "Gl0b@l$2204";
 
 		login(email, password);
+		Assert.assertTrue(wait.until(ExpectedConditions.urlContains("/Dashboard/HrDashboard")), "Login failed or Dashboard not loaded");
 		Thread.sleep(3000);
 
-		driver.get("https://biu.softsolanalytics.com/#/Masters/ErrorLog");
+		driver.get("https://universityism.com/#/Report/ErrorLogs");
 		Thread.sleep(2000);
 
-		String errorCount = getTodayErrorLogCount();
+		String errorCount = searchAndCaptureTodayCount();
 		String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MMMM-yyyy hh:mm a"));
 
-		String whatsappMessage = "*BIU -> Error Count Details:* " + "Error Count: " + errorCount + " | Date: "
+		String whatsappMessage = "*IHSM -> Error Count Details:* " + "Error Count: " + errorCount + " | Date: "
 				+ currentDate;
 
-		log.info(">> Final BIU Error Count Details Message: " + whatsappMessage);
+		log.info(">> Final IHSM Error Count Details Message: " + whatsappMessage);
 		System.out.println(whatsappMessage);
 
 		Assert.assertFalse(errorCount.isEmpty(), "Error count should not be empty");
@@ -121,36 +130,60 @@ public class BiuErrorLogsCountDaily {
 		Thread.sleep(2000);
 	}
 
-	public String getTodayErrorLogCount() {
-		String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	public String searchAndCaptureTodayCount() {
+		String todayDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+		wait.until(ExpectedConditions.visibilityOf(dateInputField));
+		dateInputField.click();
+		dateInputField.sendKeys(Keys.CONTROL + "a");
+		dateInputField.sendKeys(Keys.DELETE);
+		dateInputField.sendKeys(todayDate);
+
+		log.info(">> Date entered in search box: " + todayDate);
+
+		String oldCountValue = countInputField.getAttribute("value");
+		if (oldCountValue == null) {
+			oldCountValue = "";
+		}
+		oldCountValue = oldCountValue.trim();
+
+		log.info(">> Old count value before search: " + oldCountValue);
+
+		wait.until(ExpectedConditions.elementToBeClickable(searchButton));
+		safeClick(searchButton);
+		log.info(">> Search button clicked");
+
 		String errorCount = "0";
 
-		List<WebElement> rows = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(errorLogRows));
+		try {
+			WebDriverWait countWait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
-		log.info(">> Current system date for matching: " + currentDate);
-		log.info(">> Total rows found in error log table: " + rows.size());
+			final String previousValue = oldCountValue;
 
-		for (WebElement row : rows) {
-			List<WebElement> columns = row.findElements(By.tagName("td"));
+			errorCount = countWait.until(driver -> {
+				String newValue = countInputField.getAttribute("value");
 
-			if (columns.size() >= 3) {
-				String rowSerialNo = columns.get(0).getText().trim();
-				String rowCount = columns.get(1).getText().trim();
-				String rowDate = columns.get(2).getText().trim();
+				if (newValue != null) {
+					newValue = newValue.trim();
 
-				log.info(
-						">> Checking Row -> Serial No: " + rowSerialNo + ", Count: " + rowCount + ", Date: " + rowDate);
-
-				if (currentDate.equals(rowDate)) {
-					errorCount = rowCount;
-					log.info(">> Match found for current date: " + currentDate + " | Error Count: " + errorCount);
-					break;
+					if (!newValue.isEmpty() && !newValue.equals(previousValue)) {
+						return newValue;
+					}
 				}
-			}
-		}
+				return null;
+			});
 
-		if ("0".equals(errorCount)) {
-			log.info(">> No row found for current date: " + currentDate + " | Using default Error Count: 0");
+			log.info(">> New Error Count captured after search: " + errorCount);
+
+		} catch (Exception e) {
+			log.info(">> Count value did not change after search within timeout, using existing or default value");
+
+			String fallbackValue = countInputField.getAttribute("value");
+			if (fallbackValue != null && !fallbackValue.trim().isEmpty()) {
+				errorCount = fallbackValue.trim();
+			} else {
+				errorCount = "0";
+			}
 		}
 
 		return errorCount;
@@ -161,20 +194,6 @@ public class BiuErrorLogsCountDaily {
 		switchToNewestTab();
 		wait.until(ExpectedConditions.urlContains("web.whatsapp.com"));
 		log.info(">> WhatsApp Web opened in new tab");
-	}
-
-	protected void switchToNewTab(String parentWindow) {
-		wait.until(driver -> driver.getWindowHandles().size() > 1);
-
-		Set<String> allWindows = driver.getWindowHandles();
-
-		for (String windowHandle : allWindows) {
-			if (!windowHandle.equals(parentWindow)) {
-				driver.switchTo().window(windowHandle);
-				driver.manage().window().maximize();
-				break;
-			}
-		}
 	}
 
 	protected void switchToNewestTab() {
@@ -315,7 +334,7 @@ public class BiuErrorLogsCountDaily {
 	@AfterClass
 	public void tearDown() {
 		log.info("========================================");
-		log.info("   BIU ERROR LOGS COUNT DAILY TEST - COMPLETED ");
+		log.info("   IHSM ERROR LOGS COUNT DAILY TEST - COMPLETED ");
 		log.info("========================================");
 
 		if (driver != null) {
@@ -323,4 +342,5 @@ public class BiuErrorLogsCountDaily {
 		}
 
 	}
+
 }

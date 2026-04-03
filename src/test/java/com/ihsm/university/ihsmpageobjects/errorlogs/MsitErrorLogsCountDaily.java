@@ -130,6 +130,7 @@ public class MsitErrorLogsCountDaily {
 		openTargetWhatsAppChat();
 		enterMessageInChatBox(whatsappMessage);
 		sendMessage();
+		Thread.sleep(2000);
 	}
 
 	public void navigateToErrorLog() throws InterruptedException {
@@ -369,8 +370,9 @@ public class MsitErrorLogsCountDaily {
 		log.info("   MSIT ERROR LOGS COUNT DAILY TEST - COMPLETED ");
 		log.info("========================================");
 
-		/*
-		 * if (driver != null) { driver.quit(); }
-		 */
+		if (driver != null) {
+			driver.quit();
+		}
+
 	}
 }
