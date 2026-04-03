@@ -6,11 +6,10 @@ pipeline {
     }
 
     tools {
-        maven 'MAVEN1'       
+        maven 'MAVEN1'
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 git branch: 'master',
@@ -27,15 +26,15 @@ pipeline {
     }
 
     post {
-        always {
+        success {
             emailext(
-                to:       'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
-                subject:  "${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - ${currentBuild.result}",
-                body:     """
-                    <h2>Build Report</h2>
+                to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
+                subject: "SUCCESS - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    <h2>Build Passed</h2>
                     <p><b>Project:</b> ${env.JOB_NAME}</p>
                     <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
-                    <p><b>Status:</b> ${currentBuild.result}</p>
+                    <p><b>Status:</b> SUCCESS</p>
                     <p><b>Duration:</b> ${currentBuild.durationString}</p>
                     <p><b>Logs:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                 """,
@@ -43,24 +42,49 @@ pipeline {
             )
         }
 
-        success {
+        failure {
             emailext(
-                to:      'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
-                subject: "✅ SUCCESS - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body:    "<p>Build passed successfully!</p><p>${env.BUILD_URL}</p>",
+                to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
+                subject: "FAILED - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    <h2>Build Failed</h2>
+                    <p><b>Project:</b> ${env.JOB_NAME}</p>
+                    <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                    <p><b>Status:</b> FAILURE</p>
+                    <p><b>Duration:</b> ${currentBuild.durationString}</p>
+                    <p><b>Logs:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                """,
                 mimeType: 'text/html'
             )
         }
 
-        failure {
+        unstable {
             emailext(
-                to:      'ajangra@ismedusoftsol.com',
-                subject: "❌ FAILED - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body:    """
-                    <h3>Build Failed!</h3>
-                    <p><b>Job:</b> ${env.JOB_NAME}</p>
-                    <p><b>Build:</b> ${env.BUILD_NUMBER}</p>
-                    <p>Check logs here: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
+                subject: "UNSTABLE - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    <h2>Build Unstable</h2>
+                    <p><b>Project:</b> ${env.JOB_NAME}</p>
+                    <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                    <p><b>Status:</b> UNSTABLE</p>
+                    <p><b>Duration:</b> ${currentBuild.durationString}</p>
+                    <p><b>Logs:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                """,
+                mimeType: 'text/html'
+            )
+        }
+
+        aborted {
+            emailext(
+                to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
+                subject: "ABORTED - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    <h2>Build Aborted</h2>
+                    <p><b>Project:</b> ${env.JOB_NAME}</p>
+                    <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                    <p><b>Status:</b> ABORTED</p>
+                    <p><b>Duration:</b> ${currentBuild.durationString}</p>
+                    <p><b>Logs:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                 """,
                 mimeType: 'text/html'
             )
