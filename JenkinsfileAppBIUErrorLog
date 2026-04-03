@@ -1,0 +1,93 @@
+pipeline {
+    agent any
+
+    triggers {
+        cron('32 10 * * *')   // Every day at 10:32 AM -----
+    }
+
+    tools {
+        maven 'MAVEN1'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'master',
+                    credentialsId: 'github-pat',
+                    url: 'https://github.com/amitj0/ihsmregression.git'
+            }
+        }
+
+        stage('Run AppTrackers Reset Script') {
+            steps {
+                bat 'mvn clean test -Dtest=BiuErrorLogsCountDaily'
+            }
+        }
+    }
+
+    post {
+        success {
+            emailext(
+                to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
+                subject: "SUCCESS - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    <h2>Build Passed</h2>
+                    <p><b>Project:</b> ${env.JOB_NAME}</p>
+                    <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                    <p><b>Status:</b> SUCCESS</p>
+                    <p><b>Duration:</b> ${currentBuild.durationString}</p>
+                    <p><b>Logs:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                """,
+                mimeType: 'text/html'
+            )
+        }
+
+        failure {
+            emailext(
+                to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
+                subject: "FAILED - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    <h2>Build Failed</h2>
+                    <p><b>Project:</b> ${env.JOB_NAME}</p>
+                    <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                    <p><b>Status:</b> FAILURE</p>
+                    <p><b>Duration:</b> ${currentBuild.durationString}</p>
+                    <p><b>Logs:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                """,
+                mimeType: 'text/html'
+            )
+        }
+
+        unstable {
+            emailext(
+                to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
+                subject: "UNSTABLE - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    <h2>Build Unstable</h2>
+                    <p><b>Project:</b> ${env.JOB_NAME}</p>
+                    <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                    <p><b>Status:</b> UNSTABLE</p>
+                    <p><b>Duration:</b> ${currentBuild.durationString}</p>
+                    <p><b>Logs:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                """,
+                mimeType: 'text/html'
+            )
+        }
+
+        aborted {
+            emailext(
+                to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
+                subject: "ABORTED - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    <h2>Build Aborted</h2>
+                    <p><b>Project:</b> ${env.JOB_NAME}</p>
+                    <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                    <p><b>Status:</b> ABORTED</p>
+                    <p><b>Duration:</b> ${currentBuild.durationString}</p>
+                    <p><b>Logs:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                """,
+                mimeType: 'text/html'
+            )
+        }
+    }
+}
