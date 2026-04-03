@@ -57,7 +57,7 @@ public class SemeyErrorLogsCountDaily {
 	@FindBy(xpath = "//a[contains(normalize-space(.), 'Error Log')]")
 	private WebElement errorLogSubMenu;
 
-	@FindBy(xpath = "//span[@title='Sandeep ISM']")
+	@FindBy(xpath = "//span[@title='Personal']")
 	private WebElement whatsappTargetChat;
 
 	private final By errorLogRows = By.xpath("//table[@id='errorlogcount']//tbody//tr");
