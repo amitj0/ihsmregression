@@ -61,8 +61,7 @@ public class SemeyErrorLogsCountDaily {
 	private WebElement whatsappTargetChat;
 
 	private final By errorLogRows = By.xpath("//table[@id='errorlogcount']//tbody//tr");
-	private final By whatsappSearchBox = By
-			.xpath("//div[@contenteditable='true' and (@data-tab='3' or @data-tab='2')]");
+	private final By whatsappSearchBox = By.xpath("//div[@contenteditable='true' and (@data-tab='3' or @data-tab='2')]");
 	private final By whatsappLeftPanel = By.xpath("//div[@id='pane-side' or @id='side']");
 	private final By whatsappMessageBox = By.xpath("(//div[@contenteditable='true' and @role='textbox'])[last()]");
 	private final By whatsappSendButton = By.xpath("//span[@data-icon='wds-ic-send-filled']");
@@ -149,6 +148,7 @@ public class SemeyErrorLogsCountDaily {
 		String parentWindow = driver.getWindowHandle();
 
 		wait.until(ExpectedConditions.visibilityOf(errorLogSubMenu));
+		scrollToCenter(errorLogSubMenu);
 		blinkElement(errorLogSubMenu);
 		safeClick(errorLogSubMenu);
 		log.info(">> Error Log submenu clicked");
@@ -161,35 +161,43 @@ public class SemeyErrorLogsCountDaily {
 		String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		String errorCount = "0";
 
-		List<WebElement> rows = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(errorLogRows));
+		try {
+			List<WebElement> rows = driver.findElements(errorLogRows);
 
-		log.info(">> Current system date for matching: " + currentDate);
-		log.info(">> Total rows found in error log table: " + rows.size());
+			if (rows == null || rows.isEmpty()) {
+				log.info(">> Error log table not found or no rows available. Returning default Error Count: 0");
+				return "0";
+			}
 
-		for (WebElement row : rows) {
-			List<WebElement> columns = row.findElements(By.tagName("td"));
+			log.info(">> Current system date for matching: " + currentDate);
+			log.info(">> Total rows found in error log table: " + rows.size());
 
-			if (columns.size() >= 3) {
-				String rowSerialNo = columns.get(0).getText().trim();
-				String rowCount = columns.get(1).getText().trim();
-				String rowDate = columns.get(2).getText().trim();
+			for (WebElement row : rows) {
+				List<WebElement> columns = row.findElements(By.tagName("td"));
 
-				log.info(
-						">> Checking Row -> Serial No: " + rowSerialNo + ", Count: " + rowCount + ", Date: " + rowDate);
+				if (columns.size() >= 3) {
+					String rowSerialNo = columns.get(0).getText().trim();
+					String rowCount = columns.get(1).getText().trim();
+					String rowDate = columns.get(2).getText().trim();
 
-				if (currentDate.equals(rowDate)) {
-					errorCount = rowCount;
-					log.info(">> Match found for current date: " + currentDate + " | Error Count: " + errorCount);
-					break;
+					log.info(">> Checking Row -> Serial No: " + rowSerialNo + ", Count: " + rowCount + ", Date: " + rowDate);
+
+					if (currentDate.equals(rowDate)) {
+						errorCount = rowCount;
+						log.info(">> Match found for current date: " + currentDate + " | Error Count: " + errorCount);
+						return errorCount;
+					}
 				}
 			}
-		}
 
-		if ("0".equals(errorCount)) {
 			log.info(">> No row found for current date: " + currentDate + " | Using default Error Count: 0");
-		}
+			return "0";
 
-		return errorCount;
+		} catch (Exception e) {
+			log.info(">> Error log table not found / unable to read table. Returning default Error Count: 0");
+			log.debug("Exception while reading error log count", e);
+			return "0";
+		}
 	}
 
 	protected void switchToNewTab(String parentWindow) {
@@ -250,8 +258,7 @@ public class SemeyErrorLogsCountDaily {
 			searchBox.sendKeys(Keys.DELETE);
 			searchBox.sendKeys("Personal");
 
-			WebElement searchedChat = wait
-					.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@title='Personal']")));
+			WebElement searchedChat = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@title='Personal']")));
 			blinkElement(searchedChat);
 			safeClick(searchedChat);
 			log.info(">> WhatsApp target chat opened via search");
@@ -357,6 +364,5 @@ public class SemeyErrorLogsCountDaily {
 		if (driver != null) {
 			driver.quit();
 		}
-
 	}
 }
