@@ -313,11 +313,11 @@ public class BiuErrorLogsCountDaily {
 	}
 
 	@AfterClass
-	public void tearDown() {
+	public void tearDown() throws InterruptedException {
 		log.info("========================================");
 		log.info("   BIU ERROR LOGS COUNT DAILY TEST - COMPLETED ");
 		log.info("========================================");
-
+		Thread.sleep(5000);
 		if (driver != null) {
 			driver.quit();
 		}

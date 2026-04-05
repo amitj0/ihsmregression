@@ -292,11 +292,11 @@ public class AppTrackerSmartFinanceLogCountDaily {
 	}
 
 	@AfterClass
-	public void tearDown() {
+	public void tearDown() throws InterruptedException {
 		log.info("========================================");
 		log.info("   APP TRACKER / SMART FINANCE / SMART EDUTECH LOG COUNT DAILY TEST - COMPLETED ");
 		log.info("========================================");
-
+		Thread.sleep(5000);
 		if (driver != null) {
 			driver.quit();
 		}
