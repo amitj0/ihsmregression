@@ -79,7 +79,7 @@ H 18 * * *
 
         aborted {
             emailext(
-                to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
+                to: 'ajangra@ismedusoftsol.com',
                 subject: "ABORTED - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
                     <h2>Build Aborted</h2>
