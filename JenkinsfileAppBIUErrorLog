@@ -1,8 +1,11 @@
 pipeline {
     agent any
 
-    triggers {
-    cron('32 9 * * *\n0 18 * * *\n0 23 * * *')
+   triggers {
+    cron('''
+H 9 * * *
+H 18 * * *
+''')
 }
 
     tools {
@@ -20,7 +23,7 @@ pipeline {
 
         stage('Run AppTrackers Reset Script') {
             steps {
-                bat 'mvn clean test -Dtest=BiuErrorLogsCountDaily'
+                bat 'mvn clean test -Dtest=JenkinsfileAppBIUErrorLog'
             }
         }
     }
@@ -28,7 +31,7 @@ pipeline {
     post {
         success {
             emailext(
-                to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
+                to: 'ajangra@ismedusoftsol.com',
                 subject: "SUCCESS - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
                     <h2>Build Passed</h2>
@@ -44,7 +47,7 @@ pipeline {
 
         failure {
             emailext(
-                to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
+                to: 'ajangra@ismedusoftsol.com',
                 subject: "FAILED - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
                     <h2>Build Failed</h2>
@@ -60,7 +63,7 @@ pipeline {
 
         unstable {
             emailext(
-                to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
+                to: 'ajangra@ismedusoftsol.com',
                 subject: "UNSTABLE - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
                     <h2>Build Unstable</h2>
@@ -76,7 +79,7 @@ pipeline {
 
         aborted {
             emailext(
-                to: 'ajangra@ismedusoftsol.com,jchhillar@ismedusoftsol.com',
+                to: 'ajangra@ismedusoftsol.com',
                 subject: "ABORTED - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
                     <h2>Build Aborted</h2>
