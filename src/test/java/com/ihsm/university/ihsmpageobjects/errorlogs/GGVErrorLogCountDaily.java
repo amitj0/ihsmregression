@@ -130,50 +130,44 @@ public class GGVErrorLogCountDaily {
 		Thread.sleep(2000);
 	}
 
-	public String getTodayErrorLogCount() {
-		String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-		String errorCount = "0";
+	 public String getTodayErrorLogCount() {
+	        String errorCount = "0";
 
-		try {
-			List<WebElement> rows = driver.findElements(errorLogRows);
+	        try {
+	            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table[@id='errorlog']//tbody")));
 
-			log.info(">> Current system date for matching: " + currentDate);
-			log.info(">> Total rows found in error log table: " + rows.size());
+	            List<WebElement> rows = driver.findElements(errorLogRows);
 
-			if (rows.isEmpty()) {
-				log.info(">> No rows found in error log table | Using default Error Count: 0");
-				return errorCount;
-			}
+	            if (rows == null || rows.isEmpty()) {
+	                log.info(">> No rows found in error log table | Using default Error Count: 0");
+	                return "0";
+	            }
 
-			for (WebElement row : rows) {
-				List<WebElement> columns = row.findElements(By.tagName("td"));
+	            int visibleRowCount = 0;
 
-				if (columns.size() >= 3) {
-					String rowSerialNo = columns.get(0).getText().trim();
-					String rowCount = columns.get(1).getText().trim();
-					String rowDate = columns.get(2).getText().trim();
+	            for (WebElement row : rows) {
+	                try {
+	                    if (row.isDisplayed()) {
+	                        visibleRowCount++;
+	                        log.info(">> Visible row found");
+	                    }
+	                } catch (StaleElementReferenceException e) {
+	                    log.warn(">> Stale row encountered while counting visible rows");
+	                } catch (Exception e) {
+	                    log.warn(">> Unable to evaluate one row visibility");
+	                }
+	            }
 
-					log.info(">> Checking Row -> Serial No: " + rowSerialNo + ", Count: " + rowCount + ", Date: "
-							+ rowDate);
+	            errorCount = String.valueOf(visibleRowCount);
+	            log.info(">> Total visible error log row count: " + errorCount);
 
-					if (currentDate.equals(rowDate)) {
-						errorCount = rowCount.isEmpty() ? "0" : rowCount;
-						log.info(">> Match found for current date: " + currentDate + " | Error Count: " + errorCount);
-						break;
-					}
-				}
-			}
+	        } catch (Exception e) {
+	            log.error(">> Exception while counting visible error log rows. Using default Error Count: 0", e);
+	            errorCount = "0";
+	        }
 
-			if ("0".equals(errorCount)) {
-				log.info(">> No row found for current date: " + currentDate + " | Using default Error Count: 0");
-			}
-
-		} catch (Exception e) {
-			log.error(">> Exception while reading error log count. Using default Error Count: 0", e);
-		}
-
-		return errorCount;
-	}
+	        return errorCount;
+	    }
 
 	public void openWhatsAppWebInNewTab() {
 		js.executeScript("window.open('https://web.whatsapp.com/', '_blank');");

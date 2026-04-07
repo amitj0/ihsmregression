@@ -1,7 +1,6 @@
 package com.ihsm.university.ihsmpageobjects.errorlogs;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -30,307 +29,299 @@ import org.testng.annotations.Test;
 
 public class SPPUErrorLogCountDaily {
 
-	private static final Logger log = LogManager.getLogger(SPPUErrorLogCountDaily.class);
+    private static final Logger log = LogManager.getLogger(SPPUErrorLogCountDaily.class);
 
-	private WebDriver driver;
-	private WebDriverWait wait;
-	private JavascriptExecutor js;
+    private WebDriver driver;
+    private WebDriverWait wait;
+    private JavascriptExecutor js;
 
-	@FindBy(xpath = "//input[@placeholder='Enter Email']")
-	private WebElement emailField;
+    @FindBy(xpath = "//input[@placeholder='Enter Email']")
+    private WebElement emailField;
 
-	@FindBy(xpath = "//input[@placeholder='Enter your password']")
-	private WebElement passwordField;
+    @FindBy(xpath = "//input[@placeholder='Enter your password']")
+    private WebElement passwordField;
 
-	@FindBy(xpath = "//button[normalize-space()='Login']")
-	private WebElement loginButton;
+    @FindBy(xpath = "//button[normalize-space()='Login']")
+    private WebElement loginButton;
 
-	@FindBy(xpath = "//span[@title='Personal']")
-	private WebElement whatsappTargetChat;
+    @FindBy(xpath = "//span[@title='Personal']")
+    private WebElement whatsappTargetChat;
 
-	private final By errorLogRows = By.xpath("//table[@id='errorlog']//tbody//tr");
-	private final By whatsappSearchBox = By
-			.xpath("//div[@contenteditable='true' and (@data-tab='3' or @data-tab='2')]");
-	private final By whatsappLeftPanel = By.xpath("//div[@id='pane-side' or @id='side']");
-	private final By whatsappMessageBox = By.xpath("(//div[@contenteditable='true' and @role='textbox'])[last()]");
-	private final By whatsappSendButton = By.xpath("//span[@data-icon='wds-ic-send-filled']");
+    private final By errorLogRows = By.xpath("//table[@id='errorlog']//tbody//tr");
+    private final By whatsappSearchBox = By.xpath("//div[@contenteditable='true' and (@data-tab='3' or @data-tab='2')]");
+    private final By whatsappLeftPanel = By.xpath("//div[@id='pane-side' or @id='side']");
+    private final By whatsappMessageBox = By.xpath("(//div[@contenteditable='true' and @role='textbox'])[last()]");
+    private final By whatsappSendButton = By.xpath("//span[@data-icon='wds-ic-send-filled']");
 
-	@BeforeClass
-	public void setUp() {
-		log.info("========================================");
-		log.info("   SPPU ERROR LOGS COUNT DAILY TEST - STARTING ");
-		log.info("========================================");
+    @BeforeClass
+    public void setUp() {
+        log.info("========================================");
+        log.info("   SPPU ERROR LOGS COUNT DAILY TEST - STARTING ");
+        log.info("========================================");
 
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--start-maximized");
-		options.addArguments("user-data-dir=C:\\WhatsappAutomationProfile");
-		options.addArguments("--profile-directory=Default");
-		options.addArguments("--remote-allow-origins=*");
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--start-maximized");
+        options.addArguments("user-data-dir=C:\\WhatsappAutomationProfile");
+        options.addArguments("--profile-directory=Default");
+        options.addArguments("--remote-allow-origins=*");
 
-		driver = new ChromeDriver(options);
-		wait = new WebDriverWait(driver, Duration.ofSeconds(40));
-		js = (JavascriptExecutor) driver;
+        driver = new ChromeDriver(options);
+        wait = new WebDriverWait(driver, Duration.ofSeconds(40));
+        js = (JavascriptExecutor) driver;
 
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-		driver.get("https://cdoe.sppuef.in/login");
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        driver.get("https://cdoe.sppuef.in/login");
 
-		PageFactory.initElements(driver, this);
+        PageFactory.initElements(driver, this);
 
-		log.info(">> Browser launched and navigated to application");
-		log.info(">> Using Chrome profile: C:\\WhatsappAutomationProfile");
-	}
+        log.info(">> Browser launched and navigated to application");
+        log.info(">> Using Chrome profile: C:\\WhatsappAutomationProfile");
+    }
 
-	public void login(String email, String password) {
-		wait.until(ExpectedConditions.visibilityOf(emailField)).clear();
-		emailField.sendKeys(email);
+    public void login(String email, String password) {
+        wait.until(ExpectedConditions.visibilityOf(emailField)).clear();
+        emailField.sendKeys(email);
 
-		wait.until(ExpectedConditions.visibilityOf(passwordField)).clear();
-		passwordField.sendKeys(password);
+        wait.until(ExpectedConditions.visibilityOf(passwordField)).clear();
+        passwordField.sendKeys(password);
 
-		wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
-		log.info(">> Login submitted with email: " + email);
-	}
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+        log.info(">> Login submitted with email: " + email);
+    }
 
-	@Test
-	public void verifyErrorLogCount() throws InterruptedException {
-		String email = "admin@gmail.com";
-		String password = "sppulms@1";
+    @Test
+    public void verifyErrorLogCount() throws InterruptedException {
+        String email = "admin@gmail.com";
+        String password = "sppulms@1";
 
-		login(email, password);
-		Thread.sleep(3000);
+        login(email, password);
+        Thread.sleep(3000);
 
-		driver.get("https://cdoe.sppuef.in/ErrorLog");
-		Thread.sleep(2000);
+        driver.get("https://cdoe.sppuef.in/ErrorLog");
+        Thread.sleep(2000);
 
-		String errorCount = getTodayErrorLogCount();
-		String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MMMM-yyyy hh:mm a"));
+        String errorCount = getTodayErrorLogCount();
+        String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MMMM-yyyy hh:mm a"));
 
-		String whatsappMessage = "*SPPU -> Error Count Details:* " + "Error Count: " + errorCount + " | Date: "
-				+ currentDate;
+        String whatsappMessage = "*SPPU -> Error Count Details:* " + "Error Count: " + errorCount + " | Date: "
+                + currentDate;
 
-		log.info(">> Final SPPU Error Count Details Message: " + whatsappMessage);
-		System.out.println(whatsappMessage);
+        log.info(">> Final SPPU Error Count Details Message: " + whatsappMessage);
+        System.out.println(whatsappMessage);
 
-		Assert.assertFalse(errorCount.isEmpty(), "Error count should not be empty");
+        Assert.assertNotNull(errorCount, "Error count should not be null");
 
-		openWhatsAppWebInNewTab();
-		waitForWhatsAppLogin();
-		openTargetWhatsAppChat();
-		enterMessageInChatBox(whatsappMessage);
-		sendMessage();
-		Thread.sleep(2000);
-	}
+        openWhatsAppWebInNewTab();
+        waitForWhatsAppLogin();
+        openTargetWhatsAppChat();
+        enterMessageInChatBox(whatsappMessage);
+        sendMessage();
+        Thread.sleep(2000);
+    }
 
-	public String getTodayErrorLogCount() {
-		String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-		String errorCount = "0";
+    public String getTodayErrorLogCount() {
+        String errorCount = "0";
 
-		try {
-			List<WebElement> rows = driver.findElements(errorLogRows);
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table[@id='errorlog']//tbody")));
 
-			log.info(">> Current system date for matching: " + currentDate);
-			log.info(">> Total rows found in error log table: " + rows.size());
+            List<WebElement> rows = driver.findElements(errorLogRows);
 
-			if (rows.isEmpty()) {
-				log.info(">> No rows found in error log table | Using default Error Count: 0");
-				return errorCount;
-			}
+            if (rows == null || rows.isEmpty()) {
+                log.info(">> No rows found in error log table | Using default Error Count: 0");
+                return "0";
+            }
 
-			for (WebElement row : rows) {
-				List<WebElement> columns = row.findElements(By.tagName("td"));
+            int visibleRowCount = 0;
 
-				if (columns.size() >= 3) {
-					String rowSerialNo = columns.get(0).getText().trim();
-					String rowCount = columns.get(1).getText().trim();
-					String rowDate = columns.get(2).getText().trim();
+            for (WebElement row : rows) {
+                try {
+                    if (row.isDisplayed()) {
+                        visibleRowCount++;
+                        log.info(">> Visible row found");
+                    }
+                } catch (StaleElementReferenceException e) {
+                    log.warn(">> Stale row encountered while counting visible rows");
+                } catch (Exception e) {
+                    log.warn(">> Unable to evaluate one row visibility");
+                }
+            }
 
-					log.info(">> Checking Row -> Serial No: " + rowSerialNo + ", Count: " + rowCount + ", Date: "
-							+ rowDate);
+            errorCount = String.valueOf(visibleRowCount);
+            log.info(">> Total visible error log row count: " + errorCount);
 
-					if (currentDate.equals(rowDate)) {
-						errorCount = rowCount.isEmpty() ? "0" : rowCount;
-						log.info(">> Match found for current date: " + currentDate + " | Error Count: " + errorCount);
-						break;
-					}
-				}
-			}
+        } catch (Exception e) {
+            log.error(">> Exception while counting visible error log rows. Using default Error Count: 0", e);
+            errorCount = "0";
+        }
 
-			if ("0".equals(errorCount)) {
-				log.info(">> No row found for current date: " + currentDate + " | Using default Error Count: 0");
-			}
+        return errorCount;
+    }
 
-		} catch (Exception e) {
-			log.error(">> Exception while reading error log count. Using default Error Count: 0", e);
-		}
+    public void openWhatsAppWebInNewTab() {
+        js.executeScript("window.open('https://web.whatsapp.com/', '_blank');");
+        switchToNewestTab();
+        wait.until(ExpectedConditions.urlContains("web.whatsapp.com"));
+        log.info(">> WhatsApp Web opened in new tab");
+    }
 
-		return errorCount;
-	}
+    protected void switchToNewTab(String parentWindow) {
+        wait.until(driver -> driver.getWindowHandles().size() > 1);
 
-	public void openWhatsAppWebInNewTab() {
-		js.executeScript("window.open('https://web.whatsapp.com/', '_blank');");
-		switchToNewestTab();
-		wait.until(ExpectedConditions.urlContains("web.whatsapp.com"));
-		log.info(">> WhatsApp Web opened in new tab");
-	}
+        Set<String> allWindows = driver.getWindowHandles();
 
-	protected void switchToNewTab(String parentWindow) {
-		wait.until(driver -> driver.getWindowHandles().size() > 1);
+        for (String windowHandle : allWindows) {
+            if (!windowHandle.equals(parentWindow)) {
+                driver.switchTo().window(windowHandle);
+                driver.manage().window().maximize();
+                break;
+            }
+        }
+    }
 
-		Set<String> allWindows = driver.getWindowHandles();
+    protected void switchToNewestTab() {
+        String newestWindow = null;
 
-		for (String windowHandle : allWindows) {
-			if (!windowHandle.equals(parentWindow)) {
-				driver.switchTo().window(windowHandle);
-				driver.manage().window().maximize();
-				break;
-			}
-		}
-	}
+        for (String windowHandle : driver.getWindowHandles()) {
+            newestWindow = windowHandle;
+        }
 
-	protected void switchToNewestTab() {
-		String newestWindow = null;
+        if (newestWindow != null) {
+            driver.switchTo().window(newestWindow);
+            driver.manage().window().maximize();
+        }
+    }
 
-		for (String windowHandle : driver.getWindowHandles()) {
-			newestWindow = windowHandle;
-		}
+    public void waitForWhatsAppLogin() {
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(whatsappLeftPanel));
+            log.info(">> WhatsApp already logged in");
+        } catch (Exception e) {
+            log.info(">> Please scan QR once in Selenium browser profile: C:\\WhatsappAutomationProfile");
+            wait.until(ExpectedConditions.presenceOfElementLocated(whatsappLeftPanel));
+            log.info(">> WhatsApp login completed after QR scan");
+        }
+    }
 
-		if (newestWindow != null) {
-			driver.switchTo().window(newestWindow);
-			driver.manage().window().maximize();
-		}
-	}
+    public void openTargetWhatsAppChat() {
+        try {
+            wait.until(ExpectedConditions.visibilityOf(whatsappTargetChat));
+            blinkElement(whatsappTargetChat);
+            safeClick(whatsappTargetChat);
+            log.info(">> WhatsApp target chat clicked directly");
+        } catch (Exception e) {
+            WebElement searchBox = wait.until(ExpectedConditions.visibilityOfElementLocated(whatsappSearchBox));
+            searchBox.click();
+            searchBox.sendKeys(Keys.CONTROL + "a");
+            searchBox.sendKeys(Keys.DELETE);
+            searchBox.sendKeys("Personal");
 
-	public void waitForWhatsAppLogin() {
-		try {
-			wait.until(ExpectedConditions.presenceOfElementLocated(whatsappLeftPanel));
-			log.info(">> WhatsApp already logged in");
-		} catch (Exception e) {
-			log.info(">> Please scan QR once in Selenium browser profile: C:\\WhatsappAutomationProfile");
-			wait.until(ExpectedConditions.presenceOfElementLocated(whatsappLeftPanel));
-			log.info(">> WhatsApp login completed after QR scan");
-		}
-	}
+            WebElement searchedChat = wait.until(ExpectedConditions
+                    .visibilityOfElementLocated(By.xpath("//span[@title='Personal']")));
+            blinkElement(searchedChat);
+            safeClick(searchedChat);
+            log.info(">> WhatsApp target chat opened via search");
+        }
+    }
 
-	public void openTargetWhatsAppChat() {
-		try {
-			wait.until(ExpectedConditions.visibilityOf(whatsappTargetChat));
-			blinkElement(whatsappTargetChat);
-			safeClick(whatsappTargetChat);
-			log.info(">> WhatsApp target chat clicked directly");
-		} catch (Exception e) {
-			WebElement searchBox = wait.until(ExpectedConditions.visibilityOfElementLocated(whatsappSearchBox));
-			searchBox.click();
-			searchBox.sendKeys(Keys.CONTROL + "a");
-			searchBox.sendKeys(Keys.DELETE);
-			searchBox.sendKeys("Personal");
+    public void enterMessageInChatBox(String message) {
+        WebElement msgBox = wait.until(ExpectedConditions.visibilityOfElementLocated(whatsappMessageBox));
+        scrollToCenter(msgBox);
+        safeClick(msgBox);
+        msgBox.sendKeys(message);
 
-			WebElement searchedChat = wait
-					.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@title='Personal']")));
-			blinkElement(searchedChat);
-			safeClick(searchedChat);
-			log.info(">> WhatsApp target chat opened via search");
-		}
-	}
+        log.info(">> Message entered in WhatsApp chat box: " + message);
+    }
 
-	public void enterMessageInChatBox(String message) {
-		WebElement msgBox = wait.until(ExpectedConditions.visibilityOfElementLocated(whatsappMessageBox));
-		scrollToCenter(msgBox);
-		safeClick(msgBox);
-		msgBox.sendKeys(message);
+    public void sendMessage() {
+        try {
+            WebElement sendBtn = wait.until(ExpectedConditions.elementToBeClickable(whatsappSendButton));
+            safeClick(sendBtn);
+            log.info(">> Message sent by send button");
+        } catch (Exception e) {
+            WebElement msgBox = wait.until(ExpectedConditions.visibilityOfElementLocated(whatsappMessageBox));
+            msgBox.sendKeys(Keys.ENTER);
+            log.info(">> Message sent by ENTER key");
+        }
+    }
 
-		log.info(">> Message entered in WhatsApp chat box: " + message);
-	}
+    protected void safeClick(WebElement element) {
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(element)).click();
 
-	public void sendMessage() {
-		try {
-			WebElement sendBtn = wait.until(ExpectedConditions.elementToBeClickable(whatsappSendButton));
-			safeClick(sendBtn);
-			log.info(">> Message sent by send button");
-		} catch (Exception e) {
-			WebElement msgBox = wait.until(ExpectedConditions.visibilityOfElementLocated(whatsappMessageBox));
-			msgBox.sendKeys(Keys.ENTER);
-			log.info(">> Message sent by ENTER key");
-		}
-	}
+        } catch (StaleElementReferenceException e) {
+            wait.until(ExpectedConditions.visibilityOf(element));
+            scrollToCenter(element);
+            jsClick(element);
 
-	protected void safeClick(WebElement element) {
-		try {
-			wait.until(ExpectedConditions.elementToBeClickable(element)).click();
+        } catch (ElementClickInterceptedException e) {
+            wait.until(ExpectedConditions.visibilityOf(element));
+            scrollToCenter(element);
+            jsClick(element);
 
-		} catch (StaleElementReferenceException e) {
-			wait.until(ExpectedConditions.visibilityOf(element));
-			scrollToCenter(element);
-			jsClick(element);
+        } catch (UnhandledAlertException e) {
+            try {
+                driver.switchTo().alert().accept();
+            } catch (Exception ignored) {
+            }
 
-		} catch (ElementClickInterceptedException e) {
-			wait.until(ExpectedConditions.visibilityOf(element));
-			scrollToCenter(element);
-			jsClick(element);
+            wait.until(ExpectedConditions.visibilityOf(element));
+            scrollToCenter(element);
+            jsClick(element);
 
-		} catch (UnhandledAlertException e) {
-			try {
-				driver.switchTo().alert().accept();
-			} catch (Exception ignored) {
-			}
+        } catch (Exception e) {
+            wait.until(ExpectedConditions.visibilityOf(element));
+            scrollToCenter(element);
+            jsClick(element);
+        }
+    }
 
-			wait.until(ExpectedConditions.visibilityOf(element));
-			scrollToCenter(element);
-			jsClick(element);
+    protected void scrollToCenter(WebElement element) {
+        js.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});", element);
+    }
 
-		} catch (Exception e) {
-			wait.until(ExpectedConditions.visibilityOf(element));
-			scrollToCenter(element);
-			jsClick(element);
-		}
-	}
+    protected void jsClick(WebElement element) {
+        js.executeScript("arguments[0].click();", element);
+    }
 
-	protected void scrollToCenter(WebElement element) {
-		js.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});", element);
-	}
+    protected boolean waitUntilVisible(WebElement element, Duration timeout) {
+        try {
+            new WebDriverWait(driver, timeout).until(ExpectedConditions.visibilityOf(element));
+            return true;
+        } catch (Exception e) {
+            log.debug("Element not visible within timeout", e);
+            return false;
+        }
+    }
 
-	protected void jsClick(WebElement element) {
-		js.executeScript("arguments[0].click();", element);
-	}
+    public void blinkElement(WebElement element) {
+        try {
+            if (waitUntilVisible(element, Duration.ofMillis(5000))) {
+                String originalStyle = element.getAttribute("style");
 
-	protected boolean waitUntilVisible(WebElement element, Duration timeout) {
-		try {
-			new WebDriverWait(driver, timeout).until(ExpectedConditions.visibilityOf(element));
-			return true;
-		} catch (Exception e) {
-			log.debug("Element not visible within timeout", e);
-			return false;
-		}
-	}
+                for (int i = 0; i < 2; i++) {
+                    js.executeScript("arguments[0].setAttribute('style','border:3px solid black; background: yellow;')",
+                            element);
+                    Thread.sleep(100);
 
-	public void blinkElement(WebElement element) {
-		try {
-			if (waitUntilVisible(element, Duration.ofMillis(5000))) {
-				String originalStyle = element.getAttribute("style");
+                    js.executeScript("arguments[0].setAttribute('style', arguments[1])", element, originalStyle);
+                    Thread.sleep(100);
+                }
+            }
+        } catch (Exception e) {
+            log.debug("Unable to highlight element", e);
+            Thread.currentThread().interrupt();
+        }
+    }
 
-				for (int i = 0; i < 2; i++) {
-					js.executeScript("arguments[0].setAttribute('style','border:3px solid black; background: yellow;')",
-							element);
-					Thread.sleep(100);
-
-					js.executeScript("arguments[0].setAttribute('style', arguments[1])", element, originalStyle);
-					Thread.sleep(100);
-				}
-			}
-		} catch (Exception e) {
-			log.debug("Unable to highlight element", e);
-			Thread.currentThread().interrupt();
-		}
-	}
-
-	@AfterClass
-	public void tearDown() throws InterruptedException {
-		log.info("========================================");
-		log.info("   SPPU ERROR LOGS COUNT DAILY TEST - COMPLETED ");
-		log.info("========================================");
-		Thread.sleep(5000);
-		if (driver != null) {
-			driver.quit();
-		}
-
-	}
+    @AfterClass
+    public void tearDown() throws InterruptedException {
+        log.info("========================================");
+        log.info("   SPPU ERROR LOGS COUNT DAILY TEST - COMPLETED ");
+        log.info("========================================");
+        Thread.sleep(5000);
+        if (driver != null) {
+            driver.quit();
+        }
+    }
 }

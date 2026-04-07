@@ -37,8 +37,7 @@ public class AppTrackerSmartFinanceLogCountDaily {
 	@FindBy(xpath = "//span[@title='Personal']")
 	private WebElement whatsappTargetChat;
 
-	private final By whatsappSearchBox = By
-			.xpath("//div[@contenteditable='true' and (@data-tab='3' or @data-tab='2')]");
+	private final By whatsappSearchBox = By.xpath("//div[@contenteditable='true' and (@data-tab='3' or @data-tab='2')]");
 	private final By whatsappLeftPanel = By.xpath("//div[@id='pane-side' or @id='side']");
 	private final By whatsappMessageBox = By.xpath("(//div[@contenteditable='true' and @role='textbox'])[last()]");
 	private final By whatsappSendButton = By.xpath("//span[@data-icon='wds-ic-send-filled']");
@@ -72,16 +71,13 @@ public class AppTrackerSmartFinanceLogCountDaily {
 	public void testLogCountsAndSendWhatsAppMessage() throws InterruptedException {
 		log.info(">> Starting log count retrieval...");
 
-		String appTrackerCount = getCountByUrlAndCurrentDateOrZero("gvLogsKsam", "https://apptracker.in/Application/");
+		String appTrackerCount = getRowCountByKeywordAndCurrentDate("gvLogsKsam", "apptracker.in/application");
+		String smartFinanceCount = getRowCountByKeywordAndCurrentDate("gvLogs", "fin.smartedutech.in/feereceipt");
+		String smartEduTechCount = getRowCountByKeywordAndCurrentDate("gvLogs", "smartedutech.in/student");
 
-		String smartFinanceCount = getCountByUrlAndCurrentDateOrZero("gvLogs",
-				"https://fin.smartedutech.in/FeeReceipt/");
-
-		String smartEduTechCount = getCountByUrlAndCurrentDateOrZero("gvLogs", "https://smartedutech.in/Student/");
-
-		log.info(">> App Tracker Daily Log Count: " + appTrackerCount);
-		log.info(">> Smart Finance Daily Log Count: " + smartFinanceCount);
-		log.info(">> Smart EduTech Daily Log Count: " + smartEduTechCount);
+		log.info(">> App Tracker Error Log Row Count: " + appTrackerCount);
+		log.info(">> Smart Finance Error Log Row Count: " + smartFinanceCount);
+		log.info(">> Smart EduTech Error Log Row Count: " + smartEduTechCount);
 
 		String currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MMMM-yyyy hh:mm a"));
 
@@ -102,49 +98,63 @@ public class AppTrackerSmartFinanceLogCountDaily {
 		Thread.sleep(2000);
 	}
 
-	public String getCountByUrlAndCurrentDateOrZero(String tableId, String urlText) {
-		String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	public String getRowCountByKeywordAndCurrentDate(String tableId, String keyword) {
+		String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("M/d/yyyy"));
+		int matchedRowCount = 0;
 
 		try {
-			List<WebElement> matchedRows = driver.findElements(By.xpath(
-					"//table[@id='" + tableId + "']//tbody//tr[td[contains(normalize-space(), '" + urlText + "')]]"));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table[@id='" + tableId + "']//tbody")));
 
-			if (matchedRows == null || matchedRows.isEmpty()) {
-				log.info(">> No matching row found for URL: " + urlText + " | Returning count as 0");
+			List<WebElement> rows = driver.findElements(By.xpath("//table[@id='" + tableId + "']//tbody//tr"));
+
+			if (rows == null || rows.isEmpty()) {
+				log.info(">> No rows found in table: " + tableId + " | Returning 0");
 				return "0";
 			}
 
-			WebElement lastMatchedRow = matchedRows.get(matchedRows.size() - 1);
+			for (WebElement row : rows) {
+				try {
+					if (!row.isDisplayed()) {
+						continue;
+					}
 
-			List<WebElement> columns = lastMatchedRow.findElements(By.tagName("td"));
+					String rowText = row.getText().trim().toLowerCase();
 
-			if (columns.size() < 4) {
-				log.info(">> Matching row has insufficient columns for URL: " + urlText + " | Returning count as 0");
-				return "0";
+					log.info(">> Checking Row Text: " + rowText);
+					log.info(">> Current Date To Match: " + currentDate);
+
+					if (rowText.contains(keyword.toLowerCase()) && rowText.contains(currentDate)) {
+						matchedRowCount++;
+
+						log.info(">> Matched row found for keyword + current date: " + keyword);
+
+						scrollToCenter(row);
+						blinkElement(row);
+
+						List<WebElement> columns = row.findElements(By.tagName("td"));
+						for (int i = 0; i < columns.size(); i++) {
+							String colText = columns.get(i).getText().trim();
+							log.info(">> Column [" + i + "] = " + colText);
+
+							if (colText.toLowerCase().contains(keyword.toLowerCase())) {
+								scrollToCenter(columns.get(i));
+								blinkElement(columns.get(i));
+							}
+						}
+					}
+
+				} catch (StaleElementReferenceException e) {
+					log.warn(">> Stale row encountered while checking keyword/date match");
+				} catch (Exception e) {
+					log.warn(">> Skipping one row while checking keyword/date match", e);
+				}
 			}
 
-			String rowCount = columns.get(1).getText().trim();
-			String rowUrl = columns.get(2).getText().trim();
-			String rowDate = columns.get(3).getText().trim();
+			log.info(">> Total rows matching keyword [" + keyword + "] and current date [" + currentDate + "] : " + matchedRowCount);
+			return String.valueOf(matchedRowCount);
 
-			log.info(">> Matched URL: " + rowUrl);
-			log.info(">> Matched Count: " + rowCount);
-			log.info(">> Matched Date: " + rowDate);
-			log.info(">> Current Date: " + currentDate);
-
-			if (!currentDate.equals(rowDate)) {
-				log.info(">> Date does not match current date for URL: " + urlText + " | Returning count as 0");
-				return "0";
-			}
-
-			if (rowCount.isEmpty()) {
-				log.info(">> Count is empty for URL: " + urlText + " | Returning count as 0");
-				return "0";
-			}
-
-			return rowCount;
 		} catch (Exception e) {
-			log.info(">> Unable to fetch count for URL: " + urlText + " | Returning count as 0");
+			log.error(">> Exception while counting rows by keyword and date for: " + keyword + " | Returning 0", e);
 			return "0";
 		}
 	}
@@ -203,13 +213,16 @@ public class AppTrackerSmartFinanceLogCountDaily {
 			if (waitUntilVisible(element, Duration.ofMillis(5000))) {
 				String originalStyle = element.getAttribute("style");
 
-				for (int i = 0; i < 2; i++) {
-					js.executeScript("arguments[0].setAttribute('style','border:3px solid black; background: yellow;')",
+				for (int i = 0; i < 3; i++) {
+					js.executeScript(
+							"arguments[0].setAttribute('style','border:3px solid red; background: yellow;');",
 							element);
-					Thread.sleep(100);
+					Thread.sleep(200);
 
-					js.executeScript("arguments[0].setAttribute('style', arguments[1])", element, originalStyle);
-					Thread.sleep(100);
+					js.executeScript(
+							"arguments[0].setAttribute('style', arguments[1]);",
+							element, originalStyle);
+					Thread.sleep(200);
 				}
 			}
 		} catch (Exception e) {
@@ -262,8 +275,7 @@ public class AppTrackerSmartFinanceLogCountDaily {
 			searchBox.sendKeys(Keys.DELETE);
 			searchBox.sendKeys("Personal");
 
-			WebElement searchedChat = wait
-					.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@title='Personal']")));
+			WebElement searchedChat = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@title='Personal']")));
 			blinkElement(searchedChat);
 			safeClick(searchedChat);
 			log.info(">> WhatsApp target chat opened via search");
@@ -300,6 +312,5 @@ public class AppTrackerSmartFinanceLogCountDaily {
 		if (driver != null) {
 			driver.quit();
 		}
-
 	}
 }
