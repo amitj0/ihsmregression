@@ -58,7 +58,7 @@ public class GGVErrorLogCountDaily {
 	@BeforeClass
 	public void setUp() {
 		log.info("========================================");
-		log.info("   SPPU ERROR LOGS COUNT DAILY TEST - STARTING ");
+		log.info("   GGV ERROR LOGS COUNT DAILY TEST - STARTING ");
 		log.info("========================================");
 
 		ChromeOptions options = new ChromeOptions();
@@ -114,10 +114,10 @@ public class GGVErrorLogCountDaily {
 		String errorCount = getTodayErrorLogCount();
 		String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MMMM-yyyy hh:mm a"));
 
-		String whatsappMessage = "*SPPU -> Error Count Details:* " + "Error Count: " + errorCount + " | Date: "
+		String whatsappMessage = "*GGV -> Error Count Details:* " + "Error Count: " + errorCount + " | Date: "
 				+ currentDate;
 
-		log.info(">> Final SPPU Error Count Details Message: " + whatsappMessage);
+		log.info(">> Final GGV Error Count Details Message: " + whatsappMessage);
 		System.out.println(whatsappMessage);
 
 		Assert.assertFalse(errorCount.isEmpty(), "Error count should not be empty");
@@ -334,7 +334,7 @@ public class GGVErrorLogCountDaily {
 	@AfterClass
 	public void tearDown() throws InterruptedException {
 		log.info("========================================");
-		log.info("   SPPU ERROR LOGS COUNT DAILY TEST - COMPLETED ");
+		log.info("   GGV ERROR LOGS COUNT DAILY TEST - COMPLETED ");
 		log.info("========================================");
 		Thread.sleep(5000);
 		if (driver != null) {
@@ -342,4 +342,4 @@ public class GGVErrorLogCountDaily {
 		}
 
 	}
-}
+} 
