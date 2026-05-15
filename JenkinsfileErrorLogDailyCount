@@ -29,7 +29,7 @@ H 18 * * *
         stage('Run Daily Error Log Scripts') {
             steps {
                 bat '''
-                mvn clean test -Dtest=AfsirErrorLogCountDaily,AppTrackerSmartFinanceLogCountDaily,BiuErrorLogsCountDaily,GGVErrorLogCountDaily,IhsmErrorLogCountDaily,MsitErrorLogsCountDaily,SemeyErrorLogsCountDaily,SPPUErrorLogCountDaily
+                mvn clean test -Dtest=AllUniversityErrorLogWhatsAppAPI
                 '''
             }
         }
