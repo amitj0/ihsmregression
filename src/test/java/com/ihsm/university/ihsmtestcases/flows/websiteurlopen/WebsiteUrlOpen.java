@@ -14,6 +14,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -42,7 +43,8 @@ public class WebsiteUrlOpen {
     private static final By whatsappSendButton =
             By.xpath("//span[@data-icon='wds-ic-send-filled']");
 
-    public static void main(String[] args) {
+    @Test
+    public void websiteUrlOpenTest() {
 
         String[] urls = {
                 "https://werify.in/",
@@ -72,12 +74,13 @@ public class WebsiteUrlOpen {
         try {
             ChromeOptions options = new ChromeOptions();
 
-//            options.addArguments("--headless=new");
+            // If Jenkins runs without visible desktop session, uncomment below line.
+            // options.addArguments("--headless=new");
+
             options.addArguments("--window-size=1920,1080");
             options.addArguments("--disable-gpu");
             options.addArguments("--no-sandbox");
             options.addArguments("--disable-dev-shm-usage");
-
             options.addArguments("--disable-notifications");
             options.addArguments("user-data-dir=" + WHATSAPP_PROFILE_PATH);
             options.addArguments("--profile-directory=Default");
@@ -165,6 +168,12 @@ public class WebsiteUrlOpen {
 
             System.out.println("WhatsApp message sent successfully.");
 
+            if (failCount > 0) {
+                System.out.println("Some URLs failed to open, but Jenkins build will remain SUCCESS.");
+                System.out.println("Failed count: " + failCount);
+                System.out.println("Failed URLs: " + failedUrlList);
+            }
+
         } finally {
             try {
                 Thread.sleep(3000);
@@ -235,7 +244,11 @@ public class WebsiteUrlOpen {
         sb.append("*Failed URL Details:*").append("\n");
 
         for (int i = 0; i < failedUrlList.size(); i++) {
-            sb.append(i + 1).append(". ").append(failedUrlList.get(i)).append("\n");
+            sb.append(i + 1).append(". ").append(failedUrlList.get(i));
+
+            if (i < failedUrlList.size() - 1) {
+                sb.append("\n");
+            }
         }
 
         return sb.toString();
@@ -287,9 +300,18 @@ public class WebsiteUrlOpen {
         WebElement msgBox = wait.until(ExpectedConditions.visibilityOfElementLocated(whatsappMessageBox));
         scrollToCenter(msgBox);
         safeClick(msgBox);
-        msgBox.sendKeys(message);
 
-        System.out.println("Message entered in WhatsApp chat box.");
+        String[] lines = message.split("\\r?\\n");
+
+        for (int i = 0; i < lines.length; i++) {
+            msgBox.sendKeys(lines[i]);
+
+            if (i < lines.length - 1) {
+                msgBox.sendKeys(Keys.SHIFT, Keys.ENTER);
+            }
+        }
+
+        System.out.println("Combined message entered in WhatsApp chat box.");
     }
 
     private static void sendMessage() {
