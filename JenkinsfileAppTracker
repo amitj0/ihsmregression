@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     triggers {
-        cron('30 10 * * *')   // Every day at 10:30 AM
+       cron('32 9,\n0 18 * * *')
     }
 
     tools {
@@ -18,9 +18,9 @@ pipeline {
             }
         }
 
-        stage('Run AppTrackers Reset Script') {
+        stage('Run AppTrackers Visa Reset Script') {
             steps {
-                bat 'mvn clean test -Dtest=AppTrackersResetAutomation'
+                bat 'mvn clean test -Dtest=AppTrackersVisaDataReset'
             }
         }
     }
@@ -40,7 +40,7 @@ pipeline {
                 """,
                 mimeType: 'text/html'
             )
-        }
+        } 
 
         failure {
             emailext(
