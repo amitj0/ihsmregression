@@ -32,7 +32,7 @@ public class WebsiteUrlOpen {
 
     private static final String WHATSAPP_SUCCESS_CHAT_NAME = "Personal";
     private static final String WHATSAPP_FAILED_CHAT_NAME = "Testing Team";
-//    private static final String WHATSAPP_FAILED_CHAT_NAME = "Jagminder Sir ISM";
+//    private static final String WHATSAPP_FAILED_CHAT_NAME = "Jagminder Sir ISM";  
 
     private static final By whatsappSearchBox =
             By.xpath("//div[@contenteditable='true' and (@data-tab='3' or @data-tab='2')]");
