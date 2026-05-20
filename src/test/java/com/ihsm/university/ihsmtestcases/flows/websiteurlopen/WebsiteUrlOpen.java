@@ -29,7 +29,10 @@ public class WebsiteUrlOpen {
     private static JavascriptExecutor js;
 
     private static final String WHATSAPP_PROFILE_PATH = "C:\\WhatsappAutomationProfile";
-    private static final String WHATSAPP_CHAT_NAME = "Personal";
+
+    private static final String WHATSAPP_SUCCESS_CHAT_NAME = "Personal";
+    private static final String WHATSAPP_FAILED_CHAT_NAME = "Testing Team";
+//    private static final String WHATSAPP_FAILED_CHAT_NAME = "Jagminder Sir ISM";
 
     private static final By whatsappSearchBox =
             By.xpath("//div[@contenteditable='true' and (@data-tab='3' or @data-tab='2')]");
@@ -157,12 +160,16 @@ public class WebsiteUrlOpen {
                     failedUrlList
             );
 
-            System.out.println("Sending WhatsApp message...");
+            String targetWhatsAppChatName = failCount == 0
+                    ? WHATSAPP_SUCCESS_CHAT_NAME
+                    : WHATSAPP_FAILED_CHAT_NAME;
+
+            System.out.println("Sending WhatsApp message to: " + targetWhatsAppChatName);
             System.out.println(whatsappMessage);
 
             openWhatsAppWebInNewTab();
             waitForWhatsAppLogin();
-            openTargetWhatsAppChat();
+            openTargetWhatsAppChat(targetWhatsAppChatName);
             enterMessageInChatBox(whatsappMessage);
             sendMessage();
 
@@ -272,13 +279,13 @@ public class WebsiteUrlOpen {
         }
     }
 
-    private static void openTargetWhatsAppChat() {
+    private static void openTargetWhatsAppChat(String chatName) {
         try {
             WebElement targetChat = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//span[@title='" + WHATSAPP_CHAT_NAME + "']")));
+                    By.xpath("//span[@title='" + chatName + "']")));
 
             safeClick(targetChat);
-            System.out.println("WhatsApp target chat clicked directly.");
+            System.out.println("WhatsApp target chat clicked directly: " + chatName);
 
         } catch (Exception e) {
             WebElement searchBox = wait.until(ExpectedConditions.visibilityOfElementLocated(whatsappSearchBox));
@@ -286,13 +293,13 @@ public class WebsiteUrlOpen {
             searchBox.click();
             searchBox.sendKeys(Keys.CONTROL + "a");
             searchBox.sendKeys(Keys.DELETE);
-            searchBox.sendKeys(WHATSAPP_CHAT_NAME);
+            searchBox.sendKeys(chatName);
 
             WebElement searchedChat = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//span[@title='" + WHATSAPP_CHAT_NAME + "']")));
+                    By.xpath("//span[@title='" + chatName + "']")));
 
             safeClick(searchedChat);
-            System.out.println("WhatsApp target chat opened via search.");
+            System.out.println("WhatsApp target chat opened via search: " + chatName);
         }
     }
 
