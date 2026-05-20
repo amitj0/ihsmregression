@@ -226,6 +226,11 @@ public class WebsiteUrlOpen {
     }
 
     private static String buildFailedUrlWhatsAppMessage(int totalUrls, int passCount, int failCount, List<String> failedUrlList) {
+
+        if (failCount == 0 || failedUrlList == null || failedUrlList.isEmpty()) {
+            return "All URLs opened successfully.";
+        }
+
         String currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MMMM-yyyy hh:mm a"));
 
         StringBuilder sb = new StringBuilder();
@@ -235,11 +240,6 @@ public class WebsiteUrlOpen {
         sb.append("Total URLs Checked: ").append(totalUrls).append("\n");
         sb.append("Passed: ").append(passCount).append("\n");
         sb.append("Failed: ").append(failCount).append("\n\n");
-
-        if (failCount == 0 || failedUrlList == null || failedUrlList.isEmpty()) {
-            sb.append("All URLs opened successfully.");
-            return sb.toString();
-        }
 
         sb.append("*Failed URL Details:*").append("\n");
 
